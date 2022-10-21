@@ -9,21 +9,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO: changer le nom du class a Parser puisque cette classe va prendre en consideration aussi le sauvegarde
+// des livraisons en xml files.
 public class ParserPlan {
-    private static final String FILENAME = "src/main/resources/file.xml";
+//    private static  String FILENAME = "src/main/resources/file.xml";
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
     private static final List<Intersection> intersectionsListe = new ArrayList<Intersection>();
     private static final List<Troncon> tronconsListe = new ArrayList<Troncon>();
-//    private static final List<Entropot> entropots = new ArrayList<Entropot>();
+    private static final List<Entrepot> entropots = new ArrayList<Entrepot>();
 
-    public void lirePlan(String fileName) {
+    public static void lirePlan(String fileName) {
         SAXBuilder sax= new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
         try {
-            Document doc = sax.build(new File(FILENAME));
+            Document doc = sax.build(new File(fileName));
             Element rootNode = doc.getRootElement();
             List<Element> entrepots = rootNode.getChildren("warehouse");
 
@@ -31,6 +32,7 @@ public class ParserPlan {
                 String addresse = entropot.getAttributeValue("address");
                 // TODO :Create Warehouse
                 // TODO: Add Warehouse.
+//                entrepots.add(new Entrepot(addresse));
             }
             List<Element> intersections = rootNode.getChildren("intersection");
             intersections.forEach(
@@ -38,8 +40,6 @@ public class ParserPlan {
                         String id = i.getAttributeValue("id");
                         double latitude = Double.parseDouble(i.getAttributeValue("latitude"));
                         double longitude = Double.parseDouble(i.getAttributeValue("longitude"));
-                        // TODO: create Intersection
-                        // TODO: Add intersection
                         intersectionsListe.add(new Intersection(id, latitude, longitude));
                     }
             );
@@ -80,4 +80,16 @@ public class ParserPlan {
         }
 
     }
+
+    // Getters and Setters
+
+    public static List<Troncon> getTronconsListe(){
+        return tronconsListe;
+    }
+    public static List<Intersection> getIntersectionsListe(){
+        return intersectionsListe;
+    }
+
+
+
 }
