@@ -20,7 +20,7 @@ public class ParserPlan {
     private final List<Entrepot> entrepotsListe = new ArrayList<Entrepot>();
 
     // TODO: retourner un plan
-    public void lirePlan(String fileName) throws MauvaisFormatXmlException{
+    public void lirePlan(String fileName) throws MauvaisFormatXmlException, IOException {
         SAXBuilder sax= new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
@@ -77,9 +77,7 @@ public class ParserPlan {
 
 
         } catch (JDOMException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MauvaisFormatXmlException(e);
         }
 
 

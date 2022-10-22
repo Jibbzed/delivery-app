@@ -3,6 +3,8 @@ package modele;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest {
@@ -14,7 +16,7 @@ public class ParserTest {
         parser = new ParserPlan();
     }
     @Test
-    void testLectureCasNormal() throws MauvaisFormatXmlException {
+    void testLectureCasNormal() throws MauvaisFormatXmlException, IOException {
         // given
         int nombreIntersectionsExpectees = 308;
         int nombreTrouconsExpectes = 616;
@@ -36,13 +38,16 @@ public class ParserTest {
         // given
         String nomFichierFormatNonValide = "src/test/resources/books.xml";
         String nomFichierCorrompu = "src/test/resources/smallMapCorrompu.xml";
-
+        String nomFichierNonXml = "src/test/resources/nonXML.xml";
+        String nomFichierExistePas = "src/test/resources/existPas.xml";
         // when
 
         // then
         assertAll(
                 () -> assertThrows(MauvaisFormatXmlException.class, () -> parser.lirePlan(nomFichierFormatNonValide)),
-                () -> assertThrows(MauvaisFormatXmlException.class, () -> parser.lirePlan(nomFichierCorrompu))
+                () -> assertThrows(MauvaisFormatXmlException.class, () -> parser.lirePlan(nomFichierCorrompu)),
+                () -> assertThrows(MauvaisFormatXmlException.class, () -> parser.lirePlan(nomFichierNonXml)),
+                () -> assertThrows(IOException.class, ()-> parser.lirePlan(nomFichierExistePas))
         );
 
 
