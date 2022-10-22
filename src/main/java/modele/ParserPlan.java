@@ -15,26 +15,33 @@ public class ParserPlan {
 //    private static  String FILENAME = "src/main/resources/file.xml";
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
-    private static final List<Intersection> intersectionsListe = new ArrayList<Intersection>();
-    private static final List<Troncon> tronconsListe = new ArrayList<Troncon>();
-    private static final List<Entrepot> entropots = new ArrayList<Entrepot>();
+    private final List<Intersection> intersectionsListe = new ArrayList<Intersection>();
+    private final List<Troncon> tronconsListe = new ArrayList<Troncon>();
+    private final List<Entrepot> entrepotsListe = new ArrayList<Entrepot>();
 
-    public static void lirePlan(String fileName) {
+    // TODO: retourner un plan
+    public void lirePlan(String fileName) throws MauvaisFormatXmlException{
         SAXBuilder sax= new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
         try {
             Document doc = sax.build(new File(fileName));
             Element rootNode = doc.getRootElement();
+
+
             List<Element> entrepots = rootNode.getChildren("warehouse");
+            validerElementXml(entrepots, "entropot");
 
             for (Element entropot : entrepots) {
                 String addresse = entropot.getAttributeValue("address");
                 // TODO :Create Warehouse
                 // TODO: Add Warehouse.
-//                entrepots.add(new Entrepot(addresse));
+//                entrepotsListe.add(new Entrepot(addresse));
             }
+
+
             List<Element> intersections = rootNode.getChildren("intersection");
+            validerElementXml(intersections, "intersection");
             intersections.forEach(
                     i -> {
                         String id = i.getAttributeValue("id");
@@ -45,6 +52,7 @@ public class ParserPlan {
             );
 
             List<Element> troncons = rootNode.getChildren("segment");
+            validerElementXml(troncons, "troncon");
 
             for(Element t: troncons) {
                         String destinationId = t.getAttributeValue("destination");
@@ -56,15 +64,13 @@ public class ParserPlan {
                                                     .filter(i -> i.getId().equals(origineId))
                                                     .findFirst()
                                                     .orElseThrow(
-                                                            // TODO: personalize the exception
-                                                            ()-> new Exception("Origine introuvable avec id: " + origineId)
+                                                            ()-> new MauvaisFormatXmlException("Origine introuvable avec id: " + origineId)
                                                     );
                         Intersection destination = intersectionsListe.stream()
                                                     .filter(i -> i.getId().equals(destinationId))
                                                     .findFirst()
                                                     .orElseThrow(
-                                                            // TODO: personalize the exception
-                                                            ()-> new Exception("Destination introuvable avec id: " + destinationId)
+                                                            ()-> new MauvaisFormatXmlException("Destination introuvable avec id: " + destinationId)
                                                     );
                         tronconsListe.add(new Troncon(nom, longueur, origine, destination));
                     }
@@ -74,19 +80,23 @@ public class ParserPlan {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (Exception e) {
-            // TODO : personalize the exception
-            throw new RuntimeException(e);
         }
 
+
+    }
+
+    private  static <T> void validerElementXml(List<T> list, String elementName) throws MauvaisFormatXmlException{
+        if (list.isEmpty()) {
+            throw new MauvaisFormatXmlException("Il n'y a pas d'element " + elementName + " sur le fichier xml fourni" );
+        }
     }
 
     // Getters and Setters
 
-    public static List<Troncon> getTronconsListe(){
+    public List<Troncon> getTronconsListe(){
         return tronconsListe;
     }
-    public static List<Intersection> getIntersectionsListe(){
+    public List<Intersection> getIntersectionsListe(){
         return intersectionsListe;
     }
 
