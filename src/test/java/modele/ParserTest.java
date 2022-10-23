@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParserTest {
 
     // 308 intersections sur fichier smallMap
-    private ParserPlan parser;
+    private Parser parser;
     @BeforeEach
     void init () {
-        parser = new ParserPlan();
+        parser = new Parser();
     }
     @Test
     void testLectureCasNormal() throws MauvaisFormatXmlException, IOException {
@@ -24,9 +24,9 @@ public class ParserTest {
         String nomFichier = "src/test/resources/smallMap.xml";
 
         // when
-        parser.lirePlan(nomFichier);
-        int nombreIntersectionsRecues = parser.getIntersectionsListe().size();
-        int nombreTrouconsRecus =  parser.getTronconsListe().size();
+        Plan plan = parser.lirePlan(nomFichier);
+        int nombreIntersectionsRecues = plan.getIntersections().size();
+        int nombreTrouconsRecus =  plan.getTroncons().size();
         // then
         assertAll(
                 () -> assertEquals(nombreIntersectionsExpectees, nombreIntersectionsRecues),

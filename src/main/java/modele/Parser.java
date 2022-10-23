@@ -10,18 +10,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-// TODO: changer le nom du class a Parser puisque cette classe va prendre en consideration aussi le sauvegarde
-// des livraisons en xml files.
-public class ParserPlan {
+
+public class Parser {
 //    private static  String FILENAME = "src/main/resources/file.xml";
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
-    private final List<Intersection> intersectionsListe = new ArrayList<Intersection>();
-    private final List<Troncon> tronconsListe = new ArrayList<Troncon>();
     private final List<Entrepot> entrepotsListe = new ArrayList<Entrepot>();
 
-    // TODO: retourner un plan
-    public void lirePlan(String fileName) throws MauvaisFormatXmlException, IOException {
+    public Plan lirePlan(String fileName) throws MauvaisFormatXmlException, IOException {
+        Plan plan = new Plan();
         SAXBuilder sax= new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
@@ -48,7 +45,7 @@ public class ParserPlan {
                         String id = i.getAttributeValue("id");
                         double latitude = Double.parseDouble(i.getAttributeValue("latitude"));
                         double longitude = Double.parseDouble(i.getAttributeValue("longitude"));
-                        intersectionsListe.add(new Intersection(id, latitude, longitude));
+                        plan.ajouterIntersection(new Intersection(id, latitude, longitude));
                     }
             );
 
@@ -61,19 +58,19 @@ public class ParserPlan {
                         String nom = t.getAttributeValue("name");
                         String origineId = t.getAttributeValue("origin");
                         // Checker si l'origine et la destination existe tant qu'une intersection.
-                        Intersection origine = intersectionsListe.stream()
+                        Intersection origine = plan.getIntersections().stream()
                                                     .filter(i -> i.getId().equals(origineId))
                                                     .findFirst()
                                                     .orElseThrow(
                                                             ()-> new MauvaisFormatXmlException("Origine introuvable avec id: " + origineId)
                                                     );
-                        Intersection destination = intersectionsListe.stream()
+                        Intersection destination = plan.getIntersections().stream()
                                                     .filter(i -> i.getId().equals(destinationId))
                                                     .findFirst()
                                                     .orElseThrow(
                                                             ()-> new MauvaisFormatXmlException("Destination introuvable avec id: " + destinationId)
                                                     );
-                        tronconsListe.add(new Troncon(nom, longueur, origine, destination));
+                        plan.ajouterTroncon(new Troncon(nom, longueur, origine, destination));
                     }
 
 
@@ -81,7 +78,7 @@ public class ParserPlan {
             throw new MauvaisFormatXmlException(e);
         }
 
-
+        return plan;
     }
 
     private  static <T> void validerElementXml(List<T> list, String elementName) throws MauvaisFormatXmlException{
@@ -89,20 +86,4 @@ public class ParserPlan {
             throw new MauvaisFormatXmlException("Il n'y a pas d'element " + elementName + " sur le fichier xml fourni" );
         }
     }
-
-    // Getters and Setters
-    /*
-    Je ne veux pas copier toute la liste avant de le routrner dans le get. Je crois que c'est deux methodes sont
-    utilises pour l'instant que sur les tests, mais au pire il seront utilisés en pacakge modele [mais si je ne sais
-    pas leur utilités en dehors du test"
-     */
-    protected List<Troncon> getTronconsListe(){
-        return tronconsListe;
-    }
-    protected List<Intersection> getIntersectionsListe(){
-        return intersectionsListe;
-    }
-
-
-
 }

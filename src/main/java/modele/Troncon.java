@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.Objects;
+
 public class Troncon {
 
     protected String nom;
@@ -46,5 +48,18 @@ public class Troncon {
 
     public void setDestination(Intersection destination) {
         this.destination = destination;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Troncon troncon = (Troncon) o;
+        return origine.equals(troncon.origine) && destination.equals(troncon.destination);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(origine, destination);
     }
 }

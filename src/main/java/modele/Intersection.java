@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.Objects;
+
 public class Intersection {
 
     protected String id;
@@ -45,5 +47,18 @@ public class Intersection {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Intersection that = (Intersection) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
