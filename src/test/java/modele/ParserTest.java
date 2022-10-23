@@ -1,5 +1,6 @@
 package modele;
 
+import modele.exception.MauvaisFormatXmlException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

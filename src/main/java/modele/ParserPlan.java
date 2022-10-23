@@ -1,5 +1,6 @@
 package modele;
 
+import modele.exception.MauvaisFormatXmlException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -90,11 +91,15 @@ public class ParserPlan {
     }
 
     // Getters and Setters
-
-    public List<Troncon> getTronconsListe(){
+    /*
+    Je ne veux pas copier toute la liste avant de le routrner dans le get. Je crois que c'est deux methodes sont
+    utilises pour l'instant que sur les tests, mais au pire il seront utilisés en pacakge modele [mais si je ne sais
+    pas leur utilités en dehors du test"
+     */
+    protected List<Troncon> getTronconsListe(){
         return tronconsListe;
     }
-    public List<Intersection> getIntersectionsListe(){
+    protected List<Intersection> getIntersectionsListe(){
         return intersectionsListe;
     }
 
