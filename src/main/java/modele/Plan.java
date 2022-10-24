@@ -8,8 +8,7 @@ import java.util.stream.Collectors;
 public class Plan {
     private Set<Troncon> troncons;
     private Set<Intersection> intersections;
-// TODO: Is Entrepot part of the plan
-//    private Entrepot entrepot;
+
 
     public Plan() {
         troncons = new HashSet<>();

@@ -8,14 +8,11 @@ import org.jdom2.input.SAXBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-//    private static  String FILENAME = "src/main/resources/file.xml";
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
-    private final List<Entrepot> entrepotsListe = new ArrayList<Entrepot>();
 
     public Plan lirePlan(String fileName) throws MauvaisFormatXmlException, IOException {
         Plan plan = new Plan();
@@ -27,15 +24,6 @@ public class Parser {
             Element rootNode = doc.getRootElement();
 
 
-            List<Element> entrepots = rootNode.getChildren("warehouse");
-            validerElementXml(entrepots, "entropot");
-
-            for (Element entropot : entrepots) {
-                String addresse = entropot.getAttributeValue("address");
-                // TODO :Create Warehouse
-                // TODO: Add Warehouse.
-//                entrepotsListe.add(new Entrepot(addresse));
-            }
 
 
             List<Element> intersections = rootNode.getChildren("intersection");
@@ -48,6 +36,21 @@ public class Parser {
                         plan.ajouterIntersection(new Intersection(id, latitude, longitude));
                     }
             );
+            // TODO: this works for now, but we should try to find a better way to do this
+            // i don't know much about the library, but perhaps i can specify that there is a single element child
+            // instead of a list.
+            List<Element> entrepots = rootNode.getChildren("warehouse");
+            validerElementXml(entrepots, "entropot");
+
+            for (Element entrepot : entrepots) {
+                String addresse = entrepot.getAttributeValue("address");
+                for(Intersection intersection: plan.getIntersections()){
+                    if(intersection.getId().equals(addresse)) {
+                        intersection.setEntrepot(true);
+                    }
+                }
+            }
+
 
             List<Element> troncons = rootNode.getChildren("segment");
             validerElementXml(troncons, "troncon");

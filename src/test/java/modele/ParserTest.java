@@ -24,13 +24,22 @@ public class ParserTest {
         String nomFichier = "src/test/resources/smallMap.xml";
 
         // when
+        boolean warehouseBooleanResult = false;
         Plan plan = parser.lirePlan(nomFichier);
         int nombreIntersectionsRecues = plan.getIntersections().size();
         int nombreTrouconsRecus =  plan.getTroncons().size();
+
+        for(Intersection intersection: plan.getIntersections()){
+            if (intersection.getId().equals("25303831")) {
+                warehouseBooleanResult = intersection.isEntrepot();
+            }
+        }
         // then
+        boolean finalWarehouseBooleanResult = warehouseBooleanResult;
         assertAll(
                 () -> assertEquals(nombreIntersectionsExpectees, nombreIntersectionsRecues),
-                () -> assertEquals(nombreTrouconsExpectes, nombreTrouconsRecus)
+                () -> assertEquals(nombreTrouconsExpectes, nombreTrouconsRecus),
+                () -> assertTrue(finalWarehouseBooleanResult)
         );
     }
 
