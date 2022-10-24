@@ -20,6 +20,10 @@ public class Plan {
         this.intersections.addAll(intersections);
     }
 
+    public Set<Troncon> listerTronconsSortieParIntersection(Intersection intersection){
+        return this.troncons.stream().filter(t-> t.getOrigine().equals(intersection)).collect(Collectors.toSet());
+    }
+
     public void ajouterTroncon(Troncon troncon){
        validTroncon(troncon);
        this.troncons.add(troncon);
