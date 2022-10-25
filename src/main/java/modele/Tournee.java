@@ -7,6 +7,9 @@ public class Tournee {
 
     public List<Livraison> livraisons = new ArrayList<>();
 
+    public Tournee() {
+    }
+
     public Tournee(List<Livraison> livraisons) {
         this.livraisons = livraisons;
     }
