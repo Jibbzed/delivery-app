@@ -29,7 +29,7 @@ public class ParserTest {
         int nombreIntersectionsRecues = plan.getIntersections().size();
         int nombreTrouconsRecus =  plan.getTroncons().size();
 
-        for(Intersection intersection: plan.getIntersections()){
+        for(Intersection intersection: plan.getIntersections().values()){
             if (intersection.getId().equals("25303831")) {
                 warehouseBooleanResult = intersection.isEntrepot();
             }

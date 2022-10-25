@@ -44,7 +44,7 @@ public class Parser {
 
             for (Element entrepot : entrepots) {
                 String addresse = entrepot.getAttributeValue("address");
-                for(Intersection intersection: plan.getIntersections()){
+                for(Intersection intersection: plan.getIntersections().values()){
                     if(intersection.getId().equals(addresse)) {
                         intersection.setEntrepot(true);
                     }
@@ -61,13 +61,13 @@ public class Parser {
                         String nom = t.getAttributeValue("name");
                         String origineId = t.getAttributeValue("origin");
                         // Checker si l'origine et la destination existe tant qu'une intersection.
-                        Intersection origine = plan.getIntersections().stream()
+                        Intersection origine = plan.getIntersections().values().stream()
                                                     .filter(i -> i.getId().equals(origineId))
                                                     .findFirst()
                                                     .orElseThrow(
                                                             ()-> new MauvaisFormatXmlException("Origine introuvable avec id: " + origineId)
                                                     );
-                        Intersection destination = plan.getIntersections().stream()
+                        Intersection destination = plan.getIntersections().values().stream()
                                                     .filter(i -> i.getId().equals(destinationId))
                                                     .findFirst()
                                                     .orElseThrow(

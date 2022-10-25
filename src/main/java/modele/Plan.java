@@ -1,23 +1,21 @@
 package modele;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Plan {
     private Set<Troncon> troncons;
-    private Set<Intersection> intersections;
+    private Map<String, Intersection> intersections;
 
 
     public Plan() {
         troncons = new HashSet<>();
-        intersections = new HashSet<>();
+        intersections = new HashMap<>();
     }
-    public Plan(Collection troncons, Collection intersections) {
+    public Plan(Collection troncons, Map intersections) {
         this();
         this.troncons.addAll(troncons);
-        this.intersections.addAll(intersections);
+        this.intersections.putAll(intersections);
     }
 
     public Set<Troncon> listerTronconsSortieParIntersection(Intersection intersection){
@@ -29,8 +27,8 @@ public class Plan {
        this.troncons.add(troncon);
     }
     private void validTroncon(Troncon troncon) {
-        if(!(this.intersections.contains(troncon.getOrigine()))
-                || !(this.intersections.contains(troncon.getDestination())) ){
+        if( (this.intersections.get(troncon.getOrigine()) != null )
+                || (this.intersections.get(troncon.getDestination()) != null ) ){
             // TODO: Est-ce qu'on a besoin de ce check, si on ajoute des troncons que depuis fichier xml
             // on a deja fais le check sur le ParserPlan avant de creer un nouveau troncon.
             throw new IllegalArgumentException("echec d'ajout du troncon: troncon avec un origine ou destination invalide.");
@@ -38,7 +36,7 @@ public class Plan {
     }
 
     public void ajouterIntersection(Intersection intersection) {
-        this.intersections.add(intersection);
+        this.intersections.put(intersection.getId(), intersection);
     }
 
     public void retirerIntersection(Intersection intersection) {
@@ -58,7 +56,82 @@ public class Plan {
         return troncons;
     }
 
-    protected Set<Intersection> getIntersections() {
+    protected Map<String, Intersection> getIntersections() {
         return intersections;
     }
+
+    public Map<String, Dijkstra> plusCourtChemin(String idOrigine, List<String> idDestinations) {
+        Double distMax = Double.MAX_VALUE;
+
+        Map<String, Double> distances = new HashMap<>();
+        Map<String, Troncon> parents = new HashMap<>();
+
+        //Initialisation du tableau des distances
+        intersections.forEach((id, intersection)-> distances.put(id, distMax));
+        //Initialisation pour l'origine
+        distances.put(idOrigine, (double) 0);
+        parents.put(idOrigine, null);
+
+        Set<String> noeudsBlancs = new HashSet<>();
+        Set<String> noeudsGris = new HashSet<>();
+        Set<String> noeudsNoirs = new HashSet<>();
+
+        noeudsBlancs.addAll(intersections.keySet());
+        noeudsBlancs.remove(idOrigine);
+        noeudsGris.add(idOrigine);
+
+        while( !noeudsGris.isEmpty() ) {
+            //On récupère le noeud gris avec la plus petite distance
+            String noeudCourant = noeudsGris.stream().sorted(Comparator.comparing(distances::get)).findFirst().orElse("");
+            /*String noeudCourant = null;
+            Integer max = Integer.MAX_VALUE;
+            for ( String s : noeudsGris ) {
+                if ( distances.get(s) < max ) {
+                    noeudCourant = s;
+                    max = distances.get(s);
+                }
+            }*/
+            Set<Troncon> successeurs = listerTronconsSortieParIntersection(intersections.get(noeudCourant));
+            for( Troncon t : successeurs ) {
+                String dest = t.getDestination().getId();
+                if( noeudsBlancs.contains(dest) || noeudsGris.contains(dest) ) {
+                    Double longueur = t.getLongueur();
+                    if (distances.get(dest) > (distances.get(noeudCourant) + longueur)) {
+                        parents.put(dest, t);
+                        distances.put(dest, distances.get(noeudCourant) + longueur);
+                    }
+                    if (noeudsBlancs.contains(dest)) {
+                        noeudsGris.add(dest);
+                        noeudsBlancs.remove(dest);
+                    }
+                }
+            }
+            noeudsNoirs.add(noeudCourant);
+            noeudsGris.remove(noeudCourant);
+        }
+
+        Map<String, Dijkstra> res = new HashMap<>();
+        for ( String id : idDestinations ) {
+            List<Troncon> chemin = getChemin(idOrigine, id, parents);
+            res.put(id, new Dijkstra(idOrigine, id, distances.get(id), chemin));
+        }
+
+        return res;
+    }
+
+    protected List<Troncon> getChemin(String idOrigine, String id, Map<String, Troncon> parents) {
+        List<Troncon> chemin = new ArrayList<>();
+        String idActuel = id;
+        Troncon tronconActuel = parents.get(id);
+        do {
+            chemin.add(tronconActuel);
+            idActuel = tronconActuel.getOrigine().getId();
+            tronconActuel = parents.get(idActuel);
+        } while ( !idActuel.equals(idOrigine) );
+
+        Collections.reverse(chemin);
+        return chemin;
+    }
+
+
 }
