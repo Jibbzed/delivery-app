@@ -42,10 +42,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,11 +57,13 @@ public class Controller {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     /** some coordinates from around town. */
+    // TODO: remove those coordinates .
     private static final Coordinate coordKarlsruheCastle = new Coordinate(45.787014254394485, 4.859803724463408);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(45.70992358352251, 4.839579846710358);
     private static final Coordinate coordKarlsruheStation = new Coordinate(45.751259, 4.771900);
     private static final Coordinate coordKarlsruheSoccer = new Coordinate(45.74364103080251, 4.894440521734221);
     private static final Coordinate coordKarlsruheUniversity = new Coordinate(45.7372222601674, 4.8506159101826976);
+    private static final Coordinate coordCenterLyon = new Coordinate(45.76015950285325, 4.8379530819309995);
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle, coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
 
     private static final Coordinate coordGermanyNorth = new Coordinate(45.787014254394485, 4.859803724463408);
@@ -81,10 +80,13 @@ public class Controller {
     private static final Coordinate randCoord4 = new Coordinate(45.75171, 4.8718166);
     private static final Coordinate randCoord5 = new Coordinate(45.750896, 4.859119);
 
+    private final Coordinate coordMin;
+    private final Coordinate coordMax;
+
     private final List<Coordinate> coordinateSet;
     private final Extent extentLyon;
     /** default zoom value. */
-    private static final int ZOOM_DEFAULT = 14;
+    private static final int ZOOM_DEFAULT = 15;
 
     /** the markers. */
     private final Marker markerKaHarbour;
@@ -92,6 +94,11 @@ public class Controller {
     private final Marker markerKaStation;
     private final Marker markerKaSoccer;
     private final Marker markerClick;
+
+    private final Marker markerMinCoord;
+    private final Marker markerMaxCoord;
+
+    private final Set<Marker> markersIntersections = new HashSet<>();
 
     /** the labels. */
     private final MapLabel labelKaUniversity;
@@ -218,6 +225,15 @@ public class Controller {
     @FXML
     private CheckBox checkKaHarbourMarker;
 
+    @FXML
+    private CheckBox checkMarkerMinCoord;
+
+    @FXML
+    private CheckBox checkMarkerMaxCoord;
+
+    @FXML
+    private CheckBox checkIntersectionsMarkers;
+
     /** Check button for castle marker */
     @FXML
     private CheckBox checkKaCastleMarker;
@@ -275,8 +291,19 @@ public class Controller {
                 plan.getIntersections().values().stream()
                     .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
                     .collect(Collectors.toList());
+
+         coordinateSet.stream()
+                 .map(c-> new Marker(getClass().getResource("/icons8-pin-24.png"), -15, -20).setPosition(c).setVisible(false))
+//                 .map(c-> Marker.createProvided(Marker.Provided.BLUE).setPosition(c).setVisible(false))
+                 .forEach(markersIntersections::add);
+
+
         extentLyon = Extent.forCoordinates(coordinateSet);
+        coordMin = extentLyon.getMin();
+        coordMax = extentLyon.getMax();
         // a couple of markers using the provided ones
+        markerMinCoord = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordMin).setVisible(false);
+        markerMaxCoord = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordMax).setVisible(false);
         markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
             false);
         markerKaCastle = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordKarlsruheCastle).setVisible(
@@ -296,6 +323,7 @@ public class Controller {
         labelKaCastle = new MapLabel("castle", 10, -10).setVisible(false).setCssClass("green-label");
         labelKaStation = new MapLabel("station", 10, -10).setVisible(false).setCssClass("red-label");
         labelClick = new MapLabel("click!", 10, -10).setVisible(false).setCssClass("orange-label");
+
 
         markerKaCastle.attachLabel(labelKaCastle);
         markerKaStation.attachLabel(labelKaStation);
@@ -408,6 +436,10 @@ public class Controller {
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
             new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkMarkerMinCoord.setGraphic(
+                new ImageView(new Image(markerMinCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkMarkerMaxCoord.setGraphic(
+                new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkKaCastleMarker.setGraphic(
             new ImageView(new Image(markerKaCastle.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkKaStationMarker.setGraphic(
@@ -417,12 +449,20 @@ public class Controller {
         checkClickMarker.setGraphic(
             new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
+        checkIntersectionsMarkers.setGraphic(
+                new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
+        );
         // bind the checkboxes to the markers visibility
         checkKaHarbourMarker.selectedProperty().bindBidirectional(markerKaHarbour.visibleProperty());
         checkKaCastleMarker.selectedProperty().bindBidirectional(markerKaCastle.visibleProperty());
         checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
         checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
+        checkMarkerMinCoord.selectedProperty().bindBidirectional(markerMinCoord.visibleProperty());
+        checkMarkerMaxCoord.selectedProperty().bindBidirectional(markerMaxCoord.visibleProperty());
+        markersIntersections.forEach(marker-> {
+            checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
+        });
         logger.trace("marker checks done");
 
         // load two coordinate lines
@@ -528,6 +568,8 @@ public class Controller {
         });
         mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
             event.consume();
+            // TODO: afficher section pour ajouter une livraision
+            event.getMarker().setRotation(event.getMarker().getRotation() + 180);
             labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
@@ -614,12 +656,15 @@ public class Controller {
         logger.debug("setting center and enabling controls...");
         // start at the harbour with default zoom
         mapView.setZoom(ZOOM_DEFAULT);
-        mapView.setCenter(coordKarlsruheHarbour);
+        mapView.setCenter(coordCenterLyon);
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKaHarbour);
         mapView.addMarker(markerKaCastle);
         mapView.addMarker(markerKaStation);
         mapView.addMarker(markerKaSoccer);
+        mapView.addMarker(markerMinCoord);
+        mapView.addMarker(markerMaxCoord);
+        markersIntersections.forEach(mapView::addMarker);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
 
         // add the fix label, the other's are attached to markers.
@@ -627,7 +672,7 @@ public class Controller {
 
         // add the tracks
         mapView.addCoordinateLine(trackMagenta);
-        mapView.addCoordinateLine(trackCyan);
+//        mapView.addCoordinateLine(trackCyan);
 
         // add the circle
         mapView.addMapCircle(circleCastle);

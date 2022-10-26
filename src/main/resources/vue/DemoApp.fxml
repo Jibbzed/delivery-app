@@ -91,11 +91,14 @@
                     <content>
                         <VBox spacing="10.0">
                             <children>
+                                <CheckBox fx:id="checkMarkerMinCoord" text="MinPoint" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkMarkerMaxCoord" text="MaxPoint" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaHarbourMarker" text="Karlsruhe harbour" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaCastleMarker" text="Karlsruhe castle" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaStationMarker" text="Karlsruhe station" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaSoccerMarker" text="KSC soccer stadium" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkClickMarker" text="click location" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkIntersectionsMarkers" text="afficher intersections" maxWidth="Infinity"></CheckBox>
                             </children>
                         </VBox>
                     </content>
