@@ -31,8 +31,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import modele.Parser;
-import modele.Plan;
+import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ public class Controller {
     private static final Coordinate coordKarlsruheStation = new Coordinate(45.751259, 4.771900);
     private static final Coordinate coordKarlsruheSoccer = new Coordinate(45.74364103080251, 4.894440521734221);
     private static final Coordinate coordKarlsruheUniversity = new Coordinate(45.7372222601674, 4.8506159101826976);
-    private static final Coordinate coordCenterLyon = new Coordinate(45.76015950285325, 4.8379530819309995);
+    private static Coordinate coordCenterWarehouse;
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle, coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
 
     private static final Coordinate coordGermanyNorth = new Coordinate(45.787014254394485, 4.859803724463408);
@@ -83,7 +82,7 @@ public class Controller {
     private final Coordinate coordMin;
     private final Coordinate coordMax;
 
-    private final List<Coordinate> coordinateSet;
+    private final List<Coordinate> coordinateList;
     private final Extent extentLyon;
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 15;
@@ -108,6 +107,7 @@ public class Controller {
 
     // a circle around the castle
     private final MapCircle circleCastle;
+    private final Plan plan;
 
     @FXML
     /** button to set the map's zoom. */
@@ -270,7 +270,7 @@ public class Controller {
 
     /** Check Button for constraining th extent. */
     @FXML
-    private CheckBox checkConstrainGermany;
+    private CheckBox checkConstrainXmlFile;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -285,20 +285,27 @@ public class Controller {
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
+        initCoordStatic();
         Parser parser = new Parser();
-        Plan plan = parser.lirePlan("src/test/resources/smallMap.xml");
-         coordinateSet =
+        this.plan = parser.lirePlan("src/test/resources/smallMap.xml");
+         coordinateList =
                 plan.getIntersections().values().stream()
                     .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
                     .collect(Collectors.toList());
-
-         coordinateSet.stream()
-                 .map(c-> new Marker(getClass().getResource("/icons8-pin-24.png"), -15, -20).setPosition(c).setVisible(false))
+         // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
+         coordinateList.stream()
+                 .map(c-> {
+                     String imageUrl = "/icons8-pin-24.png";
+                     if(c.equals(coordCenterWarehouse)) {
+                         imageUrl = "/icons8-warehouse-24.png";
+                     }
+                     return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(false);
+                 } )
 //                 .map(c-> Marker.createProvided(Marker.Provided.BLUE).setPosition(c).setVisible(false))
                  .forEach(markersIntersections::add);
 
 
-        extentLyon = Extent.forCoordinates(coordinateSet);
+        extentLyon = Extent.forCoordinates(coordinateList);
         coordMin = extentLyon.getMin();
         coordMax = extentLyon.getMax();
         // a couple of markers using the provided ones
@@ -330,6 +337,10 @@ public class Controller {
         markerClick.attachLabel(labelClick);
 
         circleCastle = new MapCircle(coordKarlsruheStation, 1_000).setVisible(true);
+    }
+
+    private static void initCoordStatic() {
+        coordCenterWarehouse = new Coordinate(coordWarhouseLyon.getLatitude(), coordWarhouseLyon.getLongitude());
     }
 
     /**
@@ -466,9 +477,31 @@ public class Controller {
         logger.trace("marker checks done");
 
         // load two coordinate lines
-        trackMagenta = new CoordinateLine(coordinateSet).setColor(Color.MAGENTA);
-        trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv")).orElse(new CoordinateLine
-            ()).setColor(Color.CYAN).setWidth(7);
+//        private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
+
+        // TODO: delete afterwards, this is just a test
+        Intersection warehouse = plan.getIntersections().get("25303831");
+        Intersection i1 = plan.getIntersections().get("25321689");
+        Intersection i2 = plan.getIntersections().get("25321687");
+        Intersection i3 = plan.getIntersections().get("459797860");
+        Intersection i4 = plan.getIntersections().get("251047560");
+        Intersection i5 = plan.getIntersections().get("25321447");
+
+        Map<String, Dijkstra> resultat = plan.plusCourtChemin(warehouse.getId(), Stream.of("25336178").collect(Collectors.toList()));
+//        List<Coordinate> chemin = Stream.of(
+//                new Coordinate(warehouse.getLatitude(), warehouse.getLongitude()),
+//                new Coordinate(i1.getLatitude(), i1.getLongitude()),
+//                new Coordinate(i2.getLatitude(), i2.getLongitude()),
+//                new Coordinate(i3.getLatitude(), i3.getLongitude()),
+//                new Coordinate(i4.getLatitude(), i4.getLongitude()),
+//                new Coordinate(i5.getLatitude(), i5.getLongitude())
+//        ).collect(Collectors.toList());
+        List<Coordinate> chemin = resultat.get("25336178").getChemin().stream()
+                    .map(Troncon::getOrigine)
+                    .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                    .collect(Collectors.toList());
+        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7);
+        trackCyan = new CoordinateLine().setColor(Color.CYAN).setWidth(7);
         logger.trace("tracks loaded");
         checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
         checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
@@ -493,7 +526,7 @@ public class Controller {
         checkDrawPolygon.selectedProperty().addListener(polygonListener);
 
         // add the constrain listener
-        checkConstrainGermany.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 mapView.constrainExtent(extentLyon);
             } else {
@@ -656,7 +689,7 @@ public class Controller {
         logger.debug("setting center and enabling controls...");
         // start at the harbour with default zoom
         mapView.setZoom(ZOOM_DEFAULT);
-        mapView.setCenter(coordCenterLyon);
+        mapView.setCenter(coordCenterWarehouse);
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKaHarbour);
         mapView.addMarker(markerKaCastle);
