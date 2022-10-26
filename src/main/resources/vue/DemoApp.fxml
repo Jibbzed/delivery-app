@@ -58,11 +58,7 @@
                     <content>
                         <VBox spacing="10.0">
                             <children>
-                                <Button fx:id="buttonKaHarbour" text="Karlsruhe harbour" maxWidth="Infinity"/>
-                                <Button fx:id="buttonKaCastle" text="Karlsruhe castle" maxWidth="Infinity"/>
-                                <Button fx:id="buttonKaStation" text="Karlsruhe station" maxWidth="Infinity"/>
-                                <Button fx:id="buttonKaSoccer" text="KSC soccer stadium" maxWidth="Infinity"/>
-                                <Button fx:id="buttonAllLocations" text="All" maxWidth="Infinity"/>
+                                <Button fx:id="buttonWarhouse" text="Entrepot" maxWidth="Infinity"/>
                             </children>
                         </VBox>
                     </content>
@@ -91,13 +87,8 @@
                     <content>
                         <VBox spacing="10.0">
                             <children>
-                                <CheckBox fx:id="checkMarkerMinCoord" text="MinPoint" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkMarkerMaxCoord" text="MaxPoint" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaHarbourMarker" text="Karlsruhe harbour" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaCastleMarker" text="Karlsruhe castle" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaStationMarker" text="Karlsruhe station" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkKaSoccerMarker" text="KSC soccer stadium" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkClickMarker" text="click location" maxWidth="Infinity"/>
+<!--                                <CheckBox fx:id="checkMarkerMinCoord" text="MinPoint" maxWidth="Infinity"/>-->
+<!--                                <CheckBox fx:id="checkMarkerMaxCoord" text="MaxPoint" maxWidth="Infinity"/>-->
                                 <CheckBox fx:id="checkIntersectionsMarkers" text="afficher intersections" maxWidth="Infinity"></CheckBox>
                             </children>
                         </VBox>
@@ -108,8 +99,8 @@
                         <VBox spacing="10.0">
                             <children>
                                 <CheckBox fx:id="checkTrackMagenta" text="magenta track" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkTrackCyan" text="cyan track" maxWidth="Infinity"/>
-                                <CheckBox fx:id="checkDrawPolygon" text="draw a polygon" maxWidth="Infinity"/>
+<!--                                <CheckBox fx:id="checkTrackCyan" text="cyan track" maxWidth="Infinity"/>-->
+<!--                                <CheckBox fx:id="checkDrawPolygon" text="draw a polygon" maxWidth="Infinity"/>-->
                             </children>
                         </VBox>
                     </content>
