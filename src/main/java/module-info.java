@@ -1,5 +1,13 @@
 module vue {
     requires javafx.controls;
     requires jdom2;
+    requires org.slf4j;
+    requires javafx.fxml;
+    requires javafx.graphics;
+    requires com.sothawo.mapjfx;
     exports vue;
+
+    opens vue to javafx.fxml, javafx.graphics;
+    exports controleur;
+    opens controleur to javafx.fxml, javafx.graphics;
 }
