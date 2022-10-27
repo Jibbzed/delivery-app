@@ -108,6 +108,12 @@ public class Plan {
             }
             noeudsNoirs.add(noeudCourant);
             noeudsGris.remove(noeudCourant);
+            Boolean exitDest = true;
+            for( String id : idDestinations ) {
+                if( !noeudsNoirs.contains(id) ) { exitDest = false; }
+            }
+            Boolean exitOrigin = noeudsNoirs.contains(idOrigine);
+            if( exitOrigin && exitDest ) { break; }
         }
 
         Map<String, Dijkstra> res = new HashMap<>();
@@ -131,6 +137,10 @@ public class Plan {
 
         Collections.reverse(chemin);
         return chemin;
+    }
+
+    public Intersection getIntersectionParId(String idInter) {
+        return intersections.get(idInter);
     }
 
 
