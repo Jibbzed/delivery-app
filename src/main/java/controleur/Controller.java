@@ -24,6 +24,8 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,6 +41,8 @@ import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.ServiceLivraison;
+import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,6 +72,7 @@ public class Controller {
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
     private Coordinate coordMin;
     private Coordinate coordMax;
+
 
     private List<Coordinate> coordinateList;
     private Extent extentLyon;
@@ -203,6 +208,9 @@ public class Controller {
     @FXML
     private CheckBox checkConstrainXmlFile;
 
+    @FXML
+    private ListView<?> listeLivraisons;
+
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
         .setUrl("http://ows.terrestris.de/osm/service?")
@@ -262,6 +270,8 @@ public class Controller {
     public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
         chargerPlan(path);
         logger.trace("begin initialize");
+
+
 
         // init MapView-Cache
         final OfflineCache offlineCache = mapView.getOfflineCache();
@@ -530,7 +540,7 @@ public class Controller {
 
             final AjoutLivraisonController controller = fxmlLoader.getController();
 
-            controller.initData(plan.getIntersections().get(intersectionIdSelectionne));
+            controller.initData(plan.getIntersections().get(intersectionIdSelectionne), this);
 
             Stage stage = new Stage();
             stage.setTitle("Ajout Livraison");
@@ -538,6 +548,12 @@ public class Controller {
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();
+
+
+
+            if(!stage.isShowing()) {
+
+            }
 
             labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
         });
@@ -646,5 +662,12 @@ public class Controller {
             logger.error("load {}", url, e);
         }
         return Optional.empty();
+    }
+
+    public void refreshLivraison() {
+        ObservableList listLivraisonObeservable = FXCollections.observableArrayList();
+        listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
+        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
+        listeLivraisons.getItems().addAll(listLivraisonObeservable);
     }
 }

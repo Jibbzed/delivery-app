@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class AjoutLivraisonController {
 
-
+    private Controller controllerMere;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -85,11 +85,11 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection) {
+    public void initData(Intersection intersection, Controller controllerMere) {
         destination = intersection;
         destinationIdLabel.setText(destination.getId());
         destinationIdLabel.setVisible(true);
-
+        this.controllerMere = controllerMere;
         System.out.println(destination);
     }
 
@@ -115,7 +115,8 @@ public class AjoutLivraisonController {
         livraison.setCoursierLivraison(this.coursierSelectionne);
         livraison.setFenetreHoraireLivr(this.plageHoraire);
         serviceLivraison.ajouterLivraison(livraison);
-        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
+//        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
+        this.controllerMere.refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
     }
