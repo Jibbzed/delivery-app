@@ -31,10 +31,17 @@ public class ServiceCoursier {
     public void ajouterCoursier(){
         this.listeCoursiers.add(new Coursier(faker.name().lastName(), faker.name().firstName()));
     }
+    public void ajouterCoursier(Coursier coursier){
+        this.listeCoursiers.add(coursier);
+    }
 
     public void retirerCoursier(String nom, String prenom){
         Coursier c = new Coursier(nom, prenom);
         this.listeCoursiers.remove(c);
+    }
+
+    public void retirerCoursier(Coursier coursier){
+        this.listeCoursiers.remove(coursier);
     }
 
     public List<Coursier> getListeCoursiers() {

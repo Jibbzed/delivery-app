@@ -1,7 +1,5 @@
 package modele;
 
-import com.github.javafaker.Faker;
-
 import java.util.Objects;
 public class Coursier {
 
@@ -42,7 +40,7 @@ public class Coursier {
         return prenom;
     }
 
-    public boolean isPlanifie() {
+    public boolean getPlanifie() {
         return planifie;
     }
 
