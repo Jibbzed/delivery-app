@@ -2,6 +2,7 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Tournee {
@@ -33,5 +34,18 @@ public class Tournee {
 
     public void retirerLivraison(Livraison l){
         this.livraisons.remove(l);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tournee tournee = (Tournee) o;
+        return livraisons.equals(tournee.livraisons);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(livraisons);
     }
 }
