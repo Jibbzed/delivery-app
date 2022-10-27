@@ -214,6 +214,7 @@ public class Controller {
     public Controller() throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
+         // TODO: traiter exception mauvais format xml
         this.plan = parser.lirePlan("src/test/resources/smallMap.xml");
          coordinateList =
                 plan.getIntersections().values().stream()
