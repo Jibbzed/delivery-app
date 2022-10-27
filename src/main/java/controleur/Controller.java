@@ -62,24 +62,24 @@ public class Controller {
     private static final String __ENTROPOT_ID__ = "25303831";
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
-    private final Coordinate coordMin;
-    private final Coordinate coordMax;
+    private Coordinate coordMin;
+    private Coordinate coordMax;
 
-    private final List<Coordinate> coordinateList;
-    private final Extent extentLyon;
+    private List<Coordinate> coordinateList;
+    private Extent extentLyon;
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 15;
 
     /** the markers. */
-    private final Marker markerMinCoord;
-    private final Marker markerMaxCoord;
+    private Marker markerMinCoord;
+    private Marker markerMaxCoord;
 
     private final Set<Marker> markersIntersections = new HashSet<>();
 
     /** the labels. */
 
     /** Le plan */
-    private final Plan plan;
+    private Plan plan;
 
     @FXML
     /** button to set the map's zoom. */
@@ -212,24 +212,28 @@ public class Controller {
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
+        //chargerPlan("src/test/resources/smallMap.xml");
+    }
+
+    private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
-        this.plan = parser.lirePlan("src/test/resources/smallMap.xml");
-         coordinateList =
+        this.plan = parser.lirePlan(path);
+        coordinateList =
                 plan.getIntersections().values().stream()
-                    .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
-                    .collect(Collectors.toList());
-         // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
-         coordinateList.stream()
-                 .map(c-> {
-                     String imageUrl = "/icons8-pin-24.png";
-                     if(c.equals(coordCenterWarehouse)) {
-                         imageUrl = "/icons8-warehouse-24.png";
-                     }
-                     return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(false);
-                 } )
+                        .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .collect(Collectors.toList());
+        // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
+        coordinateList.stream()
+                .map(c -> {
+                    String imageUrl = "/icons8-pin-24.png";
+                    if (c.equals(coordCenterWarehouse)) {
+                        imageUrl = "/icons8-warehouse-24.png";
+                    }
+                    return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(false);
+                })
 //                 .map(c-> Marker.createProvided(Marker.Provided.BLUE).setPosition(c).setVisible(false))
-                 .forEach(markersIntersections::add);
+                .forEach(markersIntersections::add);
 
 
         extentLyon = Extent.forCoordinates(coordinateList);
@@ -251,7 +255,8 @@ public class Controller {
      * @param projection
      *     the projection to use in the map.
      */
-    public void initMapAndControls(Projection projection) {
+    public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
+        chargerPlan(path);
         logger.trace("begin initialize");
 
         // init MapView-Cache

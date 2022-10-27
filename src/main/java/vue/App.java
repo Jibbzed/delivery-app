@@ -36,7 +36,7 @@ public class App extends Application {
         final Controller controller = fxmlLoader.getController();
         final  Projection projection = getParameters().getUnnamed().contains("wgs84")
                 ? Projection.WGS_84 : Projection.WEB_MERCATOR;
-        controller.initMapAndControls(projection);
+        controller.initMapAndControls(projection, "src/test/resources/largeMap.xml");
 
         Scene scene = new Scene(rootNode);
         logger.trace("scene created");

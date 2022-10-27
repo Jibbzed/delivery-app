@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import modele.exception.MauvaisFormatXmlException;
 import vue.App;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.io.IOException;
 public class ControllerPageAccueil {
 
     @FXML
-    private Button buttonBigMap;
+    private Button buttonLargeMap;
 
     @FXML
     private Button buttonMediumMap;
@@ -47,12 +48,18 @@ public class ControllerPageAccueil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        buttonBigMap.setOnAction(event -> {
-            System.out.println("src/test/resources/bigMap.xml");
-            xmlPath = "src/test/resources/bigMap.xml";
+        buttonLargeMap.setOnAction(event -> {
+            System.out.println("src/test/resources/largeMap.xml");
+            xmlPath = "src/test/resources/largeMap.xml";
             stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             final Controller controller = fxmlLoader.getController();
-            controller.initMapAndControls(Projection.WEB_MERCATOR);
+            try {
+                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
+            } catch (MauvaisFormatXmlException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -61,16 +68,52 @@ public class ControllerPageAccueil {
         buttonMediumMap.setOnAction(event -> {
             System.out.println("src/test/resources/mediumMap.xml");
             xmlPath = "src/test/resources/mediumMap.xml";
+            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            final Controller controller = fxmlLoader.getController();
+            try {
+                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
+            } catch (MauvaisFormatXmlException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         });
 
         buttonSmallMap.setOnAction(event -> {
             System.out.println("src/test/resources/smallMap.xml");
             xmlPath = "src/test/resources/smallMap.xml";
+            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            final Controller controller = fxmlLoader.getController();
+            try {
+                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
+            } catch (MauvaisFormatXmlException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         });
 
         buttonValidate.setOnAction(event -> {
             System.out.println(textXML.getText());
             xmlPath = textXML.getText();
+            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            final Controller controller = fxmlLoader.getController();
+            try {
+                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
+            } catch (MauvaisFormatXmlException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         });
     }
 
