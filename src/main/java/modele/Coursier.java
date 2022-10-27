@@ -8,21 +8,18 @@ public class Coursier {
 
     private final String nom;
     private final String prenom;
-    private boolean planifie;
-    private boolean valide;
+    private boolean planifie; // True si le coursier est attribue à une tournee
 
     public Coursier(String nom, String prenom) {
         this.nom = nom;
         this.prenom = prenom;
         this.planifie = false;
-        this.valide = true;
     }
 
     public Coursier(String nom, String prenom, boolean planifie) {
         this.nom = nom;
         this.prenom = prenom;
         this.planifie = planifie;
-        this.valide = true;
     }
 
     @Override
@@ -54,25 +51,12 @@ public class Coursier {
         this.planifie = planifie;
     }
 
-    /**
-     * Correspond à un set de valide, mais plus explicite
-     */
-    public void deleteCoursier() {
-        this.valide = false;
-    }
-
-
-
     @Override
     public String toString() {
-        if (this.valide) {
-            return "Coursier{" +
-                    "nom='" + nom + '\'' +
-                    ", prenom='" + prenom + '\'' +
-                    ", planifie=" + planifie +
-                    '}';
-        } else {
-            return "Coursier supprimé.";
-        }
-    }
+        return "Coursier{" +
+                "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", planifie=" + planifie +
+                '}';
+}
 }
