@@ -50,11 +50,8 @@ public class Coursier {
 
     @Override
     public String toString() {
-        return "Coursier{" +
-                "nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", planifie=" + planifie +
-                '}';
-}
+        return nom + " " + prenom;
+    }
+
 
 }

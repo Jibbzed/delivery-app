@@ -9,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.ServiceCoursier;
+import service.ServiceLivraison;
+import service.impl.ServiceLivraisonMockImpl;
 
 /**
  * JavaFX App
@@ -25,6 +28,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ServiceCoursier.getInstance(1);
+        ServiceLivraisonMockImpl.getInstance();
         logger.info("starting DemoApp");
         String fxmlFile = "/vue/DemoApp.fxml";
         logger.debug("loading fxml file {}", fxmlFile);
