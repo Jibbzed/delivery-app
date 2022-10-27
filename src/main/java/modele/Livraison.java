@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Livraison {
@@ -75,5 +76,18 @@ public class Livraison {
 
     public void setOrigineLivraison(Intersection origineLivraison) {
         this.origineLivraison = origineLivraison;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livraison livraison = (Livraison) o;
+        return origineLivraison.equals(livraison.origineLivraison) && destinationLivraison.equals(livraison.destinationLivraison) && parcoursLivraison.equals(livraison.parcoursLivraison);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(origineLivraison, destinationLivraison, parcoursLivraison);
     }
 }

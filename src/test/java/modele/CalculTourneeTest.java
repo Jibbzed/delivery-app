@@ -85,10 +85,31 @@ public class CalculTourneeTest {
 
         CalculTournee algo = new CalculTournee(plan, i1, pointsLivraison);
 
-        Tournee tournee = algo.calculerTournee();
+        Tournee tourneeCalculee = algo.calculerTournee();
 
-       // expected
+        // expected
+        // tournee calculee a la main sur un exemple simple pour valider le TSP
+        List<Troncon> traj1 = new ArrayList<>();
+        traj1.add(new Troncon("y", 3, i1, i3));
+        Livraison l1 = new Livraison(i1, i3, traj1);
 
+        List<Troncon> traj2 = new ArrayList<>();
+        traj2.add(new Troncon("b", 2, i3, i4));
+        Livraison l2 = new Livraison(i3, i4, traj2);
+
+        List<Troncon> traj3 = new ArrayList<>();
+        traj3.add(new Troncon("g", 3, i4, i2));
+        traj3.add(new Troncon("x", 1, i2, i1));
+        Livraison l3 = new Livraison(i4, i1 ,traj3);
+
+        List<Livraison> livraisons = new ArrayList<>();
+        livraisons.add(l1);
+        livraisons.add(l2);
+        livraisons.add(l3);
+        Tournee attendue = new Tournee(livraisons);
+
+        // test
+        assertEquals(attendue, tourneeCalculee);
     }
 
 }
