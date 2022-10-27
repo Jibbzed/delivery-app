@@ -549,12 +549,6 @@ public class Controller {
             stage.centerOnScreen();
             stage.show();
 
-
-
-            if(!stage.isShowing()) {
-
-            }
-
             labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
         });
 
