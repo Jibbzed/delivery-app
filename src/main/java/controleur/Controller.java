@@ -25,11 +25,15 @@ import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
@@ -503,10 +507,46 @@ public class Controller {
 
             labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
+
+        mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
+            event.consume();
+            Coordinate coordSelectionne = event.getMarker().getPosition();
+            String intersectionIdSelectionne =
+                    plan.getIntersections().values().stream()
+                            .filter(i -> i.getLatitude() == coordSelectionne.getLatitude()
+                                    && i.getLongitude() == coordSelectionne.getLongitude())
+                            .map(Intersection::getId)
+                            .findAny().orElse("");
+
+            String fxmlFile = "/vue/AjoutLivraison.fxml";
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root;
+            try {
+                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            final AjoutLivraisonController controller = fxmlLoader.getController();
+
+            controller.initData(plan.getIntersections().get(intersectionIdSelectionne));
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajout Livraison");
+            stage.show();
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+            stage.show();
+
+            labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
+        });
+
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: marker right clicked: " + event.getMarker().getId());
         });
+
         mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
