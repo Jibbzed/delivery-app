@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.AjoutLivraisonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.AjoutLivraisonController">
    <children>
       <VBox layoutX="306.0" layoutY="154.0" prefHeight="67.0" prefWidth="158.0">
          <children>
@@ -37,8 +37,8 @@
          </children>
       </VBox>
       <Label layoutX="41.0" layoutY="25.0" prefHeight="18.0" prefWidth="193.0" text="Saisir une livraison" />
-      <Label layoutX="41.0" layoutY="43.0" prefHeight="18.0" prefWidth="54.0" text="Origine :" />
-      <Label layoutX="41.0" layoutY="61.0" prefHeight="18.0" prefWidth="66.0" text="Destination :" />
+      <Label layoutX="41.0" layoutY="43.0" prefHeight="18.0" prefWidth="54.0" maxWidth="-Infinity" text="Origine :" />
+      <Label layoutX="41.0" layoutY="61.0" prefHeight="18.0" prefWidth="66.0" maxWidth="-Infinity" text="Destination :" />
       <Label fx:id="originIdLabel" layoutX="119.0" layoutY="43.0" prefHeight="18.0" prefWidth="54.0" text="originID" />
       <Label fx:id="destinationIdLabel" layoutX="119.0" layoutY="61.0" text="destID" visible="false" />
    </children>

@@ -19,7 +19,8 @@ public class AjoutLivraisonController {
 
 
     private Intersection destination;
-    private Coursier selectedCoursier;
+
+    private Coursier coursierSelectionne;
     @FXML
     private ComboBox coursierSelector;
 
@@ -45,8 +46,12 @@ public class AjoutLivraisonController {
     @FXML
     private Label originIdLabel;
 
-    public void AjoutLivraisonController() {
 
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);
+    private int plageHoraire;
+    private ServiceLivraison serviceLivraison;
+
+    public void AjoutLivraisonController() {
     }
 
     public void initialize() {
@@ -65,11 +70,11 @@ public class AjoutLivraisonController {
         start11.setOnAction(e -> {
             selectionnerPlageHoraire(11);
         });
-        ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);
-        serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
 //        coursierSelector.getItems().add("Coursier 1");
-
+//        coursierSelector.getItems().add("Coursier 2");
+        serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.setOnAction(e -> {
+
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
 
@@ -85,19 +90,18 @@ public class AjoutLivraisonController {
         destinationIdLabel.setText(destination.getId());
         destinationIdLabel.setVisible(true);
 
-        System.out.println(intersection);
+        System.out.println(destination);
     }
 
 
     //TODO: compléter cette méthode pour ajouter la plage horaire à la livraison
     public void selectionnerPlageHoraire(int plageHoraire) {
-        System.out.println(plageHoraire);
-
+        this.plageHoraire = plageHoraire; 
     }
 
     //TODO: compléter cette méthode pour ajouter le coursier à la livraison
     public void selectionnerCoursier(Coursier coursier) {
-        selectedCoursier = coursier;
+        this.coursierSelectionne = coursier;
 
     }
 
@@ -106,13 +110,13 @@ public class AjoutLivraisonController {
             warningMessage.setVisible(true);
             return;
         }
-        ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         Livraison livraison = new Livraison(this.destination);
-//        livraison.setFenetreHoraireLivr(this.selectionnerPlageHoraire(););
+        livraison.setCoursierLivraison(this.coursierSelectionne);
+        livraison.setFenetreHoraireLivr(this.plageHoraire);
         serviceLivraison.ajouterLivraison(livraison);
-        Set<Livraison> livraisons=  serviceLivraison.afficherToutLivraisons();
+        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
-        //TODO: ajouter la livraison à la liste
     }
 }
