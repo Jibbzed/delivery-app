@@ -38,7 +38,7 @@ public class CalculTournee {
             destinations = new ArrayList<>();
             destinations.add(entrepot.getId());
             for( Intersection inter : pointsLivraison ) {
-                if( inter != i ) { destinations.add(i.getId()); }
+                if( inter.getId() != i.getId() ) { destinations.add(inter.getId()); }
             }
             plusCourtsChemins.put(i.getId(), plan.plusCourtChemin(i.getId(), destinations));
         }
