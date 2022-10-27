@@ -2,12 +2,13 @@ package modele;
 
 import com.github.javafaker.Faker;
 
+import java.util.Objects;
+
 public class Coursier {
 
     private final String nom;
     private final String prenom;
     private boolean planifie;
-
     private boolean valide;
 
     public Coursier(String nom, String prenom) {
@@ -22,6 +23,19 @@ public class Coursier {
         this.prenom = prenom;
         this.planifie = planifie;
         this.valide = true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coursier coursier = (Coursier) o;
+        return nom.equals(coursier.nom) && prenom.equals(coursier.prenom);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nom, prenom);
     }
 
     public String getNom() {
@@ -47,18 +61,7 @@ public class Coursier {
         this.valide = false;
     }
 
-    /**
-     * Crée une fausse base de donnée de coursiers
-     * @param nombre : nombre de coursier à créer
-     */
-    public static Coursier[] initCoursier(int nombre) {
-        Faker faker = new Faker();
-        Coursier[] coursierArray = new Coursier[nombre];
-        for (int i = 0 ; i < nombre ; i++) {
-            coursierArray[i] = new Coursier(faker.name().lastName(), faker.name().firstName());
-        }
-        return coursierArray;
-    }
+
 
     @Override
     public String toString() {

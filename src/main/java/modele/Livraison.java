@@ -7,7 +7,6 @@ public class Livraison {
     public Intersection destinationLivraison;
     public Coursier coursierLivraison;
     public List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
-    public Intersection origineLivraison; // première intersection du parcours de la livraison
     public int fenetreHoraireLivr;
 
     public Livraison() {
@@ -25,7 +24,6 @@ public class Livraison {
                 "destinationLivraison=" + destinationLivraison +
                 ", coursierLivraison=" + coursierLivraison +
                 ", parcoursLivraison=" + parcoursLivraison +
-                ", origineLivraison=" + origineLivraison +
                 ", fenetreHoraireLivr=" + fenetreHoraireLivr +
                 '}';
     }
@@ -36,14 +34,6 @@ public class Livraison {
 
     public void setCoursierLivraison(Coursier coursierLivraison) {
         this.coursierLivraison = coursierLivraison;
-    }
-
-    public Intersection getOrigineLivraison() {
-        return origineLivraison;
-    }
-
-    public void setOrigineLivraison(Intersection origineLivraison) {
-        this.origineLivraison = origineLivraison;
     }
 
     public List<Troncon> getParcoursLivraison() {

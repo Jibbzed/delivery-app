@@ -5,9 +5,10 @@ import java.util.List;
 
 public class Tournee {
 
-    public List<Livraison> livraisons = new ArrayList<>();
+    public List<Livraison> livraisons;
 
     public Tournee() {
+        this.livraisons = new ArrayList<>();
     }
 
     public Tournee(List<Livraison> livraisons) {
@@ -15,7 +16,7 @@ public class Tournee {
     }
 
     public List<Livraison> getLivraisons() {
-        return livraisons;
+        return new ArrayList<>(livraisons); // Nouvelle liste pour qu'on ne puisse pas changer la liste par un get
     }
 
     public void ajouterLivraison(Livraison l){
