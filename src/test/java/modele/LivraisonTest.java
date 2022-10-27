@@ -39,7 +39,7 @@ public class LivraisonTest {
         livraisonTest.setFenetreHoraireLivr(newHoraire);
 
         assertEquals(livraisonTest.getCoursierLivraison().get().getNom(), newCoursier.getNom());
-        assertEquals(livraisonTest.getOrigineLivraison().getId(), newDepart.getId());
+        assertEquals(livraisonTest.getOrigineLivraison().get().getId(), newDepart.getId());
         assertEquals(livraisonTest.getFenetreHoraireLivr().get(), newHoraire);
     }
 }

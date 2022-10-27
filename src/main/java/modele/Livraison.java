@@ -1,11 +1,12 @@
 package modele;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Livraison {
 
-    public Intersection origineLivraison;
+    public Optional<Intersection> origineLivraison;
     public Intersection destinationLivraison;
     public Optional<Coursier> coursierLivraison;
     public List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
@@ -14,17 +15,24 @@ public class Livraison {
     public Livraison() {
     }
 
+    public Livraison(Intersection destinationLivraison) {
+        this.destinationLivraison = destinationLivraison;
+        parcoursLivraison = new ArrayList<>();
+    }
+
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, List<Troncon> parcoursLivraison) {
-        this.origineLivraison = origineLivraison;
+        this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
         coursierLivraison = Optional.empty();
         fenetreHoraireLivr = Optional.empty();
         this.parcoursLivraison = parcoursLivraison;
     }
-    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr) {
+    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
+        this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
         this.coursierLivraison = Optional.of(coursierLivraison);
         this.fenetreHoraireLivr = Optional.of(fenetreHoraireLivr);
+        this.parcoursLivraison = new ArrayList<>();
     }
 
     @Override
@@ -69,11 +77,11 @@ public class Livraison {
         this.destinationLivraison = destinationLivraison;
     }
 
-    public Intersection getOrigineLivraison() {
+    public Optional<Intersection> getOrigineLivraison() {
         return origineLivraison;
     }
 
     public void setOrigineLivraison(Intersection origineLivraison) {
-        this.origineLivraison = origineLivraison;
+        this.origineLivraison = Optional.of(origineLivraison);
     }
 }

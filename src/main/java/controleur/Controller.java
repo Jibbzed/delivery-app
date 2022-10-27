@@ -595,7 +595,7 @@ public class Controller {
 
             final AjoutLivraisonController controller = fxmlLoader.getController();
 
-            controller.initData(intersectionIdSelectionne);
+            controller.initData(plan.getIntersections().get(intersectionIdSelectionne));
 
             Stage stage = new Stage();
             stage.setTitle("Ajout Livraison");
