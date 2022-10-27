@@ -1,58 +1,46 @@
 package modele;
 
 import org.junit.jupiter.api.Test;
+import service.ServiceCoursier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ServiceCoursierTest {
-/*
-    // Création de coursier
+
+    // Création et remplissage de la liste des coursiers
     @Test
-    public void testCreerCoursier() {
-        Coursier coursierTest = new Coursier("BONIFACIO", "Grinardo", false);
+    public void testRemplirListe() {
 
-        String message = "Coursier{nom='BONIFACIO', prenom='Grinardo', planifie=false}";
+        // A l'initialisation
+        ServiceCoursier service = new ServiceCoursier(2);
+        assertEquals(2, service.getListeCoursiers().size());
 
-        assertEquals(message, coursierTest.toString());
+        // A l'ajout d'un coursier
+        Coursier coursierAjout = new Coursier("BONIFACIO", "Grinardo");
+        service.ajouterCoursier(coursierAjout);
+
+        assertEquals(3, service.getListeCoursiers().size());
+        assertTrue(service.getListeCoursiers().contains(coursierAjout));
     }
 
-    // Planification de coursier
+
+    // Suppression de la liste des coursiers
     @Test
-    public void testPlanifierCoursier() {
-        Coursier coursierTest = new Coursier("BONIFACIO", "Grinardo", false);
+    public void testRetirerCoursier() {
+        ServiceCoursier service = new ServiceCoursier(3);
+        Coursier coursierRetireNom = service.getListeCoursiers().get(0);
+        Coursier coursierRetireClient = service.getListeCoursiers().get(1);
 
-        coursierTest.setPlanifie(true);
-        String message = "Coursier{nom='BONIFACIO', prenom='Grinardo', planifie=true}";
+        // 2 manières de supprimer
+        // test avec nom + prénom
+        service.retirerCoursier(coursierRetireNom.getNom(), coursierRetireNom.getPrenom());
+        assertTrue(!service.getListeCoursiers().contains(coursierRetireNom));
 
-        assertEquals(message, coursierTest.toString());
-        assertTrue(coursierTest.isPlanifie());
+        // test avec l'objet client
+        service.retirerCoursier(coursierRetireClient);
+        assertTrue(!service.getListeCoursiers().contains(coursierRetireNom));
+
+        assertEquals(1, service.getListeCoursiers().size());
     }
-
-    // Suppression de coursier
-    @Test
-    public void testSupprimerCoursier() {
-        Coursier coursierTest = new Coursier("BONIFACIO", "Grinardo");
-
-        coursierTest.deleteCoursier();
-
-        assertEquals("Coursier supprimé.", coursierTest.toString());
-    }
-
-    // Initialisation de coursier pour la fausse bdd
-//    @Test
-//    public void testInitCoursier() {
-//        Coursier[] coursiers;
-//        coursiers = Coursier.initCoursier(4);
-//
-//        for(int i = 0 ; i < 4 ; i++) {
-//            String message = "Coursier{nom='" + coursiers[i].getNom() +
-//                    "', prenom='" + coursiers[i].getPrenom() + "', planifie=false}";
-//            assertEquals(message, coursiers[i].toString());
-//        }
-//        assertEquals(4, coursiers.length);
-//
-//    }
-
- */
 }
