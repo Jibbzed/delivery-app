@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tournee {
-    public List<Livraison> livraisons;
+    private List<Livraison> livraisons;
+    private Coursier coursier;
 
     public Tournee() {
         this.livraisons = new ArrayList<>();
     }
 
     public Tournee(List<Livraison> livraisons) {
-        this.livraisons = livraisons;
+        this.livraisons = new ArrayList<Livraison>(livraisons);
+    }
+
+    public void attribuerTournee(Coursier c){
+        this.coursier = c;
+        c.setPlanifie(true);
     }
 
     public List<Livraison> getLivraisons() {
