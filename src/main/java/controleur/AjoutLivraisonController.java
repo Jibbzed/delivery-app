@@ -5,12 +5,13 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import modele.Intersection;
 
 public class AjoutLivraisonController {
 
 
-    String destinationId="";
+    String destinationId = "";
     @FXML
     private ComboBox coursierSelector;
 
@@ -40,11 +41,7 @@ public class AjoutLivraisonController {
 
     }
 
-
     public void initialize() {
-        destinationIdLabel.setText(destinationId);
-        destinationIdLabel.setVisible(true);
-
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -71,10 +68,15 @@ public class AjoutLivraisonController {
 
     /**
      * initialiser l'id de l'intersection associée à la livraison
+     *
      * @param idIntersection
      */
-    public void initData(String idIntersection){
-        destinationId=idIntersection;
+    public void initData(String idIntersection) {
+        destinationId = idIntersection;
+        destinationIdLabel.setText(destinationId);
+        destinationIdLabel.setVisible(true);
+
+        System.out.println(idIntersection);
     }
 
 
@@ -95,8 +97,8 @@ public class AjoutLivraisonController {
             warningMessage.setVisible(true);
             return;
         }
-        Platform.exit();
-
+        Stage stage = (Stage) validationButton.getScene().getWindow();
+        stage.close();
         //TODO: ajouter la livraison à la liste
     }
 }

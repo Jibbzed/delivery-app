@@ -12,7 +12,15 @@ public class LivraisonTest {
         Intersection arriveeTest = new Intersection("1264",14,26);
         Coursier coursierTest = new Coursier("Duriff","Alban");
         int fenetreH = 8;
+
         Livraison livraisonTest = new Livraison(departTest,arriveeTest,coursierTest,fenetreH);
+
+        String message = "Livraison{destinationLivraison=" + arriveeTest +
+                ", coursierLivraison=Optional[" + coursierTest +
+                "], parcoursLivraison=null" +
+                ", fenetreHoraireLivr=Optional[8]}";
+
+        assertEquals(message, livraisonTest.toString());
     }
 
     @Test

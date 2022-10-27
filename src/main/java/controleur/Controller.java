@@ -583,17 +583,25 @@ public class Controller {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vue/AjoutLivraison.fxml"));
-            AjoutLivraisonController controller = fxmlLoader.getController();
-
-            Parent root = null;
+            String fxmlFile = "/vue/AjoutLivraison.fxml";
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root;
             try {
-                root = (Parent) fxmlLoader.load();
+                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+
+            final AjoutLivraisonController controller = fxmlLoader.getController();
+
+            controller.initData(intersectionIdSelectionne);
+
             Stage stage = new Stage();
+            stage.setTitle("Ajout Livraison");
+            stage.show();
             stage.setScene(new Scene(root));
+            stage.centerOnScreen();
             stage.show();
 
             labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
