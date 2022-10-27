@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 public class App extends Application {
     /** Logger for the class */
     private static final Logger logger = LoggerFactory.getLogger(App.class);
+    public static String parameters;
 
     public static void main(String[] args) {
         logger.trace("begin main");
@@ -33,7 +34,7 @@ public class App extends Application {
         logger.trace("stage loaded");
 
         final Controller controller = fxmlLoader.getController();
-        final Projection projection = getParameters().getUnnamed().contains("wgs84")
+        final  Projection projection = getParameters().getUnnamed().contains("wgs84")
                 ? Projection.WGS_84 : Projection.WEB_MERCATOR;
         controller.initMapAndControls(projection);
 
