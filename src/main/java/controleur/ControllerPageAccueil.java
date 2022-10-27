@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import modele.exception.MauvaisFormatXmlException;
-import vue.App;
 
 import java.io.IOException;
 
