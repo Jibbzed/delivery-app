@@ -3,13 +3,12 @@ package modele;
 import com.github.javafaker.Faker;
 
 import java.util.Objects;
-
 public class Coursier {
 
     private final String nom;
     private final String prenom;
-    private boolean planifie; // True si le coursier est attribue à une tournee
 
+    private boolean planifie; // True si le coursier est attribue à une tournee
     public Coursier(String nom, String prenom) {
         this.nom = nom;
         this.prenom = prenom;
@@ -21,7 +20,6 @@ public class Coursier {
         this.prenom = prenom;
         this.planifie = planifie;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,6 +31,7 @@ public class Coursier {
     @Override
     public int hashCode() {
         return Objects.hash(nom, prenom);
+
     }
 
     public String getNom() {
@@ -59,4 +58,5 @@ public class Coursier {
                 ", planifie=" + planifie +
                 '}';
 }
+
 }

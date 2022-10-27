@@ -52,12 +52,12 @@ public class Plan {
         this.troncons.remove(troncon);
     }
 
-    protected Set<Troncon> getTroncons() {
-        return troncons;
+    public Set<Troncon> getTroncons() {
+        return new HashSet<>(troncons);
     }
 
-    protected Map<String, Intersection> getIntersections() {
-        return intersections;
+    public Map<String, Intersection> getIntersections() {
+        return new HashMap<>(intersections);
     }
 
     public Map<String, Dijkstra> plusCourtChemin(String idOrigine, List<String> idDestinations) {
