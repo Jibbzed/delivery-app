@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ServiceCoursier {
 
-    private List<Coursier>  listeCoursiers;
+    private List<Coursier>  listeCoursiers = new ArrayList<>();
     private int nombreCoursiers;
     private Faker faker;
 

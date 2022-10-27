@@ -2,21 +2,24 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Tournee {
     private List<Livraison> livraisons;
-    private Coursier coursier;
+    // TODO: change coursier to Coursier instead of optional.
+    private Optional<Coursier> coursier;
 
     public Tournee() {
         this.livraisons = new ArrayList<>();
     }
 
     public Tournee(List<Livraison> livraisons) {
-        this.livraisons = new ArrayList<Livraison>(livraisons);
+        this.livraisons = new ArrayList<>(livraisons);
+        this.coursier = Optional.empty();
     }
 
     public void attribuerTournee(Coursier c){
-        this.coursier = c;
+        this.coursier = Optional.of(c);
         c.setPlanifie(true);
     }
 

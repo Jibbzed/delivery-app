@@ -9,17 +9,19 @@ public class LivraisonTest {
     @Test
     public void testCreerLivraison() {
         Intersection departTest = new Intersection("1234",12,25);
+        Intersection arriveeTest = new Intersection("1264",14,26);
         Coursier coursierTest = new Coursier("Duriff","Alban");
         int fenetreH = 8;
-        Livraison livraisonTest = new Livraison(departTest,coursierTest,fenetreH);
+        Livraison livraisonTest = new Livraison(departTest,arriveeTest,coursierTest,fenetreH);
     }
 
     @Test
     public void testModifierLivraison(){
         Intersection departTest = new Intersection("1234",12,25);
+        Intersection arriveeTest = new Intersection("1264",14,26);
         Coursier coursierTest = new Coursier("Duriff","Alban");
         int fenetreH = 8;
-        Livraison livraisonTest = new Livraison(departTest,coursierTest,fenetreH);
+        Livraison livraisonTest = new Livraison(departTest, arriveeTest,coursierTest,fenetreH);
 
         Intersection newDepart = new Intersection("2564",5,6);
         Coursier newCoursier = new Coursier("Allot","Lauraine");
@@ -28,8 +30,8 @@ public class LivraisonTest {
         livraisonTest.setOrigineLivraison(newDepart);
         livraisonTest.setFenetreHoraireLivr(newHoraire);
 
-        assertEquals(livraisonTest.getCoursierLivraison().getNom(), newCoursier.getNom());
+        assertEquals(livraisonTest.getCoursierLivraison().get().getNom(), newCoursier.getNom());
         assertEquals(livraisonTest.getOrigineLivraison().getId(), newDepart.getId());
-        assertEquals(livraisonTest.getFenetreHoraireLivr(), newHoraire);
+        assertEquals(livraisonTest.getFenetreHoraireLivr().get(), newHoraire);
     }
 }
