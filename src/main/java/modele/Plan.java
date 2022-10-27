@@ -133,5 +133,9 @@ public class Plan {
         return chemin;
     }
 
+    public Intersection getIntersectionParId(String idInter) {
+        return intersections.get(idInter);
+    }
+
 
 }
