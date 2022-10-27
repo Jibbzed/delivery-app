@@ -25,15 +25,11 @@ import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
@@ -56,240 +52,173 @@ import java.util.stream.Stream;
  */
 public class Controller {
 
-    /**
-     * logger for the class.
-     */
+    /** logger for the class. */
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    /**
-     * some coordinates from around town.
-     */
+    /** some coordinates from around town. */
     // TODO: remove those coordinates .
 
-    //TODO: make entropot id dynamic
+            //TODO: make entropot id dynamic
     private static final String __ENTROPOT_ID__ = "25303831";
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
-    private final Coordinate coordMin;
-    private final Coordinate coordMax;
+    private Coordinate coordMin;
+    private Coordinate coordMax;
 
-    private final List<Coordinate> coordinateList;
-    private final Extent extentLyon;
-    /**
-     * default zoom value.
-     */
+    private List<Coordinate> coordinateList;
+    private Extent extentLyon;
+    /** default zoom value. */
     private static final int ZOOM_DEFAULT = 15;
 
-    /**
-     * the markers.
-     */
-    private final Marker markerMinCoord;
-    private final Marker markerMaxCoord;
+    /** the markers. */
+    private Marker markerMinCoord;
+    private Marker markerMaxCoord;
 
     private final Set<Marker> markersIntersections = new HashSet<>();
 
     /** the labels. */
 
-    /**
-     * Le plan
-     */
-    private final Plan plan;
+    /** Le plan */
+    private Plan plan;
 
     @FXML
     /** button to set the map's zoom. */
     private Button buttonZoom;
 
-    /**
-     * the MapView containing the map
-     */
+    /** the MapView containing the map */
     @FXML
     private MapView mapView;
 
-    /**
-     * the box containing the top controls, must be enabled when mapView is initialized
-     */
+    /** the box containing the top controls, must be enabled when mapView is initialized */
     @FXML
     private HBox topControls;
 
-    /**
-     * Slider to change the zoom value
-     */
+    /** Slider to change the zoom value */
     @FXML
     private Slider sliderZoom;
 
-    /**
-     * Accordion for all the different options
-     */
+    /** Accordion for all the different options */
     @FXML
     private Accordion leftControls;
 
-    /**
-     * section containing the location button
-     */
+    /** section containing the location button */
     @FXML
     private TitledPane optionsLocations;
 
     /** button to set the map's center */
     /** button to set the map's center */
     /** button to set the map's center */
-    /**
-     * button to set the map's center
-     */
+    /** button to set the map's center */
     @FXML
     private Button buttonWarhouse;
 
-    /**
-     * for editing the animation duration
-     */
+    /** for editing the animation duration */
     @FXML
     private TextField animationDuration;
 
-    /**
-     * the BIng Maps API Key.
-     */
+    /** the BIng Maps API Key. */
     @FXML
     private TextField bingMapsApiKey;
 
-    /**
-     * Label to display the current center
-     */
+    /** Label to display the current center */
     @FXML
     private Label labelCenter;
 
-    /**
-     * Label to display the current extent
-     */
+    /** Label to display the current extent */
     @FXML
     private Label labelExtent;
 
-    /**
-     * Label to display the current zoom
-     */
+    /** Label to display the current zoom */
     @FXML
     private Label labelZoom;
 
-    /**
-     * label to display the last event.
-     */
+    /** label to display the last event. */
     @FXML
     private Label labelEvent;
 
-    /**
-     * RadioButton for MapStyle OSM
-     */
+    /** RadioButton for MapStyle OSM */
     @FXML
     private RadioButton radioMsOSM;
 
-    /**
-     * RadioButton for MapStyle Stamen Watercolor
-     */
+    /** RadioButton for MapStyle Stamen Watercolor */
     @FXML
     private RadioButton radioMsSTW;
 
-    /**
-     * RadioButton for MapStyle Bing Roads
-     */
+    /** RadioButton for MapStyle Bing Roads */
     @FXML
     private RadioButton radioMsBR;
 
-    /**
-     * RadioButton for MapStyle Bing Roads - dark
-     */
+    /** RadioButton for MapStyle Bing Roads - dark */
     @FXML
     private RadioButton radioMsCd;
 
-    /**
-     * RadioButton for MapStyle Bing Roads - grayscale
-     */
+    /** RadioButton for MapStyle Bing Roads - grayscale */
     @FXML
     private RadioButton radioMsCg;
 
-    /**
-     * RadioButton for MapStyle Bing Roads - light
-     */
+    /** RadioButton for MapStyle Bing Roads - light */
     @FXML
     private RadioButton radioMsCl;
 
-    /**
-     * RadioButton for MapStyle Bing Aerial
-     */
+    /** RadioButton for MapStyle Bing Aerial */
     @FXML
     private RadioButton radioMsBA;
 
-    /**
-     * RadioButton for MapStyle Bing Aerial with Label
-     */
+    /** RadioButton for MapStyle Bing Aerial with Label */
     @FXML
     private RadioButton radioMsBAwL;
 
-    /**
-     * RadioButton for MapStyle WMS.
-     */
+    /** RadioButton for MapStyle WMS. */
     @FXML
     private RadioButton radioMsWMS;
 
-    /**
-     * RadioButton for MapStyle XYZ
-     */
+    /** RadioButton for MapStyle XYZ */
     @FXML
     private RadioButton radioMsXYZ;
 
-    /**
-     * ToggleGroup for the MapStyle radios
-     */
+    /** ToggleGroup for the MapStyle radios */
     @FXML
     private ToggleGroup mapTypeGroup;
 
-    /**
-     * Check button for harbour marker
-     */
+    /** Check button for harbour marker */
     @FXML
     private CheckBox checkIntersectionsMarkers;
-    /**
-     * the first CoordinateLine
-     */
+    /** the first CoordinateLine */
     private CoordinateLine trackMagenta;
-    /**
-     * Check button for first track
-     */
+    /** Check button for first track */
     @FXML
     private CheckBox checkTrackMagenta;
 
-    /**
-     * the second CoordinateLine
-     */
+    /** the second CoordinateLine */
     private CoordinateLine trackCyan;
-    /**
-     * Check button for first track
-     */
+    /** Check button for first track */
     private CoordinateLine polygonLine;
     /** Check Button for polygon drawing mode. */
 
-    /**
-     * Check Button for constraining th extent.
-     */
+    /** Check Button for constraining th extent. */
     @FXML
     private CheckBox checkConstrainXmlFile;
 
-    /**
-     * params for the WMS server.
-     */
+    /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
-            .setUrl("http://ows.terrestris.de/osm/service?")
-            .addParam("layers", "OSM-WMS");
+        .setUrl("http://ows.terrestris.de/osm/service?")
+        .addParam("layers", "OSM-WMS");
 
-    //    https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/10/350/530
+//    https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/10/350/530
     private XYZParam xyzParams = new XYZParam()
-            .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
-            .withAttributions(
-                    "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
+        .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
+        .withAttributions(
+            "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
+        //chargerPlan("src/test/resources/smallMap.xml");
+    }
+
+    private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
-        // TODO: traiter exception mauvais format xml
-        this.plan = parser.lirePlan("src/test/resources/smallMap.xml");
+        this.plan = parser.lirePlan(path);
         coordinateList =
                 plan.getIntersections().values().stream()
                         .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
@@ -323,9 +252,11 @@ public class Controller {
      * called after the fxml is loaded and all objects are created. This is not called initialize any more,
      * because we need to pass in the projection before initializing.
      *
-     * @param projection the projection to use in the map.
+     * @param projection
+     *     the projection to use in the map.
      */
-    public void initMapAndControls(Projection projection) {
+    public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
+        chargerPlan(path);
         logger.trace("begin initialize");
 
         // init MapView-Cache
@@ -422,7 +353,7 @@ public class Controller {
                 new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
         );
         // bind the checkboxes to the markers visibility
-        markersIntersections.forEach(marker -> {
+        markersIntersections.forEach(marker-> {
             checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
         });
         logger.trace("marker checks done");
@@ -449,9 +380,9 @@ public class Controller {
 //        ).collect(Collectors.toList());
         //TODO: duplicated code
         List<Coordinate> chemin = resultat.get("25336178").getChemin().stream()
-                .map(Troncon::getOrigine)
-                .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
-                .collect(Collectors.toList());
+                    .map(Troncon::getOrigine)
+                    .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                    .collect(Collectors.toList());
         trackMagenta = new CoordinateLine().setColor(Color.MAGENTA).setWidth(7).setVisible(true);
         trackCyan = new CoordinateLine(chemin).setColor(Color.CYAN).setWidth(7);
         logger.trace("tracks loaded");
@@ -461,18 +392,18 @@ public class Controller {
         // get the extent of both tracks
         Extent tracksExtent = Extent.forCoordinates(trackCyan.getCoordinateStream().collect(Collectors.toList()));
         ChangeListener<Boolean> trackVisibleListener =
-                (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
+            (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
 //        trackMagenta.visibleProperty().addListener(trackVisibleListener);
 //        trackCyan.visibleProperty().addListener(trackVisibleListener);
 
         // add the polygon check handler
         ChangeListener<Boolean> polygonListener =
-                (observable, oldValue, newValue) -> {
-                    if (!newValue && polygonLine != null) {
-                        mapView.removeCoordinateLine(polygonLine);
-                        polygonLine = null;
-                    }
-                };
+            (observable, oldValue, newValue) -> {
+                if (!newValue && polygonLine != null) {
+                    mapView.removeCoordinateLine(polygonLine);
+                    polygonLine = null;
+                }
+            };
 
         // add the constrain listener
         checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -486,9 +417,9 @@ public class Controller {
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
-                .projection(projection)
-                .showZoomControls(false)
-                .build());
+            .projection(projection)
+            .showZoomControls(false)
+            .build());
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -551,67 +482,31 @@ public class Controller {
             Coordinate coordSelectionne = event.getMarker().getPosition();
             String intersectionIdSelectionne =
                     plan.getIntersections().values().stream()
-                            .filter(i -> i.getLatitude() == coordSelectionne.getLatitude()
-                                    && i.getLongitude() == coordSelectionne.getLongitude())
-                            .map(Intersection::getId)
-                            .findAny().orElse("");
+                    .filter(i-> i.getLatitude() == coordSelectionne.getLatitude()
+                                && i.getLongitude() == coordSelectionne.getLongitude())
+                    .map(Intersection::getId)
+                    .findAny().orElse("");
             Map<String, Dijkstra> resultatDijkstra =
-                    plan.plusCourtChemin(__ENTROPOT_ID__, Collections.singletonList(intersectionIdSelectionne));
+                    plan.plusCourtChemin(__ENTROPOT_ID__, Collections.singletonList( intersectionIdSelectionne ));
             // TODO: Duplicated code
             List<Coordinate> chemin = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
                     .map(Troncon::getOrigine)
-                    .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                    .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
                     .collect(Collectors.toList());
             // Ajouter derniere intersection au chemin
             chemin.add(coordSelectionne);
             mapView.removeCoordinateLine(trackMagenta);
-            trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+             trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
             mapView.addCoordinateLine(trackMagenta);
 
             labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
-
-        mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
-            event.consume();
-            Coordinate coordSelectionne = event.getMarker().getPosition();
-            String intersectionIdSelectionne =
-                    plan.getIntersections().values().stream()
-                            .filter(i -> i.getLatitude() == coordSelectionne.getLatitude()
-                                    && i.getLongitude() == coordSelectionne.getLongitude())
-                            .map(Intersection::getId)
-                            .findAny().orElse("");
-
-            String fxmlFile = "/vue/AjoutLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root;
-            try {
-                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            final AjoutLivraisonController controller = fxmlLoader.getController();
-
-            controller.initData(plan.getIntersections().get(intersectionIdSelectionne));
-
-            Stage stage = new Stage();
-            stage.setTitle("Ajout Livraison");
-            stage.show();
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
-
-            labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
-        });
-
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: marker right clicked: " + event.getMarker().getId());
         });
-
         mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
@@ -655,7 +550,8 @@ public class Controller {
     /**
      * enables / disables the different controls
      *
-     * @param flag if true the controls are disabled
+     * @param flag
+     *     if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
         topControls.setDisable(flag);
@@ -691,19 +587,21 @@ public class Controller {
     /**
      * load a coordinateLine from the given uri in lat;lon csv format
      *
-     * @param url url where to load from
+     * @param url
+     *     url where to load from
      * @return optional CoordinateLine object
-     * @throws NullPointerException if uri is null
+     * @throws NullPointerException
+     *     if uri is null
      */
     private Optional<CoordinateLine> loadCoordinateLine(URL url) {
         try (
-                Stream<String> lines = new BufferedReader(
-                        new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
+            Stream<String> lines = new BufferedReader(
+                new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
         ) {
             return Optional.of(new CoordinateLine(
-                    lines.map(line -> line.split(";")).filter(array -> array.length == 2)
-                            .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
-                            .collect(Collectors.toList())));
+                lines.map(line -> line.split(";")).filter(array -> array.length == 2)
+                    .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
+                    .collect(Collectors.toList())));
         } catch (IOException | NumberFormatException e) {
             logger.error("load {}", url, e);
         }
