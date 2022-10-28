@@ -92,8 +92,6 @@ public class Controller {
     /** Le plan */
     private Plan plan;
 
-    private List<Livraison> listeLivraisonTournee;
-
     @FXML
     /** button to set the map's zoom. */
     private Button buttonZoom;
@@ -655,8 +653,27 @@ public class Controller {
         // On a un objet calculTournee et on calcule la tournee
         CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
         Tournee tournee = calculTournee.calculerTournee();
-        this.listeLivraisonTournee = tournee.getLivraisons();
-        System.out.println(this.listeLivraisonTournee);
+
+        // On récupère les intersections
+        List<Intersection> listeIntersections= new ArrayList<Intersection>();
+        // Origine et destination des livraisons
+        for (int i = 0 ; i < tournee.getLivraisons().size() ; i++) {
+            // Tronçons de chaque livraison
+            for(int j = 0 ; j < tournee.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+            }
+        }
+        // On transforme en coordonnée
+        List<Coordinate> chemin = new ArrayList<Coordinate>();
+        for (int i = 0 ; i<listeIntersections.size() ; i++) {
+            chemin.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
+        }
+        mapView.removeCoordinateLine(trackMagenta);
+        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+        mapView.addCoordinateLine(trackMagenta);
     }
 
     /**
