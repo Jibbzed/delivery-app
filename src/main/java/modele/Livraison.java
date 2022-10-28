@@ -98,4 +98,8 @@ public class Livraison {
     public int hashCode() {
         return Objects.hash(origineLivraison, destinationLivraison, parcoursLivraison);
     }
+
+    public String afficherIhm() {
+        return "livraison sur coord: (" + destinationLivraison.getLatitude() + "," + destinationLivraison.getLongitude() + ")";
+    }
 }

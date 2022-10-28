@@ -63,6 +63,13 @@
                         </VBox>
                     </content>
                 </TitledPane>
+                <TitledPane animated="true" text="livraisons">
+                    <content>
+                        <VBox spacing="10.0">
+                            <ListView fx:id="listeLivraisons" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
+                        </VBox>
+                    </content>
+                </TitledPane>
                 <TitledPane fx:id="optionsMapType" animated="true" text="map style">
                     <content>
                         <VBox spacing="10.0">
