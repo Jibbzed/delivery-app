@@ -26,6 +26,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -120,6 +122,9 @@ public class Controller {
     /** button to set the map's center */
     @FXML
     private Button buttonWarhouse;
+
+    @FXML
+    private Button buttonCalculTournee;
 
     /** for editing the animation duration */
     @FXML
@@ -370,6 +375,7 @@ public class Controller {
         markersIntersections.forEach(marker-> {
             checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
         });
+        checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
         // load two coordinate lines
@@ -427,6 +433,8 @@ public class Controller {
                 mapView.clearConstrainExtent();
             }
         }));
+
+        buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
         // finally initialize the map view
         logger.trace("start map initialization");
@@ -631,6 +639,40 @@ public class Controller {
 
         // now enable the controls
         setControlsDisable(false);
+    }
+
+    private void calculTournee() {
+        // On récupère la liste de livraisons existantes
+        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
+        // On transforme en liste d'intersection
+        List<Intersection> listeInter = new ArrayList<Intersection>();
+        for (int i = 0 ; i < listeLivraion.size() ; i++) {
+            listeInter.add(listeLivraion.get(i).destinationLivraison);
+        }
+        // On a un objet calculTournee et on calcule la tournee
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
+        Tournee tournee = calculTournee.calculerTournee();
+
+        // On récupère les intersections
+        List<Intersection> listeIntersections= new ArrayList<Intersection>();
+        // Origine et destination des livraisons
+        for (int i = 0 ; i < tournee.getLivraisons().size() ; i++) {
+            // Tronçons de chaque livraison
+            for(int j = 0 ; j < tournee.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+            }
+        }
+        // On transforme en coordonnée
+        List<Coordinate> chemin = new ArrayList<Coordinate>();
+        for (int i = 0 ; i<listeIntersections.size() ; i++) {
+            chemin.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
+        }
+        mapView.removeCoordinateLine(trackMagenta);
+        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+        mapView.addCoordinateLine(trackMagenta);
     }
 
     /**

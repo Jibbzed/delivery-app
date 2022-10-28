@@ -63,6 +63,15 @@
                         </VBox>
                     </content>
                 </TitledPane>
+                <TitledPane fx:id="optionsCalculTournee" animated="true" text="Calculer une tournée">
+                    <content>
+                        <VBox spacing="10.0">
+                            <children>
+                                <Button fx:id="buttonCalculTournee" text="Calculer une tournée" maxWidth="Infinity"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
                 <TitledPane animated="true" text="livraisons">
                     <content>
                         <VBox spacing="10.0">
