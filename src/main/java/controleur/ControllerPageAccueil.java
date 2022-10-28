@@ -60,6 +60,7 @@ public class ControllerPageAccueil {
                 throw new RuntimeException(e);
             }
             scene = new Scene(root);
+            stage.setTitle("Grande carte de Lyon");
             stage.setScene(scene);
             stage.show();
         });
@@ -77,6 +78,7 @@ public class ControllerPageAccueil {
                 throw new RuntimeException(e);
             }
             scene = new Scene(root);
+            stage.setTitle("Moyenne carte de Lyon");
             stage.setScene(scene);
             stage.show();
         });
@@ -94,6 +96,7 @@ public class ControllerPageAccueil {
                 throw new RuntimeException(e);
             }
             scene = new Scene(root);
+            stage.setTitle("Petite carte de Lyon");
             stage.setScene(scene);
             stage.show();
         });
@@ -111,6 +114,7 @@ public class ControllerPageAccueil {
                 throw new RuntimeException(e);
             }
             scene = new Scene(root);
+            stage.setTitle("Carte : "+xmlPath);
             stage.setScene(scene);
             stage.show();
         });

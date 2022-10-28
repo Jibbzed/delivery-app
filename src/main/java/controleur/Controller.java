@@ -492,7 +492,7 @@ public class Controller {
         });
         mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
             event.consume();
-            // TODO: afficher section pour ajouter une livraision
+            // TODO: afficher section pour ajouter une livraision ==> FAIT (double click)
             Coordinate coordSelectionne = event.getMarker().getPosition();
             String intersectionIdSelectionne =
                     plan.getIntersections().values().stream()
@@ -544,7 +544,6 @@ public class Controller {
 
             Stage stage = new Stage();
             stage.setTitle("Ajout Livraison");
-            stage.show();
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();
@@ -663,5 +662,6 @@ public class Controller {
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
         listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
+        labelEvent.setText("Livraison créée");
     }
 }
