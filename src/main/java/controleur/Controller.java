@@ -26,6 +26,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -90,6 +92,8 @@ public class Controller {
     /** Le plan */
     private Plan plan;
 
+    private List<Livraison> listeLivraisonTournee;
+
     @FXML
     /** button to set the map's zoom. */
     private Button buttonZoom;
@@ -120,6 +124,9 @@ public class Controller {
     /** button to set the map's center */
     @FXML
     private Button buttonWarhouse;
+
+    @FXML
+    private Button buttonCalculTournee;
 
     /** for editing the animation duration */
     @FXML
@@ -370,6 +377,7 @@ public class Controller {
         markersIntersections.forEach(marker-> {
             checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
         });
+        checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
         // load two coordinate lines
@@ -427,6 +435,8 @@ public class Controller {
                 mapView.clearConstrainExtent();
             }
         }));
+
+        buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
         // finally initialize the map view
         logger.trace("start map initialization");
@@ -632,6 +642,21 @@ public class Controller {
 
         // now enable the controls
         setControlsDisable(false);
+    }
+
+    private void calculTournee() {
+        // On récupère la liste de livraisons existantes
+        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
+        // On transforme en liste d'intersection
+        List<Intersection> listeInter = new ArrayList<Intersection>();
+        for (int i = 0 ; i < listeLivraion.size() ; i++) {
+            listeInter.add(listeLivraion.get(i).destinationLivraison);
+        }
+        // On a un objet calculTournee et on calcule la tournee
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
+        Tournee tournee = calculTournee.calculerTournee();
+        this.listeLivraisonTournee = tournee.getLivraisons();
+        System.out.println(this.listeLivraisonTournee);
     }
 
     /**
