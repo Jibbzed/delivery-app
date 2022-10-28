@@ -43,8 +43,6 @@ public class AjoutLivraisonController {
 
     @FXML
     private Label destinationIdLabel;
-    @FXML
-    private Label originIdLabel;
 
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);

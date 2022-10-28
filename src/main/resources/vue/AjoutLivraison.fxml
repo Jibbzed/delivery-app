@@ -37,9 +37,7 @@
          </children>
       </VBox>
       <Label layoutX="41.0" layoutY="25.0" prefHeight="18.0" prefWidth="193.0" text="Saisir une livraison" />
-      <Label layoutX="41.0" layoutY="43.0" prefHeight="18.0" prefWidth="54.0" maxWidth="-Infinity" text="Origine :" />
       <Label layoutX="41.0" layoutY="61.0" prefHeight="18.0" prefWidth="66.0" maxWidth="-Infinity" text="Destination :" />
-      <Label fx:id="originIdLabel" layoutX="119.0" layoutY="43.0" prefHeight="18.0" prefWidth="54.0" text="originID" />
       <Label fx:id="destinationIdLabel" layoutX="119.0" layoutY="61.0" text="destID" visible="false" />
    </children>
 </AnchorPane>
