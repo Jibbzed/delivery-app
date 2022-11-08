@@ -548,6 +548,7 @@ public class Controller {
 
             final AjoutLivraisonController controller = fxmlLoader.getController();
 
+
             controller.initData(plan.getIntersections().get(intersectionIdSelectionne), this);
 
             Stage stage = new Stage();
@@ -556,7 +557,6 @@ public class Controller {
             stage.centerOnScreen();
             stage.show();
 
-            labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
