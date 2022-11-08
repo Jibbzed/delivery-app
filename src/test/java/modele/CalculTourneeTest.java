@@ -45,7 +45,7 @@ public class CalculTourneeTest {
         // expected
         double[] coutsi1 = {0, 3, 5};
         double[] coutsi3 = {6, 0, 2};
-        double[] coutsi4 = {5, 2, 0};
+        double[] coutsi4 = {4, 2, 0};
         double[][] couts = {coutsi1, coutsi3, coutsi4};
         GrapheComplet grapheAttendu = new GrapheComplet(couts);
 
