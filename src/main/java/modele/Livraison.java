@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public class Livraison {
 
-    public Optional<Intersection> origineLivraison;
-    public Intersection destinationLivraison;
-    public Optional<Coursier> coursierLivraison;
-    public List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
-    public Optional<Integer> fenetreHoraireLivr;
+    protected Optional<Intersection> origineLivraison;
+    protected Intersection destinationLivraison;
+    protected Optional<Coursier> coursierLivraison;
+    protected List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
+    protected Optional<Integer> fenetreHoraireLivr;
 
     public Livraison() {
     }

@@ -647,7 +647,7 @@ public class Controller {
         // On transforme en liste d'intersection
         List<Intersection> listeInter = new ArrayList<Intersection>();
         for (int i = 0 ; i < listeLivraion.size() ; i++) {
-            listeInter.add(listeLivraion.get(i).destinationLivraison);
+            listeInter.add(listeLivraion.get(i).getDestinationLivraison());
         }
         // On a un objet calculTournee et on calcule la tournee
         CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
