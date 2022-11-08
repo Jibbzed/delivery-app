@@ -631,7 +631,7 @@ public class Controller {
 
     private void calculTournee() {
         // On récupère la liste de livraisons existantes
-        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
+        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         // On transforme en liste d'intersection
         List<Intersection> listeInter = new ArrayList<Intersection>();
         for (int i = 0 ; i < listeLivraion.size() ; i++) {
@@ -690,8 +690,14 @@ public class Controller {
     public void refreshLivraison() {
         ObservableList listLivraisonObeservable = FXCollections.observableArrayList();
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
+        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
         labelEvent.setText("Livraison créée");
+    }
+
+    public void supprimerLivraison() {
+        // Ok là le pb c'est que je voulais supprimer l'element de la liste qui est selectionne
+        // mais la liste qu'on voit sur l'ihm c'est juste un affichage, c'est pas des vrais livraisons,
+        // donc difficile de dire quel objet est selectionné...
     }
 }

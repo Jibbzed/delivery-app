@@ -106,11 +106,11 @@ public class AjoutLivraisonController {
     }
 
     public void saisirLivraison() {
-        this.stateController.getCurrentState().valider(this.stateController);
         if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
             warningMessage.setVisible(true);
             return;
         }
+        this.stateController.getCurrentState().valider(this.stateController);
         this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         Livraison livraison = new Livraison(this.destination);
         livraison.setCoursierLivraison(this.coursierSelectionne);
