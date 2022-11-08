@@ -1,14 +1,19 @@
 package controleur;
 
 import com.sothawo.mapjfx.Projection;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import modele.exception.MauvaisFormatXmlException;
 
@@ -121,8 +126,18 @@ public class ControllerPageAccueil {
             try {
                 controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
             } catch (MauvaisFormatXmlException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Le fichier XML n'est pas valide");
+                alert.setContentText("Veuillez charger un fichier XML valide");
+                alert.showAndWait();
                 throw new RuntimeException(e);
             } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Aucun fichier XML n'a été chargé");
+                alert.setContentText("Veuillez charger un fichier XML");
+                alert.showAndWait();
                 throw new RuntimeException(e);
             }
             scene = new Scene(root);
