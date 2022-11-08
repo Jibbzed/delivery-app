@@ -72,6 +72,7 @@ public class Controller {
     private static final String __ENTROPOT_ID__ = "25303831";
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
+    private StateController stateController;
     private Coordinate coordMin;
     private Coordinate coordMax;
 
@@ -229,9 +230,11 @@ public class Controller {
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
-        //chargerPlan("src/test/resources/smallMap.xml");
-    }
 
+    }
+    void initialize(StateController stateController) {
+         this.stateController = stateController;
+    }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
@@ -537,25 +540,10 @@ public class Controller {
                             .findAny().orElse("");
 
             String fxmlFile = "/vue/AjoutLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root;
-            try {
-                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            final AjoutLivraisonController controller = fxmlLoader.getController();
-
-
-            controller.initData(plan.getIntersections().get(intersectionIdSelectionne), this);
-
-            Stage stage = new Stage();
-            stage.setTitle("Ajout Livraison");
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
+            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
+            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
 
         });
 

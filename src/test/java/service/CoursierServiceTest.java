@@ -25,18 +25,18 @@ public class CoursierServiceTest {
 
     }
 
-//    @Test
-//    public void testAjouterCoursier() {
-//        // given
-//        int nombreDeCoursiers = 2;
-//        serviceCoursier = new ServiceCoursier(nombreDeCoursiers);
-//
-//        // when
-//        serviceCoursier.ajouterCoursier();
-//
-//        // then
-//        assertEquals(nombreDeCoursiers + 1, serviceCoursier.getListeCoursiers().size());
-//    }
+    //    @Test
+    //    public void testAjouterCoursier() {
+    //        // given
+    //        int nombreDeCoursiers = 2;
+    //        serviceCoursier = new ServiceCoursier(nombreDeCoursiers);
+    //
+    //        // when
+    //        serviceCoursier.ajouterCoursier();
+    //
+    //        // then
+    //        assertEquals(nombreDeCoursiers + 1, serviceCoursier.getListeCoursiers().size());
+    //    }
 
     @Test
     public void testRetirerCoursier() {

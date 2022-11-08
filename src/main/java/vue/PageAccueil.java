@@ -2,6 +2,7 @@ package vue;
 
 import controleur.Controller;
 import controleur.ControllerPageAccueil;
+import controleur.StateController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -21,9 +22,9 @@ public class PageAccueil extends Application {
         String fxmlFile = "/vue/PageAccueil.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
+        final StateController stateController = new StateController();
         final ControllerPageAccueil controller = fxmlLoader.getController();
-        controller.initialize();
+        controller.initialize(stateController);
 
         Scene scene = new Scene(rootNode);
 

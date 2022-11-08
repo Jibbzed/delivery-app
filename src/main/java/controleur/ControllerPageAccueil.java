@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class ControllerPageAccueil {
 
+    private StateController stateController;
     @FXML
     private Button buttonLargeMap;
 
@@ -36,87 +37,53 @@ public class ControllerPageAccueil {
     private Scene scene;
     private Parent root;
 
-    public ControllerPageAccueil() {
+    public ControllerPageAccueil(){
 
     }
-    public void initialize() {
+    public void initialize(StateController stateController) {
+        this.stateController = stateController;
         String fxmlFile = "/vue/DemoApp.fxml";
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        try {
-            root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         buttonLargeMap.setOnAction(event -> {
-            System.out.println("src/test/resources/largeMap.xml");
+            // TODO: change xml files to files that would be in the src folder [/ressources]
             xmlPath = "src/test/resources/largeMap.xml";
             stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            final Controller controller = fxmlLoader.getController();
             try {
-                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
-            } catch (MauvaisFormatXmlException e) {
-                throw new RuntimeException(e);
+//                this.stateController.getCurrentState().valider(stateController);
+                this.stateController.afficherMap(fxmlLoader, xmlPath,"Grande carte de Lyon", stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            scene = new Scene(root);
-            stage.setTitle("Grande carte de Lyon");
-            stage.setScene(scene);
-            stage.show();
         });
 
         buttonMediumMap.setOnAction(event -> {
-            System.out.println("src/test/resources/mediumMap.xml");
             xmlPath = "src/test/resources/mediumMap.xml";
             stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            final Controller controller = fxmlLoader.getController();
             try {
-                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
-            } catch (MauvaisFormatXmlException e) {
-                throw new RuntimeException(e);
+                this.stateController.afficherMap(fxmlLoader, xmlPath,"Moyenne carte de Lyon", stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            scene = new Scene(root);
-            stage.setTitle("Moyenne carte de Lyon");
-            stage.setScene(scene);
-            stage.show();
         });
 
         buttonSmallMap.setOnAction(event -> {
-            System.out.println("src/test/resources/smallMap.xml");
             xmlPath = "src/test/resources/smallMap.xml";
             stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            final Controller controller = fxmlLoader.getController();
             try {
-                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
-            } catch (MauvaisFormatXmlException e) {
-                throw new RuntimeException(e);
+                this.stateController.afficherMap(fxmlLoader, xmlPath,"Petite carte de Lyon", stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            scene = new Scene(root);
-            stage.setTitle("Petite carte de Lyon");
-            stage.setScene(scene);
-            stage.show();
         });
 
         buttonValidate.setOnAction(event -> {
-            System.out.println(textXML.getText());
             xmlPath = textXML.getText();
             stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            final Controller controller = fxmlLoader.getController();
             try {
-                controller.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
-            } catch (MauvaisFormatXmlException e) {
-                throw new RuntimeException(e);
+                this.stateController.afficherMap(fxmlLoader, xmlPath,"Carte : "+xmlPath, stage);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            scene = new Scene(root);
-            stage.setTitle("Carte : "+xmlPath);
-            stage.setScene(scene);
-            stage.show();
         });
     }
 

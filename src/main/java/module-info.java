@@ -12,4 +12,6 @@ module vue {
     opens vue to javafx.fxml, javafx.graphics;
     exports controleur;
     opens controleur to javafx.fxml, javafx.graphics;
+    exports controleur.state;
+    opens controleur.state to javafx.fxml, javafx.graphics;
 }

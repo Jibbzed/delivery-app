@@ -44,6 +44,7 @@ public class AjoutLivraisonController {
     @FXML
     private Label destinationIdLabel;
 
+    private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);
     private int plageHoraire;
@@ -52,7 +53,8 @@ public class AjoutLivraisonController {
     public void AjoutLivraisonController() {
     }
 
-    public void initialize() {
+    public void initialize(StateController stateController) {
+        this.stateController = stateController;
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -104,6 +106,7 @@ public class AjoutLivraisonController {
     }
 
     public void saisirLivraison() {
+        this.stateController.getCurrentState().valider(this.stateController);
         if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
             warningMessage.setVisible(true);
             return;
