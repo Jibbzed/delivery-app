@@ -15,7 +15,6 @@ public class PageAccueil extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
     @Override
     public void start(Stage stage) throws Exception {
         String fxmlFile = "/vue/PageAccueil.fxml";

@@ -8,9 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import modele.exception.MauvaisFormatXmlException;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ControllerPageAccueil {
@@ -23,6 +25,9 @@ public class ControllerPageAccueil {
 
     @FXML
     private Button buttonSmallMap;
+
+    @FXML
+    private Button buttonParcourir;
 
     @FXML
     private Button buttonValidate;
@@ -96,6 +101,16 @@ public class ControllerPageAccueil {
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+        });
+
+        buttonParcourir.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                xmlPath = file.getPath();
+                textXML.setText(xmlPath);
+            }
         });
 
         buttonValidate.setOnAction(event -> {
