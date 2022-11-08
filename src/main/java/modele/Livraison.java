@@ -1,5 +1,6 @@
 package modele;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,7 @@ public class Livraison {
     protected Optional<Coursier> coursierLivraison;
     protected List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
     protected Optional<Integer> fenetreHoraireLivr;
+    protected Optional<LocalTime> heurePassage;
 
     public Livraison() {
     }
@@ -21,12 +23,13 @@ public class Livraison {
         parcoursLivraison = new ArrayList<>();
     }
 
-    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, List<Troncon> parcoursLivraison) {
+    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, List<Troncon> parcoursLivraison, LocalTime heureArrivee) {
         this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
         coursierLivraison = Optional.empty();
         fenetreHoraireLivr = Optional.empty();
         this.parcoursLivraison = parcoursLivraison;
+        heurePassage = Optional.of(heureArrivee);
     }
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
         this.origineLivraison = Optional.of(origineLivraison);
@@ -48,6 +51,10 @@ public class Livraison {
 
     public Optional<Coursier> getCoursierLivraison() {
         return coursierLivraison;
+    }
+
+    public Optional<LocalTime> getHeurePassage() {
+        return heurePassage;
     }
 
     public void setCoursierLivraison(Coursier coursierLivraison) {
