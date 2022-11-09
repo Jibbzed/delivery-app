@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public class Livraison {
 
-    public Optional<Intersection> origineLivraison;
+    public Optional<Intersection> origineLivraison = Optional.empty();
     public Intersection destinationLivraison;
-    public Optional<Coursier> coursierLivraison;
+    public Optional<Coursier> coursierLivraison = Optional.empty();
     public List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
-    public Optional<Integer> fenetreHoraireLivr;
+    public Optional<Integer> fenetreHoraireLivr = Optional.empty();
 
     public Livraison() {
     }

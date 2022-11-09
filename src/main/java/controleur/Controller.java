@@ -127,6 +127,9 @@ public class Controller {
     @FXML
     private Button buttonCalculTournee;
 
+    @FXML
+    private Button buttonSupprimerLivraison;
+
     /** for editing the animation duration */
     @FXML
     private TextField animationDuration;
@@ -215,7 +218,7 @@ public class Controller {
     private CheckBox checkConstrainXmlFile;
 
     @FXML
-    private ListView<?> listeLivraisons;
+    private ListView<Livraison> listeLivraisons;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -439,12 +442,28 @@ public class Controller {
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
+        buttonSupprimerLivraison.setOnAction(event -> this.supprimerLivraison());
+
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
             .projection(projection)
             .showZoomControls(false)
             .build());
+        this.listeLivraisons.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty){
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                }
+                else {
+                    setText(livraison.afficherIhm());
+                }
+            }
+        });
+
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -688,9 +707,9 @@ public class Controller {
     }
 
     public void refreshLivraison() {
-        ObservableList listLivraisonObeservable = FXCollections.observableArrayList();
+        ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
+        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
         labelEvent.setText("Livraison créée");
     }
@@ -699,5 +718,8 @@ public class Controller {
         // Ok là le pb c'est que je voulais supprimer l'element de la liste qui est selectionne
         // mais la liste qu'on voit sur l'ihm c'est juste un affichage, c'est pas des vrais livraisons,
         // donc difficile de dire quel objet est selectionné...
+        Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
     }
 }

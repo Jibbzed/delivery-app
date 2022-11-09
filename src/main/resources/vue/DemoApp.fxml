@@ -75,7 +75,7 @@
                         <VBox spacing="10.0">
                             <ListView fx:id="listeLivraisons" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
                      <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Modifier" />
-                     <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="197.0" text="Supprimer" />
+                     <Button fx:id="buttonSupprimerLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="197.0" text="Supprimer" />
                         </VBox>
                     </content>
                 </TitledPane>
