@@ -3,6 +3,7 @@ package controleur;
 import com.sothawo.mapjfx.Projection;
 import controleur.state.AjoutLivraisonState;
 import controleur.state.InitialState;
+import controleur.state.SelectionnerLivraisonState;
 import controleur.state.State;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,8 +20,10 @@ public class StateController {
     private Controller controller;
     private ControllerPageAccueil controllerPageAccueil;
     private AjoutLivraisonController ajoutLivraisonController;
+    /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
+    public final State SelectionnerLivraisonState = new SelectionnerLivraisonState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {
@@ -47,13 +50,14 @@ public class StateController {
     public void generateAjoutLivraisonController(AjoutLivraisonController ajoutLivraisonController){
         this.ajoutLivraisonController = ajoutLivraisonController;
     }
+    //TODO: save the arguments in the Controller instatnce.
     public void afficherMap(FXMLLoader fxmlLoader, String xmlMapPath, String nomMap, Stage stage) throws IOException {
         // Parent
         Parent root = fxmlLoader.load();
         // controller
 
         this.controller = fxmlLoader.getController();
-        this.controller.initialize(this);
+        this.controller.initialize(this, fxmlLoader, xmlMapPath, nomMap);
         try {
             controller.initMapAndControls(Projection.WEB_MERCATOR, xmlMapPath);
         } catch (

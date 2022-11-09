@@ -230,13 +230,20 @@ public class Controller {
         .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
         .withAttributions(
             "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
+    private FXMLLoader fxmlLoader;
+    private String xmlMapPath;
+    private String titreStage;
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
 
     }
-    void initialize(StateController stateController) {
-         this.stateController = stateController;
+//    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
+    void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
+        this.fxmlLoader = fxmlLoader;
+        this.xmlMapPath = xmlMapPath;
+        this.titreStage = titreStage;
+        this.stateController = stateController;
     }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
@@ -442,7 +449,13 @@ public class Controller {
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
-        buttonSupprimerLivraison.setOnAction(event -> this.supprimerLivraison());
+        buttonSupprimerLivraison.setOnAction(event -> {
+            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+        });
+
+        listeLivraisons.setOnMouseClicked(event -> {
+            this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+        });
 
         // finally initialize the map view
         logger.trace("start map initialization");
@@ -722,4 +735,20 @@ public class Controller {
         ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
         refreshLivraison();
     }
+
+    // *** GETTERS ** //
+
+
+    public FXMLLoader getFxmlLoader() {
+        return fxmlLoader;
+    }
+
+    public String getXmlMapPath() {
+        return xmlMapPath;
+    }
+
+    public String getTitreStage() {
+        return titreStage;
+    }
+
 }

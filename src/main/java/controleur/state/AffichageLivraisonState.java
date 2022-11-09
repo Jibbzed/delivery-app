@@ -29,14 +29,18 @@ public class AffichageLivraisonState implements State {
 
     }
 
+    @Override
     public void cliqueDroit(StateController stateController){
         stateController.setCurrentState(stateController.initialState);
     }
 
-    public void cliqueSupprimerLivraison(StateController stateController){
+    @Override
+    public void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader) {
         stateController.setCurrentState(stateController.initialState);
     }
 
+
+    @Override
     public void cliqueModifier(StateController stateController){
         // set state to modification state
     }

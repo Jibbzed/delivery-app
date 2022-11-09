@@ -31,4 +31,20 @@ public class AjoutLivraisonState implements State {
     public void chargerLivraison(StateController stateController) {
 
     }
+
+    @Override
+    public void cliqueDroit(StateController stateController) {
+
+    }
+
+    @Override
+    public void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader) {
+
+    }
+
+
+    @Override
+    public void cliqueModifier(StateController stateController) {
+
+    }
 }

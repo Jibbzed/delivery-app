@@ -14,4 +14,11 @@ public interface State {
     public void ajouterCoursier(StateController stateController);
 
     public void chargerLivraison(StateController stateController);
+
+    void cliqueDroit(StateController stateController);
+    
+    void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader);
+
+    default void cliqueLivraison(StateController stateController){}
+    void cliqueModifier(StateController stateController);
 }
