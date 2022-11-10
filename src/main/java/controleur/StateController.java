@@ -80,7 +80,7 @@ public class StateController {
         // Controller
         this.ajoutLivraisonController = fxmlLoader.getController();
         this.ajoutLivraisonController.initialize(this);
-        ajoutLivraisonController.initData(this.intersectionSelectionne, this.controller);
+        ajoutLivraisonController.initData(this.intersectionSelectionne, this.controller, this.controller.getPlan());
         // scene
         Stage stage = new Stage();
         stage.setTitle("Ajouter Livraison");

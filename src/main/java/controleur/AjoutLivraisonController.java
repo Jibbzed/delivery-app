@@ -6,13 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import modele.Coursier;
-import modele.Intersection;
-import modele.Livraison;
+import modele.*;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
+import java.util.List;
 import java.util.Set;
 
 public class AjoutLivraisonController {
@@ -85,9 +84,10 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, Controller controllerMere) {
+    public void initData(Intersection intersection, Controller controllerMere, Plan plan) {
         destination = intersection;
-        destinationIdLabel.setText(destination.getId());
+        String nomRuesString = plan.listerTronconsParIntersection(intersection);
+        destinationIdLabel.setText(nomRuesString);
         destinationIdLabel.setVisible(true);
         this.controllerMere = controllerMere;
         System.out.println(destination);

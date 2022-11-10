@@ -274,6 +274,10 @@ public class Controller {
         markerMaxCoord = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordMax).setVisible(false);
     }
 
+    public Plan getPlan() {
+        return plan;
+    }
+
     private static void initCoordStatic() {
         coordCenterWarehouse = new Coordinate(coordWarhouseLyon.getLatitude(), coordWarhouseLyon.getLongitude());
     }
@@ -472,7 +476,7 @@ public class Controller {
                     setText(null);
                 }
                 else {
-                    setText(livraison.afficherIhm());
+                    setText(livraison.afficherIhm(getPlan()));
                 }
             }
         });

@@ -22,6 +22,26 @@ public class Plan {
         return this.troncons.stream().filter(t-> t.getOrigine().equals(intersection)).collect(Collectors.toSet());
     }
 
+    public String listerTronconsParIntersection(Intersection intersection){
+        String noms = "";
+        List<String> nomsTroncons = new ArrayList<>();
+        for (Troncon t : this.troncons) {
+            if (t.getOrigine().equals(intersection)||t.getDestination().equals(intersection)) {
+                if(!nomsTroncons.contains(t.getNom())) {
+                    nomsTroncons.add(t.getNom());
+                }
+            }
+        }
+
+        if(nomsTroncons.size()==1) {
+            noms = nomsTroncons.get(0);
+        } else {
+            noms = "Intersection entre " + nomsTroncons.get(0) + " et " + nomsTroncons.get(1);
+        }
+        return noms;
+    }
+
+
     public void ajouterTroncon(Troncon troncon){
        validTroncon(troncon);
        this.troncons.add(troncon);
