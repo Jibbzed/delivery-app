@@ -1,6 +1,6 @@
 package controleur.state;
 
-import controleur.Controller;
+import controleur.PagePrincipaleController;
 import controleur.StateController;
 import javafx.fxml.FXMLLoader;
 
@@ -37,7 +37,7 @@ public class SelectionnerLivraisonState implements State{
 
     @Override
     public void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader) {
-        Controller controller = fxmlLoader.getController();
+        PagePrincipaleController controller = fxmlLoader.getController();
         controller.supprimerLivraison();
         stateController.setCurrentState(stateController.initialState);
 

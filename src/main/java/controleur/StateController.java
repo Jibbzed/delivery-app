@@ -6,18 +6,18 @@ import controleur.state.InitialState;
 import controleur.state.SelectionnerLivraisonState;
 import controleur.state.State;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import modele.Intersection;
 import modele.exception.MauvaisFormatXmlException;
+import vue.PagePrincipale;
 
 import java.io.IOException;
 
 public class StateController {
     private State currentState;
-    private Controller controller;
+    private PagePrincipaleController controller;
     private ControllerPageAccueil controllerPageAccueil;
     private AjoutLivraisonController ajoutLivraisonController;
     /**  states **/
@@ -50,14 +50,18 @@ public class StateController {
     public void generateAjoutLivraisonController(AjoutLivraisonController ajoutLivraisonController){
         this.ajoutLivraisonController = ajoutLivraisonController;
     }
-    //TODO: save the arguments in the Controller instatnce.
-    public void afficherMap(FXMLLoader fxmlLoader, String xmlMapPath, String nomMap, Stage stage) throws IOException {
+    //TODO: save the arguments in the PagePrincipaleController instatnce.
+    //public void afficherMap(FXMLLoader fxmlLoader, String xmlMapPath, String nomMap, Stage stage) throws IOException {
+    public void afficherMap(String title, String xmlMapPath) throws IOException {
         // Parent
-        Parent root = fxmlLoader.load();
+       /* Parent root = fxmlLoader.load();*/
         // controller
 
-        this.controller = fxmlLoader.getController();
-        this.controller.initialize(this, fxmlLoader, xmlMapPath, nomMap);
+        PagePrincipale pagePrincipale = new PagePrincipale(title, xmlMapPath);
+
+        this.controller = pagePrincipale.getController();
+
+        this.controller.initialize(this,pagePrincipale.getFXMLoader(), xmlMapPath, title );
         try {
             controller.initMapAndControls(Projection.WEB_MERCATOR, xmlMapPath);
         } catch (
@@ -66,10 +70,10 @@ public class StateController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Scene scene = new Scene(root);
+       /* Scene scene = new Scene(root);
         stage.setTitle(nomMap);
-        stage.setScene(scene);
-        stage.showAndWait();
+        stage.setScene(scene);*/
+        pagePrincipale.showAndWait();
     }
 
 
@@ -77,7 +81,7 @@ public class StateController {
     public void ajouterLivraison(FXMLLoader fxmlLoader) throws IOException {
         // Parent
         Parent root = fxmlLoader.load();
-        // Controller
+        // PagePrincipaleController
         this.ajoutLivraisonController = fxmlLoader.getController();
         this.ajoutLivraisonController.initialize(this);
         ajoutLivraisonController.initData(this.intersectionSelectionne, this.controller);

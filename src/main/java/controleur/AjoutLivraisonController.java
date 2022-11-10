@@ -1,8 +1,6 @@
 package controleur;
 
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -13,11 +11,9 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
-import java.util.Set;
-
 public class AjoutLivraisonController {
 
-    private Controller controllerMere;
+    private PagePrincipaleController controllerMere;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -85,7 +81,7 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, Controller controllerMere) {
+    public void initData(Intersection intersection, PagePrincipaleController controllerMere) {
         destination = intersection;
         destinationIdLabel.setText(destination.getId());
         destinationIdLabel.setVisible(true);

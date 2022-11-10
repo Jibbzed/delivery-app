@@ -20,30 +20,22 @@ import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
-import javafx.animation.AnimationTimer;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -56,14 +48,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Controller for the FXML defined code.
+ * PagePrincipaleController for the FXML defined code.
  *
  * @author P.J. Meisch (pj.meisch@sothawo.com).
  */
-public class Controller {
+public class PagePrincipaleController {
 
     /** logger for the class. */
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(PagePrincipaleController.class);
 
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
@@ -235,12 +227,12 @@ public class Controller {
     private String titreStage;
 
     // TODO: handle exceptions
-    public Controller() throws MauvaisFormatXmlException, IOException {
+    public PagePrincipaleController() throws MauvaisFormatXmlException, IOException {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
     void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
-        this.fxmlLoader = fxmlLoader;
+     //   this.fxmlLoader = fxmlLoader;
         this.xmlMapPath = xmlMapPath;
         this.titreStage = titreStage;
         this.stateController = stateController;
