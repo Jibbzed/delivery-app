@@ -70,7 +70,6 @@ public class AjoutLivraisonController {
 //        coursierSelector.getItems().add("Coursier 2");
         serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.setOnAction(e -> {
-
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
 

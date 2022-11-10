@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import modele.Intersection;
 import modele.exception.MauvaisFormatXmlException;
 import vue.PagePrincipale;
+import vue.PageSaisieLivraison;
 
 import java.io.IOException;
 
@@ -51,11 +52,7 @@ public class StateController {
         this.ajoutLivraisonController = ajoutLivraisonController;
     }
     //TODO: save the arguments in the PagePrincipaleController instatnce.
-    //public void afficherMap(FXMLLoader fxmlLoader, String xmlMapPath, String nomMap, Stage stage) throws IOException {
     public void afficherMap(String title, String xmlMapPath) throws IOException {
-        // Parent
-       /* Parent root = fxmlLoader.load();*/
-        // controller
 
         PagePrincipale pagePrincipale = new PagePrincipale(title, xmlMapPath);
 
@@ -70,28 +67,17 @@ public class StateController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-       /* Scene scene = new Scene(root);
-        stage.setTitle(nomMap);
-        stage.setScene(scene);*/
+
         pagePrincipale.showAndWait();
     }
 
 
-
-    public void ajouterLivraison(FXMLLoader fxmlLoader) throws IOException {
-        // Parent
-        Parent root = fxmlLoader.load();
-        // PagePrincipaleController
-        this.ajoutLivraisonController = fxmlLoader.getController();
+    public void ajouterLivraison() throws IOException {
+        PageSaisieLivraison pageSaisieLivraison = new PageSaisieLivraison();
+        this.ajoutLivraisonController = pageSaisieLivraison.getController();
         this.ajoutLivraisonController.initialize(this);
         ajoutLivraisonController.initData(this.intersectionSelectionne, this.controller);
-        // scene
-        Stage stage = new Stage();
-        stage.setTitle("Ajouter Livraison");
-        stage.setScene(new Scene(root));
-        stage.centerOnScreen();
-        // fermer la scene
-        stage.showAndWait();
+        pageSaisieLivraison.showAndWait();
         // TODO change the attribute to an optional one.
         this.ajoutLivraisonController = null;
     }

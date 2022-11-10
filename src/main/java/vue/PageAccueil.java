@@ -2,31 +2,31 @@ package vue;
 
 import controleur.ControllerPageAccueil;
 import controleur.StateController;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class PageAccueil extends Application {
+import java.io.IOException;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class PageAccueil extends Stage {
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public PageAccueil (){
         String fxmlFile = "/vue/PageAccueil.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        final StateController stateController = new StateController();
+        Parent rootNode;
+        try{
+            rootNode= fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
         final ControllerPageAccueil controller = fxmlLoader.getController();
+        final StateController stateController = new StateController();
+
         controller.initialize(stateController);
-
         Scene scene = new Scene(rootNode);
-
-        stage.setTitle("Page d'Accueil");
-        stage.setScene(scene);
-        stage.show();
+        setTitle("Page d'Accueil");
+        setScene(scene);
     }
 }

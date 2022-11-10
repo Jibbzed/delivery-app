@@ -34,9 +34,6 @@ public class ControllerPageAccueil {
 
     private String xmlPath;
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
     private String title;
 
     public ControllerPageAccueil(){
@@ -49,30 +46,25 @@ public class ControllerPageAccueil {
         buttonLargeMap.setOnAction(event -> {
             // TODO: change xml files to files that would be in the src folder [/ressources]
             xmlPath = "src/test/resources/largeMap.xml";
-            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        /*    try {
-//                this.stateController.getCurrentState().valider(stateController);
-                title= "Grande "+title;
-              this.stateController.afficherMap(fxmlLoader, xmlPath,title, stage);
+            try {
+                this.stateController.afficherMap(title, xmlPath);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }*/
+            }
         });
 
         buttonMediumMap.setOnAction(event -> {
             xmlPath = "src/test/resources/mediumMap.xml";
-            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             title ="Moyenne "+title;
-         /*   try {
-                this.stateController.afficherMap(fxmlLoader, xmlPath,title, stage);
+            try {
+                this.stateController.afficherMap(title, xmlPath);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }*/
+            }
         });
 
         buttonSmallMap.setOnAction(event -> {
             xmlPath = "src/test/resources/smallMap.xml";
-            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             title = "Petite "+title;
             try {
                 this.stateController.afficherMap(title, xmlPath);
@@ -83,13 +75,12 @@ public class ControllerPageAccueil {
 
         buttonValidate.setOnAction(event -> {
             xmlPath = textXML.getText();
-            stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             title = "Carte : "+xmlPath;
-            /*try {
-                this.stateController.afficherMap(fxmlLoader, xmlPath,title, stage);
+            try {
+                this.stateController.afficherMap(title, xmlPath);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }*/
+            }
         });
     }
 

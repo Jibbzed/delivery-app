@@ -7,16 +7,14 @@ import java.io.IOException;
 
 public class InitialState implements State {
 
-
     @Override
     public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader) {
         stateController.setCurrentState(stateController.ajoutLivraisonState);
         try {
-            stateController.ajouterLivraison(fxmlLoader);
+            stateController.ajouterLivraison();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
