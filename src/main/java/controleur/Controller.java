@@ -573,10 +573,6 @@ public class Controller {
             labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
         });
 
-        mapView.addEventHandler(MapViewEvent.MAP_POINTER_MOVED, event -> {
-            logger.debug("pointer moved to " + event.getCoordinate());
-        });
-
         logger.trace("map handlers initialized");
     }
 
