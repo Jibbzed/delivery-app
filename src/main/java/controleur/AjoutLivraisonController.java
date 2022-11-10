@@ -45,7 +45,7 @@ public class AjoutLivraisonController {
     private Label destinationIdLabel;
 
 
-    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
     private int plageHoraire;
     private ServiceLivraison serviceLivraison;
 
