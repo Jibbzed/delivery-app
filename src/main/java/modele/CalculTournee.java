@@ -9,6 +9,7 @@ public class CalculTournee {
     private Map<String, Livraison> livraisons;
     private TSP tsp;
     private Map<String, Map<String, Dijkstra>> plusCourtsChemins;
+    private Coursier coursierTournee;
 
     public CalculTournee(Plan p, Intersection entrepot, Map<String, Livraison> livraisons) {
         this.plan = p;
@@ -16,6 +17,8 @@ public class CalculTournee {
         this.livraisons = livraisons;
         this.tsp = new TSP1();
         this.plusCourtsChemins = new HashMap<>();
+        // le coursier associé à la tournée calculée est le coursier de la première livraison (le même pour toutes les autres)
+        this.coursierTournee = livraisons.values().stream().findFirst().get().getCoursierLivraison().get();
     }
 
     public GrapheComplet initGraphe() {
@@ -135,13 +138,14 @@ public class CalculTournee {
             LocalTime heureArrivee = heureDepart.plusHours(dureeHeure);
             heureArrivee = heureArrivee.plusMinutes(dureeMinutes);
             // si l'heure d'arrivée d'une livraison est avant le début de sa time window alors le livreur patiente => heure d'arrivée = début de la time window
-            if( heureArrivee.isBefore(LocalTime.of(livraisons.get(idOrigine).getFenetreHoraireLivr().get(),0)) ) {
-                heureArrivee = LocalTime.of(livraisons.get(idOrigine).getFenetreHoraireLivr().get(), 0);
+            Livraison temp = livraisons.get(idDest);
+            if( heureArrivee.isBefore(LocalTime.of(livraisons.get(idDest).getFenetreHoraireLivr().get(),0)) ) {
+                heureArrivee = LocalTime.of(livraisons.get(idDest).getFenetreHoraireLivr().get(), 0);
             }
             // une livraison prend 5 minutes donc le livreur repart 5 minutes après être arrivé au point de livraison
             heureDepart = heureArrivee.plusMinutes(5);
 
-            Livraison livr = new Livraison(origine, dest, trajet, heureArrivee);
+            Livraison livr = new Livraison(origine, dest, coursierTournee, trajet, heureArrivee);
             livraisonsTournee.add(livr);
         }
         String idOrigine = tournee.get(tournee.size()-1);
@@ -158,10 +162,10 @@ public class CalculTournee {
         int dureeMinutes = (int)((duree-dureeHeure)*60);
         LocalTime heureArrivee = heureDepart.plusHours(dureeHeure);
         heureArrivee = heureArrivee.plusMinutes(dureeMinutes);
-        Livraison livr = new Livraison(origine, dest, trajet, heureArrivee);
+        Livraison livr = new Livraison(origine, dest, coursierTournee, trajet, heureArrivee);
         livraisonsTournee.add(livr);
 
-        Tournee tourneeCalculee = new Tournee(livraisonsTournee);
+        Tournee tourneeCalculee = new Tournee(livraisonsTournee, coursierTournee);
         return tourneeCalculee;
     }
 }

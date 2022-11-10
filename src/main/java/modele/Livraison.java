@@ -23,13 +23,20 @@ public class Livraison {
         parcoursLivraison = new ArrayList<>();
     }
 
-    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, List<Troncon> parcoursLivraison, LocalTime heureArrivee) {
+    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursier, List<Troncon> parcoursLivraison, LocalTime heureArrivee) {
         this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
-        coursierLivraison = Optional.empty();
+        coursierLivraison = Optional.of(coursier);
         fenetreHoraireLivr = Optional.empty();
         this.parcoursLivraison = parcoursLivraison;
         heurePassage = Optional.of(heureArrivee);
+    }
+    public Livraison(Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
+        this.origineLivraison = Optional.empty();
+        this.destinationLivraison = destinationLivraison;
+        this.coursierLivraison = Optional.of(coursierLivraison);
+        this.fenetreHoraireLivr = Optional.of(fenetreHoraireLivr);
+        this.parcoursLivraison = new ArrayList<>();
     }
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
         this.origineLivraison = Optional.of(origineLivraison);

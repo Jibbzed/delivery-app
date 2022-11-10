@@ -644,13 +644,15 @@ public class Controller {
     private void calculTournee() {
         // On récupère la liste de livraisons existantes
         List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
-        // On transforme en liste d'intersection
-        List<Intersection> listeInter = new ArrayList<Intersection>();
-        for (int i = 0 ; i < listeLivraion.size() ; i++) {
-            listeInter.add(listeLivraion.get(i).getDestinationLivraison());
+
+        // Pour créer l'objet CalculTournee, on a besoin d'une map des livraisons à l'id de leur destination
+        Map<String, Livraison> livraisons = new HashMap<>();
+        for( Livraison l : listeLivraion ) {
+            livraisons.put(l.getDestinationLivraison().getId(), l);
         }
+
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), livraisons);
         Tournee tournee = calculTournee.calculerTournee();
 
         // On récupère les intersections
