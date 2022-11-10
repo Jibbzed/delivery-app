@@ -1,10 +1,7 @@
 package modele;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CalculTournee {
     private Plan plan;
@@ -35,7 +32,7 @@ public class CalculTournee {
         List<String> destinations = new ArrayList<>();
 
         // entre l'entrepot et les points de livraison
-        for( String id : livraisons.keySet() ) { destinations.add(id); }
+        destinations.addAll(livraisons.keySet());
         plusCourtsChemins.put(entrepot.getId(), plan.plusCourtChemin(entrepot.getId(), destinations));
 
         // entre chaque point de livraison et les autres + entrepôt
@@ -52,13 +49,40 @@ public class CalculTournee {
         GrapheComplet graphe = new GrapheComplet(plusCourtsChemins, mappingIdInt);
 
         // une fois le graphe créé, on va prendre en compte les time windows en mettant un poids très élevé sur certains arcs
+        // on "enlève" l'arc entre ei et ej si ej est dans la time window consécutive à celle de ei (on ne peut pas livrer 9h avant 8h30)
+        // si ei et ej sont dans des time windows disjointes, alors on coupe l'arc entre ei et ej mais aussi entre ej et ei
+        // /!\ si on a une time window qui est vide, il faut spécifier : si livraison 8h, livraison 10h, mais pas 9h, il ne faut pas couper les arcs sinon on ne peut plus compléter la tournée
+        // ne pas oublier l'entrepôt : on ne garde que les liens de entrepôt vers livraisons de la première time window et de livraisons de la dernière time window vers entrepôt
+        // on a donc besoin de connaître l'enchaînement des time windows
+
+        // on récupère les time windows, et on les ordonne
+        List<Integer> time_windows = new ArrayList<>();
         for( Livraison l : livraisons.values() ) {
+            if( !time_windows.contains(l.getFenetreHoraireLivr().get()) ) { time_windows.add(l.getFenetreHoraireLivr().get()); }
+        }
+        Collections.sort(time_windows);
+
+        // on fait les suppressions successives en fonction des time windows
+        for( Livraison l : livraisons.values() ) {
+            // on commence par les arcs avec entrepôt
+            if( !l.getFenetreHoraireLivr().get().equals(time_windows.get(0)) ) { // si la livraison n'est pas dans la première time window
+                graphe.setCout(0, mappingIdInt.get(l.getDestinationLivraison().getId()), Double.MAX_VALUE);
+            }
+            if( !l.getFenetreHoraireLivr().get().equals(time_windows.get(time_windows.size()-1)) ) { // si la livraison n'est pas dans la dernière time window
+                graphe.setCout(mappingIdInt.get(l.getDestinationLivraison().getId()), 0, Double.MAX_VALUE);
+            }
+            // puis les arcs entre les points de livraison
             for( Livraison livr : livraisons.values() ) {
-                if( (l.getFenetreHoraireLivr().map(h -> h+1)) == livr.getFenetreHoraireLivr() ) {
-                    graphe.setCout(mappingIdInt.get(livr.getDestinationLivraison().getId()), mappingIdInt.get(l.getDestinationLivraison().getId()), Double.MAX_VALUE);
-                }else if ( (l.getFenetreHoraireLivr().get()+1) < livr.getFenetreHoraireLivr().get() ) {
-                    graphe.setCout(mappingIdInt.get(livr.getDestinationLivraison().getId()), mappingIdInt.get(l.getDestinationLivraison().getId()), Double.MAX_VALUE);
-                    graphe.setCout(mappingIdInt.get(l.getDestinationLivraison().getId()), mappingIdInt.get(livr.getDestinationLivraison().getId()), Double.MAX_VALUE);
+                if( !l.equals(livr) ) {
+                    if( time_windows.indexOf(l.getFenetreHoraireLivr().get()) == time_windows.indexOf(livr.getFenetreHoraireLivr().get()) ) {
+                    } else if( time_windows.indexOf(l.getFenetreHoraireLivr().get()) + 1 == time_windows.indexOf(livr.getFenetreHoraireLivr().get()) ) {
+                        graphe.setCout(mappingIdInt.get(livr.getDestinationLivraison().getId()), mappingIdInt.get(l.getDestinationLivraison().getId()), Double.MAX_VALUE);
+                    } else if( time_windows.indexOf(l.getFenetreHoraireLivr().get()) == time_windows.indexOf(livr.getFenetreHoraireLivr().get()) + 1 ) {
+                        graphe.setCout(mappingIdInt.get(l.getDestinationLivraison().getId()), mappingIdInt.get(livr.getDestinationLivraison().getId()), Double.MAX_VALUE);
+                    } else {
+                        graphe.setCout(mappingIdInt.get(livr.getDestinationLivraison().getId()), mappingIdInt.get(l.getDestinationLivraison().getId()), Double.MAX_VALUE);
+                        graphe.setCout(mappingIdInt.get(l.getDestinationLivraison().getId()), mappingIdInt.get(livr.getDestinationLivraison().getId()), Double.MAX_VALUE);
+                    }
                 }
             }
         }
@@ -76,6 +100,7 @@ public class CalculTournee {
             count += 1;
         }
 
+        // on initialise le graphe des plus courts chemins
         Graphe pcc = initGraphe();
 
         // on applique le TSP au graphe
