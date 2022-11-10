@@ -1,14 +1,10 @@
 package controleur;
 
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import modele.Coursier;
-import modele.Intersection;
-import modele.Livraison;
+import modele.*;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
@@ -85,11 +81,18 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection) {
+    public void initData(Intersection intersection, Plan plan) {
         destination = intersection;
-        destinationIdLabel.setText(destination.getId());
+        /*Set<Troncon> nomRues = plan.listerTronconsSortieParIntersection(intersection);
+        String nomRuesString;
+        if(nomRues.size()<1) {
+            nomRuesString = nomRues.toArray()[0].toString() + ", " + nomRues.toArray()[1].toString();
+        } else {
+            nomRuesString = nomRues.toArray()[0].toString();
+        }
+        destinationIdLabel.setText(nomRuesString);*/
+        destinationIdLabel.setText(intersection.getId());
         destinationIdLabel.setVisible(true);
-
         System.out.println(destination);
     }
 
