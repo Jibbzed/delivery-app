@@ -31,5 +31,14 @@ public class PageAccueil extends Application {
         stage.setTitle("Page d'Accueil");
         stage.setScene(scene);
         stage.show();
+        //Test page Menu pour voir l'affichage
+        /*String fxmlFile = "/vue/Menu.fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        Scene scene = new Scene(rootNode);
+
+        stage.setTitle("Page d'Accueil");
+        stage.setScene(scene);
+        stage.show();*/
     }
 }

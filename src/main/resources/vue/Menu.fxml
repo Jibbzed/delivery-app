@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import com.sothawo.mapjfx.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.text.Text?>
-<?import com.sothawo.mapjfx.MapView?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.Controller">
     <top>
         <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
@@ -44,17 +36,23 @@
    <left>
       <Pane prefHeight="726.0" prefWidth="206.0" BorderPane.alignment="CENTER">
          <children>
-              <VBox spacing="10.0">
-                  <children>
-                      <Button fx:id="buttonWarhouse" maxWidth="Infinity" text="Entrepot" />
-                  </children>
-                  <children>
-                      <Button fx:id="buttonCalculTournee" maxWidth="Infinity" text="Calculer une tournée" />
-                  </children>
-                  <Label fx:id="titreLivraisons" text="Livraisons" />
-                  <ListView fx:id="listeLivraisons" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Modifier" />
-                  <Button fx:id="buttonSupprimerLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="197.0" text="Supprimer" />
+              <VBox spacing="10.0" alignment="CENTER">
+                  <Button fx:id="buttonWarhouse" maxWidth="Infinity" text="Entrepot" />
+                  <Button fx:id="coursierLivraison" maxWidth="Infinity" text="Coursier" />
+                 <VBox fx:id="livraison" spacing="10.0" alignment="CENTER">
+                      <Label fx:id="titreLivraisons" text="Livraisons" />
+                      <ListView fx:id="listeLivraisons" prefHeight="150.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
+                      <Button fx:id="buttonModifierLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Modifier la livraison" />
+                      <Button fx:id="buttonSupprimerLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="197.0" text="Supprimer la livraison" />
+                 </VBox>
+                    <Button fx:id="buttonCalculTournee" maxWidth="Infinity" text="Calculer une tournée" />
+                 <VBox fx:id="tournee" spacing="10.0" alignment="CENTER">
+                      <Label fx:id="titreTournees" text="Tournées" />
+                      <ComboBox fx:id="coursierTournee" prefWidth="200.0" promptText="Coursier" />
+                      <ListView fx:id="listeTournees" prefHeight="150.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
+                      <Button fx:id="AjouterLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Ajouter une livraison" />
+                      <Button fx:id="buttonSupprimerTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="197.0" text="Supprimer la tournée" />
+                 </VBox>
               </VBox>
          </children>
       </Pane>

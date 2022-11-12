@@ -22,7 +22,5 @@ package vue;
  * @author P.J. Meisch (pj.meisch@sothawo.com)
  */
 public class AppLauncher {
-    public static void main(String[] args) {
-        PageAccueil.main(args);
-    }
+    public static void main(String[] args) { PageAccueil.main(args); }
 }
