@@ -1,6 +1,6 @@
 package controleur.state;
 
-import controleur.PagePrincipaleController;
+import vue.FenetreControler.FenetrePrincipaleController;
 import controleur.StateController;
 import javafx.fxml.FXMLLoader;
 
@@ -37,7 +37,7 @@ public class SelectionnerLivraisonState implements State{
 
     @Override
     public void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader) {
-        PagePrincipaleController controller = fxmlLoader.getController();
+        FenetrePrincipaleController controller = fxmlLoader.getController();
         controller.supprimerLivraison();
         stateController.setCurrentState(stateController.initialState);
 

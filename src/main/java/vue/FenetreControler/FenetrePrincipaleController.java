@@ -13,13 +13,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package controleur;
+package vue.FenetreControler;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
+import controleur.StateController;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -48,14 +49,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * PagePrincipaleController for the FXML defined code.
+ * FenetrePrincipaleController for the FXML defined code.
  *
  * @author P.J. Meisch (pj.meisch@sothawo.com).
  */
-public class PagePrincipaleController {
+public class FenetrePrincipaleController {
 
     /** logger for the class. */
-    private static final Logger logger = LoggerFactory.getLogger(PagePrincipaleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleController.class);
 
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
@@ -227,11 +228,12 @@ public class PagePrincipaleController {
     private String titreStage;
 
     // TODO: handle exceptions
-    public PagePrincipaleController() throws MauvaisFormatXmlException, IOException {
+    public FenetrePrincipaleController() throws MauvaisFormatXmlException, IOException {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
-    void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
+    @FXML
+    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
      //   this.fxmlLoader = fxmlLoader;
         this.xmlMapPath = xmlMapPath;
         this.titreStage = titreStage;
@@ -563,7 +565,7 @@ public class PagePrincipaleController {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/AjoutLivraison.fxml";
+            String fxmlFile = "/vue/SaisieLIvraison.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
             this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));

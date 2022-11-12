@@ -1,12 +1,8 @@
 package vue;
 
-import controleur.ControllerPageAccueil;
-import controleur.StateController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import vue.Fenetre.FenetreAccueil;
 
 public class DeliveryApp extends Application {
 
@@ -16,7 +12,7 @@ public class DeliveryApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        PageAccueil pageAccueil = new PageAccueil();
+        FenetreAccueil pageAccueil = new FenetreAccueil();
         pageAccueil.show();
     }
 }

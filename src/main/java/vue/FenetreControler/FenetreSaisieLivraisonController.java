@@ -1,6 +1,7 @@
-package controleur;
+package vue.FenetreControler;
 
 
+import controleur.StateController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -11,9 +12,9 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
-public class AjoutLivraisonController {
+public class FenetreSaisieLivraisonController {
 
-    private PagePrincipaleController controllerMere;
+    private FenetrePrincipaleController controllerMere;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -80,7 +81,7 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, PagePrincipaleController controllerMere) {
+    public void initData(Intersection intersection, FenetrePrincipaleController controllerMere) {
         destination = intersection;
         destinationIdLabel.setText(destination.getId());
         destinationIdLabel.setVisible(true);
@@ -97,7 +98,6 @@ public class AjoutLivraisonController {
     //TODO: compléter cette méthode pour ajouter le coursier à la livraison
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = coursier;
-
     }
 
     public void saisirLivraison() {
