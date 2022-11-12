@@ -1,10 +1,7 @@
 package controleur;
 
 import com.sothawo.mapjfx.Projection;
-import controleur.state.AjoutLivraisonState;
-import controleur.state.InitialState;
-import controleur.state.SelectionnerLivraisonState;
-import controleur.state.State;
+import controleur.state.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,7 +20,8 @@ public class StateController {
     /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
-    public final State SelectionnerLivraisonState = new SelectionnerLivraisonState();
+    public final State selectionnerLivraisonState = new SelectionnerLivraisonState();
+    public final State modificationLivraisonState = new ModificationLivraisonState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {

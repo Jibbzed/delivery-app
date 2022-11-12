@@ -728,9 +728,6 @@ public class Controller {
     }
 
     public void supprimerLivraison() {
-        // Ok là le pb c'est que je voulais supprimer l'element de la liste qui est selectionne
-        // mais la liste qu'on voit sur l'ihm c'est juste un affichage, c'est pas des vrais livraisons,
-        // donc difficile de dire quel objet est selectionné...
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
         ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
         refreshLivraison();
