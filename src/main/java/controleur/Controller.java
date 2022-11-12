@@ -450,7 +450,7 @@ public class Controller {
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
         buttonSupprimerLivraison.setOnAction(event -> {
-            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+            supprimerLivraison();
         });
 
         listeLivraisons.setOnMouseClicked(event -> {
@@ -574,8 +574,7 @@ public class Controller {
             String fxmlFile = "/vue/AjoutLivraison.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
-            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
 
         });
 
@@ -729,7 +728,13 @@ public class Controller {
 
     public void supprimerLivraison() {
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
-        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+        stateController.supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
+    }
+
+    public void modifierLivraison(){
+        Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.modifierLivraison(livraisonAModifier);
         refreshLivraison();
     }
 

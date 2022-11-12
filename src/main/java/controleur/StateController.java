@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import modele.Intersection;
+import modele.Livraison;
 import modele.exception.MauvaisFormatXmlException;
 
 import java.io.IOException;
@@ -89,4 +90,16 @@ public class StateController {
         // TODO change the attribute to an optional one.
         this.ajoutLivraisonController = null;
     }
+
+    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
+
+    public void modifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+
+    public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
+        this.setIntersectionSelectionne(intersectionSelectionne);
+        currentState.doubleCliquePlan(this, fxmlLoader);
+
+
+    }
+
 }
