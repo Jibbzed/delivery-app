@@ -1,8 +1,8 @@
 package vue.Fenetre;
 
 import modele.Intersection;
-import vue.FenetreControler.FenetrePrincipaleController;
-import vue.FenetreControler.FenetreSaisieLivraisonController;
+import vue.FenetreController.FenetrePrincipaleController;
+import vue.FenetreController.FenetreSaisieLivraisonController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class FenetreSaisieLivraison extends Stage {
 
-    private final String fxmlFile="/vue/SaisieLIvraison.fxml";
+    private final String fxmlFile= "/vue/SaisieLivraison.fxml";
     private FXMLLoader fxmlLoader;
 
     public FenetreSaisieLivraison(Intersection intersection, FenetrePrincipaleController controllerMere){

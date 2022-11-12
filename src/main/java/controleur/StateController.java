@@ -1,17 +1,16 @@
 package controleur;
 
 import com.sothawo.mapjfx.Projection;
-import controleur.state.AjoutLivraisonState;
-import controleur.state.InitialState;
-import controleur.state.SelectionnerLivraisonState;
-import controleur.state.State;
+import controleur.state.*;
+import javafx.fxml.FXMLLoader;
 import modele.Intersection;
+import modele.Livraison;
 import modele.exception.MauvaisFormatXmlException;
-import vue.FenetreControler.FenetreSaisieLivraisonController;
-import vue.FenetreControler.FenetreAccueilController;
+import vue.FenetreController.FenetreSaisieLivraisonController;
+import vue.FenetreController.FenetreAccueilController;
 import vue.Fenetre.FenetrePrincipale;
 import vue.Fenetre.FenetreSaisieLivraison;
-import vue.FenetreControler.FenetrePrincipaleController;
+import vue.FenetreController.FenetrePrincipaleController;
 
 import java.io.IOException;
 
@@ -23,7 +22,9 @@ public class StateController {
     /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
-    public final State SelectionnerLivraisonState = new SelectionnerLivraisonState();
+
+    public final State modificationLivraisonState = new ModificationLivraisonState();
+    public final State selectionnerLivraisonState = new SelectionnerLivraisonState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {
@@ -71,12 +72,23 @@ public class StateController {
     }
 
 
-    public void ajouterLivraison() throws IOException {
+    public void ajouterLivraison(FXMLLoader fxmlLoader) throws IOException {
         FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.controller);
         this.ajoutLivraisonController = pageSaisieLivraison.getController();
         this.ajoutLivraisonController.initialize(this);
         pageSaisieLivraison.showAndWait();
         // TODO change the attribute to an optional one.
         this.ajoutLivraisonController = null;
+    }
+
+    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
+
+    public void modifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+
+    public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
+        this.setIntersectionSelectionne(intersectionSelectionne);
+        currentState.doubleCliquePlan(this, fxmlLoader);
+
+
     }
 }

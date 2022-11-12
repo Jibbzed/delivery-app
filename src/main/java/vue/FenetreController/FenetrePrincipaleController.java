@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package vue.FenetreControler;
+package vue.FenetreController;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
@@ -444,7 +444,8 @@ public class FenetrePrincipaleController {
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
         buttonSupprimerLivraison.setOnAction(event -> {
-            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+//            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+            supprimerLivraison();
         });
 
         listeLivraisons.setOnMouseClicked(event -> {
@@ -565,11 +566,12 @@ public class FenetrePrincipaleController {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/SaisieLIvraison.fxml";
+            String fxmlFile = "/vue/SaisieLivraison.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
-            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
+//            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
+//            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
 
         });
 
@@ -718,15 +720,24 @@ public class FenetrePrincipaleController {
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
         listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
-        labelEvent.setText("Livraison créée");
+        labelEvent.setText("Liste livraison modifiée");
     }
 
+//    public void supprimerLivraison() {
+//        Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
+//        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+//        refreshLivraison();
+//    }
+
     public void supprimerLivraison() {
-        // Ok là le pb c'est que je voulais supprimer l'element de la liste qui est selectionne
-        // mais la liste qu'on voit sur l'ihm c'est juste un affichage, c'est pas des vrais livraisons,
-        // donc difficile de dire quel objet est selectionné...
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
-        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+        stateController.supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
+    }
+
+    public void modifierLivraison(){
+        Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.modifierLivraison(livraisonAModifier);
         refreshLivraison();
     }
 

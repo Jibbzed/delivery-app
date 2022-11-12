@@ -1,50 +1,24 @@
 package controleur.state;
 
-import vue.FenetreControler.FenetrePrincipaleController;
+import modele.Livraison;
+import service.impl.ServiceLivraisonMockImpl;
+import vue.FenetreController.FenetrePrincipaleController;
 import controleur.StateController;
 import javafx.fxml.FXMLLoader;
 
 public class SelectionnerLivraisonState implements State{
-    @Override
-    public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader) {
 
+    @Override
+    public void modifierLivraison(StateController stateController, Livraison livraisonAModifier) {
+        stateController.setCurrentState(stateController.modificationLivraisonState);
+        // TODO afficher le point de livraison actuel
+        // TODO indiquer a l'utilisateur qu'il doit double cliquer sur le point ou doit aller la livraison
+        //      ou recliquer sur le point affichée si la destination ne change pas
     }
-
     @Override
-    public void valider(StateController stateController) {
-
-    }
-
-    @Override
-    public void modifierLivraison(StateController stateController) {
-
-    }
-
-    @Override
-    public void ajouterCoursier(StateController stateController) {
-
-    }
-
-    @Override
-    public void chargerLivraison(StateController stateController) {
-
-    }
-
-    @Override
-    public void cliqueDroit(StateController stateController) {
-
-    }
-
-    @Override
-    public void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader) {
-        FenetrePrincipaleController controller = fxmlLoader.getController();
-        controller.supprimerLivraison();
+    public void cliqueSupprimerLivraison(StateController stateController, Livraison livraisonASupprimer) {
+        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
         stateController.setCurrentState(stateController.initialState);
-
-    }
-
-    @Override
-    public void cliqueModifier(StateController stateController) {
 
     }
 }

@@ -1,4 +1,4 @@
-package vue.FenetreControler;
+package vue.FenetreController;
 
 
 import controleur.StateController;

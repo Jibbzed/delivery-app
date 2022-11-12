@@ -1,6 +1,6 @@
 package vue.Fenetre;
 
-import vue.FenetreControler.FenetrePrincipaleController;
+import vue.FenetreController.FenetrePrincipaleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
