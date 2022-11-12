@@ -10,6 +10,7 @@ public class SelectionnerLivraisonState implements State{
 
     @Override
     public void modifierLivraison(StateController stateController, Livraison livraisonAModifier) {
+        stateController.modificationLivraisonState.setLivraisonAModifier(livraisonAModifier);
         stateController.setCurrentState(stateController.modificationLivraisonState);
         // TODO afficher le point de livraison actuel
         // TODO indiquer a l'utilisateur qu'il doit double cliquer sur le point ou doit aller la livraison

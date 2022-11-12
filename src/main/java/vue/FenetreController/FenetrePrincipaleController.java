@@ -737,7 +737,7 @@ public class FenetrePrincipaleController {
 
     public void modifierLivraison(){
         Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
-        stateController.modifierLivraison(livraisonAModifier);
+        stateController.cliqueModifierLivraison(livraisonAModifier);
         refreshLivraison();
     }
 

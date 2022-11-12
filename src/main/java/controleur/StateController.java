@@ -83,12 +83,19 @@ public class StateController {
 
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
 
-    public void modifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+    public void cliqueModifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+
+    public void modifierLivraison(Livraison livraisonAModifier, FXMLLoader fxmlLoader){
+        FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.controller);
+        this.ajoutLivraisonController = pageSaisieLivraison.getController();
+        this.ajoutLivraisonController.initialize(this);
+        pageSaisieLivraison.showAndWait();
+        // TODO change the attribute to an optional one.
+        this.ajoutLivraisonController = null;
+    }
 
     public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this, fxmlLoader);
-
-
     }
 }

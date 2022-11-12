@@ -7,6 +7,7 @@ import modele.Livraison;
 import java.io.IOException;
 
 public class ModificationLivraisonState implements State{
+    private Livraison livraisonAModifier;
     @Override
     public void valider(StateController stateController) {
         State.super.valider(stateController);
@@ -22,10 +23,14 @@ public class ModificationLivraisonState implements State{
     @Override
     public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader) {
         State.super.doubleCliquePlan(stateController, fxmlLoader);
-        try {
-            stateController.ajouterLivraison(fxmlLoader);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        stateController.modifierLivraison(livraisonAModifier, fxmlLoader);
+    }
+
+    public Livraison getLivraisonAModifier() {
+        return livraisonAModifier;
+    }
+
+    public void setLivraisonAModifier(Livraison livraisonAModifier) {
+        this.livraisonAModifier = livraisonAModifier;
     }
 }
