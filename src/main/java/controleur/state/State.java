@@ -22,4 +22,8 @@ public interface State {
 
     default void cliqueLivraison(StateController stateController){}
     default void setLivraisonAModifier(Livraison livraisonAModifier) {}
+    default void cliqueAjouterLivraisonATournee(StateController stateController){}
+    default void cliqueChargerLivraison(StateController stateController){}
+
+    default void validerChargerLivraison(Livraison livraisonACharger, StateController stateController) {}
 }

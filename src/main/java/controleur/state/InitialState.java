@@ -22,4 +22,14 @@ public class InitialState implements State {
         State.super.cliqueLivraison(stateController);
         stateController.setCurrentState(stateController.selectionnerLivraisonState);
     }
+
+    @Override
+    public void cliqueChargerLivraison(StateController stateController) {
+        stateController.setCurrentState(stateController.chargementLivraisonState);
+    }
+
+    @Override
+    public void cliqueAjouterLivraisonATournee(StateController stateController){
+        stateController.setCurrentState(stateController.selectionTourneeState);
+    }
 }

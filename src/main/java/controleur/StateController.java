@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import modele.Intersection;
 import modele.Livraison;
 import modele.exception.MauvaisFormatXmlException;
+import service.ServiceLivraison;
+import service.impl.ServiceLivraisonMockImpl;
 import vue.FenetreController.FenetreSaisieLivraisonController;
 import vue.FenetreController.FenetreAccueilController;
 import vue.Fenetre.FenetrePrincipale;
@@ -22,9 +24,10 @@ public class StateController {
     /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
-
     public final State modificationLivraisonState = new ModificationLivraisonState();
-    public final State selectionnerLivraisonState = new SelectionnerLivraisonState();
+    public final State selectionnerLivraisonState = new SelectionLivraisonState();
+    public final State chargementLivraisonState = new ChargementLivraisonState();
+    public final State selectionTourneeState = new SelectionTourneeState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {
@@ -98,4 +101,11 @@ public class StateController {
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this, fxmlLoader);
     }
+
+    public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
+
+    public void chargerLivraison(Livraison livraisonACharger){
+        controller.chargerLivraison(livraisonACharger);
+    }
+    public void cliquerAjouterLivraisonATournee(){  }
 }

@@ -37,6 +37,7 @@ import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -122,6 +123,12 @@ public class FenetrePrincipaleController {
 
     @FXML
     private Button buttonSupprimerLivraison;
+
+    @FXML
+    private Button buttonModifierLivraison;
+
+    @FXML
+    private Button buttonAjoutLivraisonATournee;
 
     /** for editing the animation duration */
     @FXML
@@ -308,6 +315,7 @@ public class FenetrePrincipaleController {
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
 
+
 //        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
         logger.trace("location buttons done");
 
@@ -451,6 +459,8 @@ public class FenetrePrincipaleController {
         listeLivraisons.setOnMouseClicked(event -> {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
+
+//        buttonModifierLivraison.setOnAction(event -> modifierLivraison());
 
         // finally initialize the map view
         logger.trace("start map initialization");
@@ -723,12 +733,6 @@ public class FenetrePrincipaleController {
         labelEvent.setText("Liste livraison modifiée");
     }
 
-//    public void supprimerLivraison() {
-//        Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
-//        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
-//        refreshLivraison();
-//    }
-
     public void supprimerLivraison() {
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
         stateController.supprimerLivraison(livraisonASupprimer);
@@ -739,6 +743,11 @@ public class FenetrePrincipaleController {
         Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
         stateController.cliqueModifierLivraison(livraisonAModifier);
         refreshLivraison();
+    }
+
+    public void chargerLivraison(Livraison livraisonACharger){
+        ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+        serviceLivraison.ajouterLivraison(livraisonACharger);
     }
 
     // *** GETTERS ** //

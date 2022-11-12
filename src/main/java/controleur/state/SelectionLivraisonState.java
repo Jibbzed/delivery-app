@@ -2,11 +2,9 @@ package controleur.state;
 
 import modele.Livraison;
 import service.impl.ServiceLivraisonMockImpl;
-import vue.FenetreController.FenetrePrincipaleController;
 import controleur.StateController;
-import javafx.fxml.FXMLLoader;
 
-public class SelectionnerLivraisonState implements State{
+public class SelectionLivraisonState implements State{
 
     @Override
     public void modifierLivraison(StateController stateController, Livraison livraisonAModifier) {
