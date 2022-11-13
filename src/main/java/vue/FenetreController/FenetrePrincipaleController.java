@@ -14,10 +14,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
@@ -45,7 +47,7 @@ public class FenetrePrincipaleController {
     // TODO: remove those coordinates .
 
             //TODO: make entropot id dynamic
-    private static final String __ENTROPOT_ID__ = "25303831";
+    private static String entropotId;
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
     private StateController stateController;
@@ -202,6 +204,9 @@ public class FenetrePrincipaleController {
     @FXML
     private ListView<Livraison> listeLivraisons;
 
+    @FXML
+    private VBox vBoxLivraison;
+
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
         .setUrl("http://ows.terrestris.de/osm/service?")
@@ -215,18 +220,19 @@ public class FenetrePrincipaleController {
     private FXMLLoader fxmlLoader;
     private String xmlMapPath;
     private String titreStage;
+    private Parent parent;
 
     // TODO: handle exceptions
     public FenetrePrincipaleController() throws MauvaisFormatXmlException, IOException {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
-    @FXML
-    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
-     //   this.fxmlLoader = fxmlLoader;
+    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage, Parent parent) {
+        this.fxmlLoader = fxmlLoader;
         this.xmlMapPath = xmlMapPath;
         this.titreStage = titreStage;
         this.stateController = stateController;
+        this.parent = parent;
     }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
@@ -234,7 +240,12 @@ public class FenetrePrincipaleController {
         this.plan = parser.lirePlan(path);
         coordinateList =
                 plan.getIntersections().values().stream()
-                        .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .map(intersection -> {
+                            if(intersection.isEntrepot()) {
+                                FenetrePrincipaleController.entropotId = intersection.getId();
+                            }
+                            return new Coordinate(intersection.getLatitude(), intersection.getLongitude());
+                        } )
                         .collect(Collectors.toList());
         // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
         coordinateList.stream()
@@ -442,8 +453,19 @@ public class FenetrePrincipaleController {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
 
-//        buttonModifierLivraison.setOnAction(event -> modifierLivraison());
+        this.parent.setOnMouseClicked(event -> {
+            Double x = event.getScreenX();
+            Double y = event.getSceneY();
+            // TODO: alter this and make it inside the state implementations
+            if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
+                this.stateController.getCurrentState().clique(this.stateController);
+                if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
+//                    this.stateController.getCurrentState().clique();
 
+                }
+            }
+        });
+        disableLivraisonDisableableComponenets();
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
@@ -531,7 +553,7 @@ public class FenetrePrincipaleController {
                     .map(Intersection::getId)
                     .findAny().orElse("");
             Map<String, Dijkstra> resultatDijkstra =
-                    plan.plusCourtChemin(__ENTROPOT_ID__, Collections.singletonList( intersectionIdSelectionne ));
+                    plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
             // TODO: Duplicated code
             List<Coordinate> chemin = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
                     .map(Troncon::getOrigine)
@@ -562,8 +584,6 @@ public class FenetrePrincipaleController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
             this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
-//            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
-//            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
 
         });
 
@@ -579,10 +599,6 @@ public class FenetrePrincipaleController {
         mapView.addEventHandler(MapLabelEvent.MAPLABEL_RIGHTCLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
-        });
-
-        mapView.addEventHandler(MapViewEvent.MAP_POINTER_MOVED, event -> {
-            logger.debug("pointer moved to " + event.getCoordinate());
         });
 
         logger.trace("map handlers initialized");
@@ -658,7 +674,7 @@ public class FenetrePrincipaleController {
             listeInter.add(listeLivraion.get(i).destinationLivraison);
         }
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), listeInter);
         Tournee tournee = calculTournee.calculerTournee();
 
         // On récupère les intersections
@@ -727,11 +743,14 @@ public class FenetrePrincipaleController {
         refreshLivraison();
     }
 
-   /* public void chargerLivraison(Livraison livraisonACharger){
-        ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
-        serviceLivraison.ajouterLivraison(livraisonACharger);
-    }*/
+    public void disableView() {
+        this.parent.setVisible(false);
 
+
+    }
+    public void enableView() {
+        this.parent.setVisible(true);
+    }
     // *** GETTERS ** //
 
 
@@ -747,4 +766,14 @@ public class FenetrePrincipaleController {
         return titreStage;
     }
 
+
+    public void disableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(true);
+        this.buttonModifierLivraison.setDisable(true);
+    }
+
+    public void enableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(false);
+        this.buttonModifierLivraison.setDisable(false);
+    }
 }

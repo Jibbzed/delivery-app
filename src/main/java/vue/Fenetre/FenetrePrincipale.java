@@ -11,19 +11,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+//TODO: Get node Parent
 public class FenetrePrincipale extends Stage{
     private String fxmlFile = "/vue/Principale.fxml";
     FXMLLoader fxmlLoader;
 
+    private Parent rootNode;
     public FenetrePrincipale(StateController controller, String title, String xmlPath){
-
         setTitle(title);
         setScene(loadSceneFromFXML(controller));
 
         FenetrePrincipaleController fenetreController = getController();
 
-        fenetreController.initialize(controller,getFXMLoader(), xmlPath, title );
+        fenetreController.initialize(controller,getFXMLoader(), xmlPath, title, rootNode);
         try {
             fenetreController.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
         } catch (
@@ -36,7 +36,6 @@ public class FenetrePrincipale extends Stage{
     }
     private Scene loadSceneFromFXML(StateController controller){
         this.fxmlLoader = new FXMLLoader();
-        Parent rootNode;
         try {
             rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         } catch (IOException e) {
@@ -50,5 +49,9 @@ public class FenetrePrincipale extends Stage{
     }
     public FenetrePrincipaleController getController(){
         return this.fxmlLoader.getController();
+    }
+
+    public Parent getRootNode() {
+        return rootNode;
     }
 }

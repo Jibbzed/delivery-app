@@ -12,7 +12,7 @@ public class CoursierTest {
     public void testCreerCoursier() {
         Coursier coursierTest = new Coursier("BONIFACIO", "Grinardo", false);
 
-        String message = "Coursier{nom='BONIFACIO', prenom='Grinardo', planifie=false}";
+        String message = "BONIFACIO Grinardo";
 
         assertEquals(message, coursierTest.toString());
     }

@@ -26,4 +26,6 @@ public interface State {
     default void cliqueChargerLivraison(StateController stateController){}
 
     default void validerChargerLivraison(Livraison livraisonACharger, StateController stateController) {}
+
+    default void clique(StateController stateController){};
 }

@@ -11,13 +11,15 @@ public class CoursierServiceTest {
 
     private ServiceCoursier serviceCoursier;
 
+
+    //TODO: Remove this class test ?
     @Test
     public void testConstructuerCoursierService() {
         // given
         int nombreDeCoursiers = 2;
 
         // when
-        serviceCoursier = new ServiceCoursier(nombreDeCoursiers);
+        serviceCoursier = new ServiceCoursier();
 
         // then
         assertEquals(serviceCoursier.getListeCoursiers().size(), 2);
@@ -42,7 +44,7 @@ public class CoursierServiceTest {
     public void testRetirerCoursier() {
         // given
         int nombreDeCoursiers = 2;
-        serviceCoursier = new ServiceCoursier(nombreDeCoursiers);
+        serviceCoursier = new ServiceCoursier();
         Coursier coursierAretirer = serviceCoursier.getListeCoursiers().stream().findAny().get();
 
         // when

@@ -19,4 +19,9 @@ public class SelectionLivraisonState implements State{
         ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
         stateController.setCurrentState(stateController.initialState);
     }
+    @Override
+    public void clique(StateController stateController) {
+        stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponenets();
+    }
 }

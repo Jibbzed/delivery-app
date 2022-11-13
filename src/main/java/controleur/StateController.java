@@ -2,17 +2,15 @@ package controleur;
 
 import controleur.state.*;
 import javafx.fxml.FXMLLoader;
+
 import javafx.stage.Stage;
 import modele.Intersection;
 import modele.Livraison;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.FenetreAccueil;
-import vue.FenetreController.FenetreSaisieLivraisonController;
-import vue.FenetreController.FenetreAccueilController;
 import vue.Fenetre.FenetrePrincipale;
 import vue.Fenetre.FenetreSaisieLivraison;
-import vue.FenetreController.FenetrePrincipaleController;
 
 import java.io.IOException;
 
@@ -59,8 +57,6 @@ public class StateController {
     }*/
     //TODO: save the arguments in the FenetrePrincipaleController instatnce.
     public void afficherMap(String title, String xmlMapPath){
-
-       // FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(this, title, xmlMapPath);
         mainStage.close();
         mainStage = new FenetrePrincipale(this, title, xmlMapPath);
         mainStage.showAndWait();
@@ -70,9 +66,24 @@ public class StateController {
     public void ajouterLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
-        // TODO change the attribute to an optional one.
     }
 
+    // TODO: make an interface for all our custom made stages.
+    public void disableMapView(){
+        ((FenetrePrincipale)this.mainStage).getController().disableView();
+    }
+
+    public void enableMapView() {
+        ((FenetrePrincipale)this.mainStage).getController().enableView();
+    }
+
+    public void disableLivraisonDisableableComponenets() {
+        ((FenetrePrincipale)this.mainStage).getController().disableLivraisonDisableableComponenets();
+    }
+
+    public void enableLivraisonDisableableComponenets() {
+        ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
+    }
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
 
     public void cliqueModifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
@@ -91,9 +102,9 @@ public class StateController {
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
 
     public void chargerLivraison(Livraison livraisonACharger){
-        //fenetrePrincipaleController.chargerLivraison(livraisonACharger);
         ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         serviceLivraison.ajouterLivraison(livraisonACharger);
+
     }
     public void cliquerAjouterLivraisonATournee(){  }
 }
