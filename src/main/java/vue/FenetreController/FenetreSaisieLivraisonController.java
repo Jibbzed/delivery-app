@@ -43,7 +43,7 @@ public class FenetreSaisieLivraisonController {
 
     private StateController stateController;
 
-    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance(1);
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
     private int plageHoraire;
     private ServiceLivraison serviceLivraison;
 
