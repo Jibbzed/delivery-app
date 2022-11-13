@@ -86,10 +86,13 @@ public class StateController {
     }
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
 
-    public void cliqueModifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+    public void cliqueModifierLivraison(Livraison livraisonAModifier){
+        currentState.modifierLivraison(this, livraisonAModifier);
+        this.modifierLivraison(livraisonAModifier);
+    }
 
     public void modifierLivraison(Livraison livraisonAModifier){
-         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
+         popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
         // TODO change the attribute to an optional one.
     }

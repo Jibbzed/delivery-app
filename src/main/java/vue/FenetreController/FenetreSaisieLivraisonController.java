@@ -13,6 +13,8 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
+import java.util.Optional;
+
 public class FenetreSaisieLivraisonController {
 
     private FenetrePrincipaleController controllerMere;
@@ -88,6 +90,23 @@ public class FenetreSaisieLivraisonController {
         destinationIdLabel.setVisible(true);
         this.controllerMere = controllerMere;
         System.out.println(destination);
+    }
+
+    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipaleController controllerMere, Plan plan) {
+        destination = livraisonAModifier.destinationLivraison;
+        destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
+        destinationIdLabel.setVisible(true);
+        this.controllerMere = controllerMere;
+        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().toString().substring(9, livraisonAModifier.getCoursierLivraison().toString().length() - 1));
+        if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
+            start8.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
+            start9.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[10]")) {
+            start10.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[11]")) {
+            start11.setSelected(true);
+        }
     }
 
 
