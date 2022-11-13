@@ -14,11 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import modele.*;
@@ -89,11 +91,11 @@ public class FenetrePrincipaleController {
 
     /** Accordion for all the different options */
     @FXML
-    private Accordion leftControls;
+    private Pane leftControls;
 
     /** section containing the location button */
-    @FXML
-    private TitledPane optionsLocations;
+    //@FXML
+    //private TitledPane optionsLocations;
 
     /** button to set the map's center */
     /** button to set the map's center */
@@ -115,12 +117,13 @@ public class FenetrePrincipaleController {
     private Button buttonAjoutLivraisonATournee;
 
     /** for editing the animation duration */
-    @FXML
+    /*@FXML
     private TextField animationDuration;
+     */
 
     /** the BIng Maps API Key. */
-    @FXML
-    private TextField bingMapsApiKey;
+    //@FXML
+    //private TextField bingMapsApiKey;
 
     /** Label to display the current center */
     @FXML
@@ -139,57 +142,57 @@ public class FenetrePrincipaleController {
     private Label labelEvent;
 
     /** RadioButton for MapStyle OSM */
-    @FXML
-    private RadioButton radioMsOSM;
+    //@FXML
+    //private RadioButton radioMsOSM;
 
     /** RadioButton for MapStyle Stamen Watercolor */
-    @FXML
-    private RadioButton radioMsSTW;
+    //@FXML
+    //private RadioButton radioMsSTW;
 
     /** RadioButton for MapStyle Bing Roads */
-    @FXML
-    private RadioButton radioMsBR;
+    //@FXML
+    //private RadioButton radioMsBR;
 
     /** RadioButton for MapStyle Bing Roads - dark */
-    @FXML
-    private RadioButton radioMsCd;
+    //@FXML
+    //private RadioButton radioMsCd;
 
     /** RadioButton for MapStyle Bing Roads - grayscale */
-    @FXML
-    private RadioButton radioMsCg;
+    //@FXML
+    //private RadioButton radioMsCg;
 
     /** RadioButton for MapStyle Bing Roads - light */
-    @FXML
-    private RadioButton radioMsCl;
+    //@FXML
+    //private RadioButton radioMsCl;
 
     /** RadioButton for MapStyle Bing Aerial */
-    @FXML
-    private RadioButton radioMsBA;
+    //@FXML
+    //private RadioButton radioMsBA;
 
     /** RadioButton for MapStyle Bing Aerial with Label */
-    @FXML
-    private RadioButton radioMsBAwL;
+    //@FXML
+    //private RadioButton radioMsBAwL;
 
     /** RadioButton for MapStyle WMS. */
-    @FXML
-    private RadioButton radioMsWMS;
+    //@FXML
+    //private RadioButton radioMsWMS;
 
     /** RadioButton for MapStyle XYZ */
-    @FXML
-    private RadioButton radioMsXYZ;
+    //@FXML
+    //private RadioButton radioMsXYZ;
 
     /** ToggleGroup for the MapStyle radios */
-    @FXML
-    private ToggleGroup mapTypeGroup;
+    //@FXML
+    //private ToggleGroup mapTypeGroup;
 
     /** Check button for harbour marker */
-    @FXML
-    private CheckBox checkIntersectionsMarkers;
+    //@FXML
+    //private CheckBox checkIntersectionsMarkers;
     /** the first CoordinateLine */
     private CoordinateLine trackMagenta;
     /** Check button for first track */
-    @FXML
-    private CheckBox checkTrackMagenta;
+    //@FXML
+    //private CheckBox checkTrackMagenta;
 
     /** the second CoordinateLine */
     private CoordinateLine trackCyan;
@@ -198,14 +201,17 @@ public class FenetrePrincipaleController {
     /** Check Button for polygon drawing mode. */
 
     /** Check Button for constraining th extent. */
-    @FXML
-    private CheckBox checkConstrainXmlFile;
+    //@FXML
+    //private CheckBox checkConstrainXmlFile;
 
     @FXML
     private ListView<Livraison> listeLivraisons;
 
     @FXML
     private VBox vBoxLivraison;
+
+    @FXML
+    private VBox vBoxTournee;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -282,7 +288,8 @@ public class FenetrePrincipaleController {
     public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
         chargerPlan(path);
         logger.trace("begin initialize");
-
+        vBoxLivraison.setAlignment(Pos.CENTER);
+        vBoxTournee.setAlignment(Pos.CENTER);
 
 
         // init MapView-Cache
@@ -300,7 +307,7 @@ public class FenetrePrincipaleController {
         // set the custom css file for the MapView
         mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
 
-        leftControls.setExpandedPane(optionsLocations);
+        //leftControls.setExpandedPane(optionsLocations);
 
         // set the controls to disabled, this will be changed when the MapView is intialized
         setControlsDisable(true);
@@ -317,7 +324,7 @@ public class FenetrePrincipaleController {
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         // add a listener to the animationDuration field and make sure we only accept int values
-        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+        /*animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty()) {
                 mapView.setAnimationDuration(0);
             } else {
@@ -328,7 +335,7 @@ public class FenetrePrincipaleController {
                 }
             }
         });
-        animationDuration.setText("500");
+        animationDuration.setText("500");*/
 
         // bind the map's center and zoom properties to the corresponding labels and format them
         labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
@@ -343,7 +350,7 @@ public class FenetrePrincipaleController {
         });
 
         // observe the map type radiobuttons
-        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        /*mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             logger.debug("map type toggled to {}", newValue.toString());
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
@@ -370,20 +377,21 @@ public class FenetrePrincipaleController {
             mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);
         });
-        mapTypeGroup.selectToggle(radioMsOSM);
+        mapTypeGroup.selectToggle(radioMsOSM);*/
 
         setupEventHandlers();
 
         // add the graphics to the checkboxes
 
-        checkIntersectionsMarkers.setGraphic(
+        /*checkIntersectionsMarkers.setGraphic(
                 new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
-        );
+        );*/
         // bind the checkboxes to the markers visibility
         markersIntersections.forEach(marker-> {
-            checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
+            marker.setVisible(true);
+            //checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
         });
-        checkIntersectionsMarkers.setSelected(true);
+        //checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
         // load two coordinate lines
@@ -414,7 +422,7 @@ public class FenetrePrincipaleController {
         trackMagenta = new CoordinateLine().setColor(Color.MAGENTA).setWidth(7).setVisible(true);
         trackCyan = new CoordinateLine(chemin).setColor(Color.CYAN).setWidth(7);
         logger.trace("tracks loaded");
-        checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
+        //checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
 //        checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
         logger.trace("tracks checks done");
         // get the extent of both tracks
@@ -434,13 +442,13 @@ public class FenetrePrincipaleController {
             };
 
         // add the constrain listener
-        checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        /*checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 mapView.constrainExtent(extentLyon);
             } else {
                 mapView.clearConstrainExtent();
             }
-        }));
+        }));*/
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
