@@ -57,7 +57,7 @@ public class StateController {
         // controller
 
         this.controller = fxmlLoader.getController();
-        this.controller.initialize(this, fxmlLoader, xmlMapPath, nomMap);
+        this.controller.initialize(this, fxmlLoader, xmlMapPath, nomMap, root);
         try {
             controller.initMapAndControls(Projection.WEB_MERCATOR, xmlMapPath);
         } catch (
@@ -90,5 +90,21 @@ public class StateController {
         stage.showAndWait();
         // TODO change the attribute to an optional one.
         this.ajoutLivraisonController = null;
+    }
+
+    public void disableMapView(){
+        this.controller.disableView();
+    }
+
+    public void enableMapView() {
+        this.controller.enableView();
+    }
+
+    public void disableLivraisonDisableableComponenets() {
+        this.controller.disableLivraisonDisableableComponenets();
+    }
+
+    public void enableLivraisonDisableableComponenets() {
+        this.controller.enableLivraisonDisableableComponenets();
     }
 }

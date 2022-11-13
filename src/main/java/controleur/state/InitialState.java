@@ -12,7 +12,10 @@ public class InitialState implements State {
     public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader) {
         stateController.setCurrentState(stateController.ajoutLivraisonState);
         try {
+            stateController.disableMapView();
             stateController.ajouterLivraison(fxmlLoader);
+
+            // TODO: stateController disable map View
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +60,7 @@ public class InitialState implements State {
     @Override
     public void cliqueLivraison(StateController stateController) {
         State.super.cliqueLivraison(stateController);
+        stateController.enableLivraisonDisableableComponenets();
         stateController.setCurrentState(stateController.SelectionnerLivraisonState);
     }
 }

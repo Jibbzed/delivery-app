@@ -21,4 +21,6 @@ public interface State {
 
     default void cliqueLivraison(StateController stateController){}
     void cliqueModifier(StateController stateController);
+
+    default void  clique(StateController stateController) {}
 }

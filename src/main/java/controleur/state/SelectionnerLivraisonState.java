@@ -32,7 +32,6 @@ public class SelectionnerLivraisonState implements State{
 
     @Override
     public void cliqueDroit(StateController stateController) {
-
     }
 
     @Override
@@ -46,5 +45,11 @@ public class SelectionnerLivraisonState implements State{
     @Override
     public void cliqueModifier(StateController stateController) {
 
+    }
+
+    @Override
+    public void clique(StateController stateController) {
+        stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponenets();
     }
 }

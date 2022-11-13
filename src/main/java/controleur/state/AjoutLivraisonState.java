@@ -14,6 +14,7 @@ public class AjoutLivraisonState implements State {
 
     @Override
     public void valider(StateController stateController) {
+        stateController.enableMapView();
         stateController.setCurrentState(stateController.initialState);
     }
 

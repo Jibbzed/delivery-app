@@ -30,12 +30,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -220,6 +222,12 @@ public class Controller {
     @FXML
     private ListView<Livraison> listeLivraisons;
 
+    @FXML
+    private VBox vBoxLivraison;
+
+    @FXML
+    private Button buttonModifierLivraison;
+
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
         .setUrl("http://ows.terrestris.de/osm/service?")
@@ -233,17 +241,19 @@ public class Controller {
     private FXMLLoader fxmlLoader;
     private String xmlMapPath;
     private String titreStage;
+    private Parent parent;
 
     // TODO: handle exceptions
     public Controller() throws MauvaisFormatXmlException, IOException {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
-    void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage) {
+    void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage, Parent parent) {
         this.fxmlLoader = fxmlLoader;
         this.xmlMapPath = xmlMapPath;
         this.titreStage = titreStage;
         this.stateController = stateController;
+        this.parent = parent;
     }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
@@ -455,8 +465,22 @@ public class Controller {
 
         listeLivraisons.setOnMouseClicked(event -> {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+//            this.buttonSupprimerLivraison.setDisable(false);
         });
 
+        this.parent.setOnMouseClicked(event -> {
+            Double x = event.getScreenX();
+            Double y = event.getSceneY();
+            // TODO: alter this and make it inside the state implementations
+            if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
+                this.stateController.getCurrentState().clique(this.stateController);
+                if(this.stateController.getCurrentState().equals(this.stateController.SelectionnerLivraisonState)) {
+//                    this.stateController.getCurrentState().clique();
+
+                }
+            }
+        });
+        disableLivraisonDisableableComponenets();
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
@@ -736,6 +760,13 @@ public class Controller {
         refreshLivraison();
     }
 
+    public void disableView() {
+        this.parent.setVisible(false);
+
+    }
+    public void enableView() {
+        this.parent.setVisible(true);
+    }
     // *** GETTERS ** //
 
 
@@ -751,4 +782,14 @@ public class Controller {
         return titreStage;
     }
 
+
+    public void disableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(true);
+        this.buttonModifierLivraison.setDisable(true);
+    }
+
+    public void enableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(false);
+        this.buttonModifierLivraison.setDisable(false);
+    }
 }
