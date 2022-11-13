@@ -481,7 +481,7 @@ public class FenetrePrincipaleController {
                     setText(null);
                 }
                 else {
-                    setText(livraison.afficherIhm());
+                    setText(livraison.afficherIhm(getPlan()));
                 }
             }
         });
@@ -766,6 +766,9 @@ public class FenetrePrincipaleController {
         return titreStage;
     }
 
+    public Plan getPlan() {
+        return plan;
+    }
 
     public void disableLivraisonDisableableComponenets() {
         this.buttonSupprimerLivraison.setDisable(true);

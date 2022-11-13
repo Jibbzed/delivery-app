@@ -4,7 +4,9 @@ import controleur.StateController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 
 public class FenetreAccueilController {
@@ -18,6 +20,9 @@ public class FenetreAccueilController {
 
     @FXML
     private Button buttonSmallMap;
+
+    @FXML
+    private Button buttonParcourir;
 
     @FXML
     private Button buttonValidate;
@@ -47,6 +52,15 @@ public class FenetreAccueilController {
         buttonSmallMap.setOnAction(event -> {
             String xmlPath = "src/test/resources/smallMap.xml";
             this.stateController.afficherMap("Petite carte de Lyon", xmlPath);
+        });
+
+        buttonParcourir.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                textXML.setText(file.getPath());
+            }
         });
 
         buttonValidate.setOnAction(event -> {

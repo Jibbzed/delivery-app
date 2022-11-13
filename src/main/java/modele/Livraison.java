@@ -99,7 +99,7 @@ public class Livraison {
         return Objects.hash(origineLivraison, destinationLivraison, parcoursLivraison);
     }
 
-    public String afficherIhm() {
-        return "livraison sur coord: (" + destinationLivraison.getLatitude() + "," + destinationLivraison.getLongitude() + ")";
+    public String afficherIhm(Plan plan) {
+        return "livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
     }
 }

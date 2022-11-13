@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
+import modele.Plan;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
@@ -81,9 +82,8 @@ public class FenetreSaisieLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipaleController controllerMere) {
-        destination = intersection;
-        destinationIdLabel.setText(destination.getId());
+    public void initData(Intersection intersection, FenetrePrincipaleController controllerMere, Plan plan) {
+        destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
         this.controllerMere = controllerMere;
         System.out.println(destination);

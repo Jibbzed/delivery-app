@@ -20,7 +20,7 @@ public class FenetreSaisieLivraison extends Stage {
         setTitle("Ajouter Livraison");
         setScene(loadSceneFromFXML());
         getController().initialize(controller);
-        getController().initData(intersection, fenetrePincipale.getController());
+        getController().initData(intersection, fenetrePincipale.getController(), fenetrePincipale.getController().getPlan());
         centerOnScreen();
         initModality(Modality.APPLICATION_MODAL);
     }
