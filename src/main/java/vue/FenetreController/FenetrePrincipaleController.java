@@ -727,10 +727,10 @@ public class FenetrePrincipaleController {
         refreshLivraison();
     }
 
-    public void chargerLivraison(Livraison livraisonACharger){
+   /* public void chargerLivraison(Livraison livraisonACharger){
         ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         serviceLivraison.ajouterLivraison(livraisonACharger);
-    }
+    }*/
 
     // *** GETTERS ** //
 

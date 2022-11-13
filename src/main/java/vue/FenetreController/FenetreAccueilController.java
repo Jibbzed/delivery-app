@@ -25,50 +25,34 @@ public class FenetreAccueilController {
     @FXML
     private TextField textXML;
 
-    public FenetreAccueilController(){
+    public FenetreAccueilController() {
 
     }
 
 
     @FXML
-    public void initialize() {
-        this.stateController = new StateController();
+    public void initialize(StateController controller) {
 
+        this.stateController = controller;
         buttonLargeMap.setOnAction(event -> {
             String xmlPath = "src/test/resources/largeMap.xml";
-            try {
-                this.stateController.afficherMap("Grande carte de Lyon", xmlPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.stateController.afficherMap("Grande carte de Lyon", xmlPath);
         });
 
         buttonMediumMap.setOnAction(event -> {
             String xmlPath = "src/test/resources/mediumMap.xml";
-            try {
-                this.stateController.afficherMap("Moyenne carte de Lyon", xmlPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.stateController.afficherMap("Moyenne carte de Lyon", xmlPath);
         });
 
         buttonSmallMap.setOnAction(event -> {
             String xmlPath = "src/test/resources/smallMap.xml";
-            try {
-                this.stateController.afficherMap("Petite carte de Lyon", xmlPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.stateController.afficherMap("Petite carte de Lyon", xmlPath);
         });
 
         buttonValidate.setOnAction(event -> {
-            String  xmlPath = textXML.getText();
-            String title = "Carte : "+xmlPath;
-            try {
-                this.stateController.afficherMap(title, xmlPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            String xmlPath = textXML.getText();
+            String title = "Carte : " + xmlPath;
+            this.stateController.afficherMap(title, xmlPath);
         });
     }
 

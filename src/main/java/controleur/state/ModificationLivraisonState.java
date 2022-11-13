@@ -21,9 +21,9 @@ public class ModificationLivraisonState implements State{
     }
 
     @Override
-    public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader) {
-        State.super.doubleCliquePlan(stateController, fxmlLoader);
-        stateController.modifierLivraison(livraisonAModifier, fxmlLoader);
+    public void doubleCliquePlan(StateController stateController) {
+        State.super.doubleCliquePlan(stateController);
+        stateController.modifierLivraison(livraisonAModifier);
     }
 
     public Livraison getLivraisonAModifier() {

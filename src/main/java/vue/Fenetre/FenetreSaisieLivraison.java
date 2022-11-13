@@ -1,7 +1,8 @@
 package vue.Fenetre;
 
+import controleur.StateController;
+import javafx.stage.Modality;
 import modele.Intersection;
-import vue.FenetreController.FenetrePrincipaleController;
 import vue.FenetreController.FenetreSaisieLivraisonController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,11 +16,13 @@ public class FenetreSaisieLivraison extends Stage {
     private final String fxmlFile= "/vue/SaisieLivraison.fxml";
     private FXMLLoader fxmlLoader;
 
-    public FenetreSaisieLivraison(Intersection intersection, FenetrePrincipaleController controllerMere){
+    public FenetreSaisieLivraison(StateController controller, Intersection intersection, FenetrePrincipale fenetrePincipale){
         setTitle("Ajouter Livraison");
         setScene(loadSceneFromFXML());
-        getController().initData(intersection, controllerMere);
+        getController().initialize(controller);
+        getController().initData(intersection, fenetrePincipale.getController());
         centerOnScreen();
+        initModality(Modality.APPLICATION_MODAL);
     }
 
     private Scene loadSceneFromFXML(){

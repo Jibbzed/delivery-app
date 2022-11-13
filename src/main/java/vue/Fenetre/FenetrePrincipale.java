@@ -1,5 +1,9 @@
 package vue.Fenetre;
 
+import com.sothawo.mapjfx.Projection;
+import controleur.StateController;
+import modele.exception.MauvaisFormatXmlException;
+import vue.FenetreController.FenetreAccueilController;
 import vue.FenetreController.FenetrePrincipaleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +16,25 @@ public class FenetrePrincipale extends Stage{
     private String fxmlFile = "/vue/Principale.fxml";
     FXMLLoader fxmlLoader;
 
-    public FenetrePrincipale(String title, String xmlPath){
+    public FenetrePrincipale(StateController controller, String title, String xmlPath){
 
         setTitle(title);
-        setScene(loadSceneFromFXML());
+        setScene(loadSceneFromFXML(controller));
+
+        FenetrePrincipaleController fenetreController = getController();
+
+        fenetreController.initialize(controller,getFXMLoader(), xmlPath, title );
+        try {
+            fenetreController.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
+        } catch (
+                MauvaisFormatXmlException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
-    private Scene loadSceneFromFXML(){
+    private Scene loadSceneFromFXML(StateController controller){
         this.fxmlLoader = new FXMLLoader();
         Parent rootNode;
         try {
