@@ -18,6 +18,5 @@ public class SelectionLivraisonState implements State{
     public void cliqueSupprimerLivraison(StateController stateController, Livraison livraisonASupprimer) {
         ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
         stateController.setCurrentState(stateController.initialState);
-
     }
 }

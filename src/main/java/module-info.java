@@ -18,4 +18,6 @@ module vue {
     opens vue.FenetreController to javafx.fxml, javafx.graphics;
     exports vue.Fenetre;
     opens vue.Fenetre to javafx.fxml, javafx.graphics;
+    exports DeliveryApp;
+    opens DeliveryApp to javafx.fxml, javafx.graphics;
 }

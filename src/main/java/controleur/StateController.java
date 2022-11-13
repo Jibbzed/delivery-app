@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import modele.Intersection;
 import modele.Livraison;
 import modele.exception.MauvaisFormatXmlException;
-import service.ServiceLivraison;
-import service.impl.ServiceLivraisonMockImpl;
 import vue.FenetreController.FenetreSaisieLivraisonController;
 import vue.FenetreController.FenetreAccueilController;
 import vue.Fenetre.FenetrePrincipale;
@@ -18,9 +16,9 @@ import java.io.IOException;
 
 public class StateController {
     private State currentState;
-    private FenetrePrincipaleController controller;
-    private FenetreAccueilController controllerPageAccueil;
-    private FenetreSaisieLivraisonController ajoutLivraisonController;
+    private FenetrePrincipaleController fenetrePrincipaleController;
+    private FenetreAccueilController fenetreAccueilController;
+    private FenetreSaisieLivraisonController fenetreSaisieLivraisonController;
     /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
@@ -48,22 +46,22 @@ public class StateController {
     public StateController() {
         this.currentState = initialState;
     }
-    public void generateControllerPageAcceuil(FenetreAccueilController controllerPageAccueil) {
-        this.controllerPageAccueil = controllerPageAccueil;
+    public void generateControllerPageAccueil(FenetreAccueilController controllerPageAccueil) {
+        this.fenetreAccueilController = controllerPageAccueil;
     }
     public void generateAjoutLivraisonController(FenetreSaisieLivraisonController ajoutLivraisonController){
-        this.ajoutLivraisonController = ajoutLivraisonController;
+        this.fenetreSaisieLivraisonController = ajoutLivraisonController;
     }
     //TODO: save the arguments in the FenetrePrincipaleController instatnce.
     public void afficherMap(String title, String xmlMapPath) throws IOException {
 
         FenetrePrincipale pagePrincipale = new FenetrePrincipale(title, xmlMapPath);
 
-        this.controller = pagePrincipale.getController();
+        this.fenetrePrincipaleController = pagePrincipale.getController();
 
-        this.controller.initialize(this,pagePrincipale.getFXMLoader(), xmlMapPath, title );
+        this.fenetrePrincipaleController.initialize(this,pagePrincipale.getFXMLoader(), xmlMapPath, title );
         try {
-            controller.initMapAndControls(Projection.WEB_MERCATOR, xmlMapPath);
+            fenetrePrincipaleController.initMapAndControls(Projection.WEB_MERCATOR, xmlMapPath);
         } catch (
                 MauvaisFormatXmlException e) {
             throw new RuntimeException(e);
@@ -76,12 +74,12 @@ public class StateController {
 
 
     public void ajouterLivraison(FXMLLoader fxmlLoader) throws IOException {
-        FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.controller);
-        this.ajoutLivraisonController = pageSaisieLivraison.getController();
-        this.ajoutLivraisonController.initialize(this);
+        FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.fenetrePrincipaleController);
+        this.fenetreSaisieLivraisonController = pageSaisieLivraison.getController();
+        this.fenetreSaisieLivraisonController.initialize(this);
         pageSaisieLivraison.showAndWait();
         // TODO change the attribute to an optional one.
-        this.ajoutLivraisonController = null;
+        this.fenetreSaisieLivraisonController = null;
     }
 
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
@@ -89,12 +87,12 @@ public class StateController {
     public void cliqueModifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
 
     public void modifierLivraison(Livraison livraisonAModifier, FXMLLoader fxmlLoader){
-        FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.controller);
-        this.ajoutLivraisonController = pageSaisieLivraison.getController();
-        this.ajoutLivraisonController.initialize(this);
+        FenetreSaisieLivraison pageSaisieLivraison = new FenetreSaisieLivraison(this.intersectionSelectionne, this.fenetrePrincipaleController);
+        this.fenetreSaisieLivraisonController = pageSaisieLivraison.getController();
+        this.fenetreSaisieLivraisonController.initialize(this);
         pageSaisieLivraison.showAndWait();
         // TODO change the attribute to an optional one.
-        this.ajoutLivraisonController = null;
+        this.fenetreSaisieLivraisonController = null;
     }
 
     public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
@@ -105,7 +103,7 @@ public class StateController {
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
 
     public void chargerLivraison(Livraison livraisonACharger){
-        controller.chargerLivraison(livraisonACharger);
+        fenetrePrincipaleController.chargerLivraison(livraisonACharger);
     }
     public void cliquerAjouterLivraisonATournee(){  }
 }
