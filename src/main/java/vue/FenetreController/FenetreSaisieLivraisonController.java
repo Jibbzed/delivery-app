@@ -90,12 +90,10 @@ public class FenetreSaisieLivraisonController {
     }
 
 
-    //TODO: compléter cette méthode pour ajouter la plage horaire à la livraison
     public void selectionnerPlageHoraire(int plageHoraire) {
         this.plageHoraire = plageHoraire; 
     }
 
-    //TODO: compléter cette méthode pour ajouter le coursier à la livraison
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = coursier;
     }

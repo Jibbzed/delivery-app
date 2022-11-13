@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import modele.Livraison;
 
 public interface State {
-    default void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader){}
+    default void doubleCliquePlan(StateController stateController){}
 
     default void valider(StateController stateController){}
     default void annuler(StateController stateController){}
