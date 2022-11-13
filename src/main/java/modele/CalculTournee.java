@@ -15,7 +15,7 @@ public class CalculTournee {
         this.plan = p;
         this.entrepot = entrepot;
         this.livraisons = livraisons;
-        this.tsp = new TSP1();
+        this.tsp = new TSP2();
         this.plusCourtsChemins = new HashMap<>();
         // le coursier associé à la tournée calculée est le coursier de la première livraison (le même pour toutes les autres)
         this.coursierTournee = livraisons.values().stream().findFirst().get().getCoursierLivraison().get();
