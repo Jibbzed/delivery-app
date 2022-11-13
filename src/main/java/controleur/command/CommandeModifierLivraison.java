@@ -3,11 +3,11 @@ package controleur.command;
 import modele.Livraison;
 import modele.Plan;
 
-public class CommandeAjouter implements Command {
+public class CommandeModifierLivraison implements Command {
     private Livraison livraison;
     private Plan plan;
 
-    public CommandeAjouter(Livraison livraison, Plan plan) {
+    public CommandeModifierLivraison(Livraison livraison, Plan plan) {
         this.livraison = livraison;
         this.plan = plan;
     }
@@ -19,5 +19,4 @@ public class CommandeAjouter implements Command {
     @Override
     public void undoCommand() {
     }
-
 }

@@ -17,6 +17,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -626,6 +628,13 @@ public class FenetrePrincipaleController {
         logger.trace("map handlers initialized");
     }
 
+    @FXML
+    private void handleKeyPressed(KeyEvent ke){
+        if(ke.getCode() == KeyCode.Z){
+            stateController.undo();
+            refreshLivraison();
+        }
+    }
     private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
         // animate the marker to the new position
         final Transition transition = new Transition() {

@@ -1,6 +1,7 @@
 package controleur.state;
 
 import controleur.StateController;
+import controleur.command.ListOfCommands;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class InitialState implements State {
         stateController.setCurrentState(stateController.ajoutLivraisonState);
         try {
             stateController.disableMapView();
-            stateController.ajouterLivraison();
+            stateController.afficherAjoutLivraison();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,5 +34,10 @@ public class InitialState implements State {
     @Override
     public void cliqueAjouterLivraisonATournee(StateController stateController){
         stateController.setCurrentState(stateController.selectionTourneeState);
+    }
+
+    @Override
+    public void undo(ListOfCommands listOfCommands) {
+        listOfCommands.undo();
     }
 }

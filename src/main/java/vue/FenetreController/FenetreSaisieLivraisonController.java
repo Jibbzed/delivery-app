@@ -104,12 +104,13 @@ public class FenetreSaisieLivraisonController {
             warningMessage.setVisible(true);
             return;
         }
-        this.stateController.getCurrentState().valider(this.stateController);
-        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+//        this.stateController.getCurrentState().valider(this.stateController);
+//        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         Livraison livraison = new Livraison(this.destination);
         livraison.setCoursierLivraison(this.coursierSelectionne);
         livraison.setFenetreHoraireLivr(this.plageHoraire);
-        serviceLivraison.ajouterLivraison(livraison);
+//        serviceLivraison.ajouterLivraison(livraison);
+        stateController.ajouterLivraison(livraison);
 //        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
         this.controllerMere.refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();

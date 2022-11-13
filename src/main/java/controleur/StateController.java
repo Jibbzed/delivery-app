@@ -1,5 +1,6 @@
 package controleur;
 
+import controleur.command.ListOfCommands;
 import controleur.state.*;
 import javafx.fxml.FXMLLoader;
 
@@ -17,7 +18,6 @@ import java.io.IOException;
 public class StateController {
     private State currentState;
     private Stage mainStage;
-
     private Stage popupStage;
 
     /**  states **/
@@ -36,6 +36,7 @@ public class StateController {
         return currentState;
     }
 
+    private ListOfCommands listOfCommands;
     public void setIntersectionSelectionne(Intersection intersectionSelectionne) {
         this.intersectionSelectionne = intersectionSelectionne;
     }
@@ -46,6 +47,7 @@ public class StateController {
 
     public StateController() {
         this.currentState = initialState;
+        listOfCommands = new ListOfCommands();
         mainStage = new FenetreAccueil(this);
         mainStage.show();
     }
@@ -63,10 +65,12 @@ public class StateController {
     }
 
 
-    public void ajouterLivraison() throws IOException {
+    public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
+
+    public void ajouterLivraison(Livraison l){ currentState.validerAjouterLivraison(l,this, listOfCommands); }
 
     // TODO: make an interface for all our custom made stages.
     public void disableMapView(){
@@ -84,7 +88,7 @@ public class StateController {
     public void enableLivraisonDisableableComponenets() {
         ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
     }
-    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
+    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
 
     public void cliqueModifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
 
@@ -98,6 +102,7 @@ public class StateController {
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this);
     }
+    public void undo(){ currentState.undo(listOfCommands); }
 
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
 
