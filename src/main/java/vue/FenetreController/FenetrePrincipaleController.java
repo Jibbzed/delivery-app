@@ -47,7 +47,7 @@ public class FenetrePrincipaleController {
     // TODO: remove those coordinates .
 
             //TODO: make entropot id dynamic
-    private static final String __ENTROPOT_ID__ = "25303831";
+    private static String entropotId;
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
     private StateController stateController;
@@ -240,7 +240,12 @@ public class FenetrePrincipaleController {
         this.plan = parser.lirePlan(path);
         coordinateList =
                 plan.getIntersections().values().stream()
-                        .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .map(intersection -> {
+                            if(intersection.isEntrepot()) {
+                                FenetrePrincipaleController.entropotId = intersection.getId();
+                            }
+                            return new Coordinate(intersection.getLatitude(), intersection.getLongitude());
+                        } )
                         .collect(Collectors.toList());
         // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
         coordinateList.stream()
@@ -548,7 +553,7 @@ public class FenetrePrincipaleController {
                     .map(Intersection::getId)
                     .findAny().orElse("");
             Map<String, Dijkstra> resultatDijkstra =
-                    plan.plusCourtChemin(__ENTROPOT_ID__, Collections.singletonList( intersectionIdSelectionne ));
+                    plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
             // TODO: Duplicated code
             List<Coordinate> chemin = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
                     .map(Troncon::getOrigine)
@@ -669,7 +674,7 @@ public class FenetrePrincipaleController {
             listeInter.add(listeLivraion.get(i).destinationLivraison);
         }
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), listeInter);
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), listeInter);
         Tournee tournee = calculTournee.calculerTournee();
 
         // On récupère les intersections
