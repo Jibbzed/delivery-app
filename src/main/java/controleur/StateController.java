@@ -1,16 +1,14 @@
 package controleur;
 
 import com.sothawo.mapjfx.Projection;
-import controleur.state.AjoutLivraisonState;
-import controleur.state.InitialState;
-import controleur.state.SelectionnerLivraisonState;
-import controleur.state.State;
+import controleur.state.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import modele.Intersection;
+import modele.Livraison;
 import modele.exception.MauvaisFormatXmlException;
 
 import java.io.IOException;
@@ -23,7 +21,8 @@ public class StateController {
     /**  states **/
     public final State initialState = new InitialState();
     public final State ajoutLivraisonState= new AjoutLivraisonState();
-    public final State SelectionnerLivraisonState = new SelectionnerLivraisonState();
+    public final State selectionnerLivraisonState = new SelectionnerLivraisonState();
+    public final State modificationLivraisonState = new ModificationLivraisonState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {
@@ -107,4 +106,16 @@ public class StateController {
     public void enableLivraisonDisableableComponenets() {
         this.controller.enableLivraisonDisableableComponenets();
     }
+
+    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
+
+    public void modifierLivraison(Livraison livraisonAModifier){ currentState.modifierLivraison(this, livraisonAModifier);}
+
+    public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
+        this.setIntersectionSelectionne(intersectionSelectionne);
+        currentState.doubleCliquePlan(this, fxmlLoader);
+
+
+    }
+
 }

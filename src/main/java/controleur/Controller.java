@@ -460,7 +460,7 @@ public class Controller {
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
         buttonSupprimerLivraison.setOnAction(event -> {
-            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+            supprimerLivraison();
         });
 
         listeLivraisons.setOnMouseClicked(event -> {
@@ -474,7 +474,7 @@ public class Controller {
             // TODO: alter this and make it inside the state implementations
             if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
                 this.stateController.getCurrentState().clique(this.stateController);
-                if(this.stateController.getCurrentState().equals(this.stateController.SelectionnerLivraisonState)) {
+                if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
 //                    this.stateController.getCurrentState().clique();
 
                 }
@@ -598,8 +598,7 @@ public class Controller {
             String fxmlFile = "/vue/AjoutLivraison.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            this.stateController.setIntersectionSelectionne(plan.getIntersections().get(intersectionIdSelectionne));
-            this.stateController.getCurrentState().doubleCliquePlan(stateController, fxmlLoader);
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
 
         });
 
@@ -752,11 +751,14 @@ public class Controller {
     }
 
     public void supprimerLivraison() {
-        // Ok là le pb c'est que je voulais supprimer l'element de la liste qui est selectionne
-        // mais la liste qu'on voit sur l'ihm c'est juste un affichage, c'est pas des vrais livraisons,
-        // donc difficile de dire quel objet est selectionné...
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
-        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+        stateController.supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
+    }
+
+    public void modifierLivraison(){
+        Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.modifierLivraison(livraisonAModifier);
         refreshLivraison();
     }
 

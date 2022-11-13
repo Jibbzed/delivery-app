@@ -1,26 +1,27 @@
 package controleur.state;
 
-import controleur.AjoutLivraisonController;
 import controleur.StateController;
 import javafx.fxml.FXMLLoader;
+import modele.Livraison;
 
 public interface State {
-    public void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader);
+    public default void doubleCliquePlan(StateController stateController, FXMLLoader fxmlLoader){}
 
-    public void valider(StateController stateController);
+    public default void valider(StateController stateController){}
+    public default void annuler(StateController stateController){}
 
-    public void modifierLivraison(StateController stateController);
+    public default void modifierLivraison(StateController stateController, Livraison livraisonAModifier){}
 
-    public void ajouterCoursier(StateController stateController);
+    public default void ajouterCoursier(StateController stateController){}
 
-    public void chargerLivraison(StateController stateController);
+    public default void chargerLivraison(StateController stateController){}
 
-    void cliqueDroit(StateController stateController);
-    
-    void cliqueSupprimerLivraison(StateController stateController, FXMLLoader fxmlLoader);
+    default void cliqueDroit(StateController stateController){}
+
+    default void cliqueSupprimerLivraison(StateController stateController, Livraison LivraisonASupprimer){}
 
     default void cliqueLivraison(StateController stateController){}
-    void cliqueModifier(StateController stateController);
-
     default void  clique(StateController stateController) {}
+    default void cliqueModifier(StateController stateController){}
+
 }
