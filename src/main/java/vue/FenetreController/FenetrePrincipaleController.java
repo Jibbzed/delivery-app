@@ -17,8 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -27,7 +25,7 @@ import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.ServiceLivraison;
+import service.ServiceCoursier;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -114,7 +112,7 @@ public class FenetrePrincipaleController {
     private Button buttonModifierLivraison;
 
     @FXML
-    private Button buttonAjoutLivraisonATournee;
+    private Button buttonAjouterLivraison;
 
     /** for editing the animation duration */
     /*@FXML
@@ -212,6 +210,13 @@ public class FenetrePrincipaleController {
 
     @FXML
     private VBox vBoxTournee;
+
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+
+    @FXML
+    private ComboBox comboCoursier;
+
+    private Coursier coursierSelectionne;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -314,6 +319,11 @@ public class FenetrePrincipaleController {
 
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
+
+        serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
+        comboCoursier.setOnAction(e -> {
+            selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+        });
 
 
 //        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
@@ -786,5 +796,9 @@ public class FenetrePrincipaleController {
     public void enableLivraisonDisableableComponenets() {
         this.buttonSupprimerLivraison.setDisable(false);
         this.buttonModifierLivraison.setDisable(false);
+    }
+
+    public void selectionnerCoursier(Coursier coursier) {
+        this.coursierSelectionne = coursier;
     }
 }
