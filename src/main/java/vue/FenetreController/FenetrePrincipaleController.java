@@ -1,44 +1,26 @@
-/*
- Copyright 2015-2020 Peter-Josef Meisch (pj.meisch@sothawo.com)
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-package controleur;
+package vue.FenetreController;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
-import javafx.animation.AnimationTimer;
+import controleur.StateController;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
@@ -55,15 +37,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Controller for the FXML defined code.
- *
- * @author P.J. Meisch (pj.meisch@sothawo.com).
- */
-public class Controller {
+
+public class FenetrePrincipaleController {
 
     /** logger for the class. */
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleController.class);
 
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
@@ -72,6 +50,7 @@ public class Controller {
     private static final String __ENTROPOT_ID__ = "25303831";
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
+    private StateController stateController;
     private Coordinate coordMin;
     private Coordinate coordMax;
 
@@ -125,6 +104,15 @@ public class Controller {
 
     @FXML
     private Button buttonCalculTournee;
+
+    @FXML
+    private Button buttonSupprimerLivraison;
+
+    @FXML
+    private Button buttonModifierLivraison;
+
+    @FXML
+    private Button buttonAjoutLivraisonATournee;
 
     /** for editing the animation duration */
     @FXML
@@ -214,7 +202,10 @@ public class Controller {
     private CheckBox checkConstrainXmlFile;
 
     @FXML
-    private ListView<?> listeLivraisons;
+    private ListView<Livraison> listeLivraisons;
+
+    @FXML
+    private VBox vBoxLivraison;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -226,12 +217,23 @@ public class Controller {
         .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
         .withAttributions(
             "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
+    private FXMLLoader fxmlLoader;
+    private String xmlMapPath;
+    private String titreStage;
+    private Parent parent;
 
     // TODO: handle exceptions
-    public Controller() throws MauvaisFormatXmlException, IOException {
-        //chargerPlan("src/test/resources/smallMap.xml");
-    }
+    public FenetrePrincipaleController() throws MauvaisFormatXmlException, IOException {
 
+    }
+//    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
+    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage, Parent parent) {
+        this.fxmlLoader = fxmlLoader;
+        this.xmlMapPath = xmlMapPath;
+        this.titreStage = titreStage;
+        this.stateController = stateController;
+        this.parent = parent;
+    }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
@@ -300,6 +302,7 @@ public class Controller {
 
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
+
 
 //        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
         logger.trace("location buttons done");
@@ -436,12 +439,48 @@ public class Controller {
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
+        buttonSupprimerLivraison.setOnAction(event -> {
+//            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+            supprimerLivraison();
+        });
+
+        listeLivraisons.setOnMouseClicked(event -> {
+            this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+        });
+
+        this.parent.setOnMouseClicked(event -> {
+            Double x = event.getScreenX();
+            Double y = event.getSceneY();
+            // TODO: alter this and make it inside the state implementations
+            if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
+                this.stateController.getCurrentState().clique(this.stateController);
+                if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
+//                    this.stateController.getCurrentState().clique();
+
+                }
+            }
+        });
+        disableLivraisonDisableableComponenets();
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
             .projection(projection)
             .showZoomControls(false)
             .build());
+        this.listeLivraisons.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty){
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                }
+                else {
+                    setText(livraison.afficherIhm());
+                }
+            }
+        });
+
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -536,27 +575,11 @@ public class Controller {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/AjoutLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root;
-            try {
-                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+            String fxmlFile = "/vue/SaisieLivraison.fxml";
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
 
-            final AjoutLivraisonController controller = fxmlLoader.getController();
-
-            controller.initData(plan.getIntersections().get(intersectionIdSelectionne), this);
-
-            Stage stage = new Stage();
-            stage.setTitle("Ajout Livraison");
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
-
-            labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
@@ -639,7 +662,7 @@ public class Controller {
 
     private void calculTournee() {
         // On récupère la liste de livraisons existantes
-        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
+        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         // On transforme en liste d'intersection
         List<Intersection> listeInter = new ArrayList<Intersection>();
         for (int i = 0 ; i < listeLivraion.size() ; i++) {
@@ -696,10 +719,55 @@ public class Controller {
     }
 
     public void refreshLivraison() {
-        ObservableList listLivraisonObeservable = FXCollections.observableArrayList();
+        ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
+        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
-        labelEvent.setText("Livraison créée");
+        labelEvent.setText("Liste livraison modifiée");
+    }
+
+    public void supprimerLivraison() {
+        Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
+    }
+
+    public void modifierLivraison(){
+        Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.cliqueModifierLivraison(livraisonAModifier);
+        refreshLivraison();
+    }
+
+    public void disableView() {
+        this.parent.setVisible(false);
+
+    }
+    public void enableView() {
+        this.parent.setVisible(true);
+    }
+    // *** GETTERS ** //
+
+
+    public FXMLLoader getFxmlLoader() {
+        return fxmlLoader;
+    }
+
+    public String getXmlMapPath() {
+        return xmlMapPath;
+    }
+
+    public String getTitreStage() {
+        return titreStage;
+    }
+
+
+    public void disableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(true);
+        this.buttonModifierLivraison.setDisable(true);
+    }
+
+    public void enableLivraisonDisableableComponenets() {
+        this.buttonSupprimerLivraison.setDisable(false);
+        this.buttonModifierLivraison.setDisable(false);
     }
 }
