@@ -83,6 +83,7 @@ public class FenetreSaisieLivraisonController {
      * @param intersection
      */
     public void initData(Intersection intersection, FenetrePrincipaleController controllerMere, Plan plan) {
+        destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
         this.controllerMere = controllerMere;
@@ -113,5 +114,5 @@ public class FenetreSaisieLivraisonController {
         this.controllerMere.refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
-    }
+        }
 }
