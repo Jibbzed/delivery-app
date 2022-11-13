@@ -467,6 +467,10 @@ public class FenetrePrincipaleController {
             supprimerLivraison();
         });
 
+        buttonModifierLivraison.setOnAction(event -> {
+            modifierLivraison();
+        });
+
         listeLivraisons.setOnMouseClicked(event -> {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
