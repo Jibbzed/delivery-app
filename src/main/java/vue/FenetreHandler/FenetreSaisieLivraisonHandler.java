@@ -96,16 +96,20 @@ public class FenetreSaisieLivraisonHandler{
         destinationIdLabel.setVisible(true);
         this.fenetrePrincipale = fenetrePrincipale;
         coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
-        coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
+        selectionnerCoursier(livraisonAModifier.getCoursierLivraison().get());
         //TODO : faire le cas où Coursier est empty
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
+            selectionnerPlageHoraire(8);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
             start9.setSelected(true);
+            selectionnerPlageHoraire(9);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[10]")) {
             start10.setSelected(true);
+            selectionnerPlageHoraire(10);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[11]")) {
             start11.setSelected(true);
+            selectionnerPlageHoraire(11);
         }
     }
 

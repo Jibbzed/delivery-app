@@ -115,6 +115,17 @@ public class Livraison {
     }
 
     public String afficherIhm(Plan plan) {
-        return "livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
+        return "Livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
+    }
+
+    public String toString(Plan plan) {
+        String s = "Livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
+        if(coursierLivraison.isPresent()) {
+            s += " par " + coursierLivraison.get().toString();
+        }
+        if(fenetreHoraireLivr.isPresent()) {
+            s += " à " + fenetreHoraireLivr.get() + "h";
+        }
+        return s;
     }
 }

@@ -126,16 +126,16 @@ public class FenetrePrincipaleHandler {
     //private TextField bingMapsApiKey;
 
     /** Label to display the current center */
-    @FXML
-    private Label labelCenter;
+   /* @FXML
+    private Label labelCenter;*/
 
     /** Label to display the current extent */
-    @FXML
-    private Label labelExtent;
+    /*@FXML
+    private Label labelExtent;*/
 
     /** Label to display the current zoom */
-    @FXML
-    private Label labelZoom;
+   /* @FXML
+    private Label labelZoom;*/
 
     /** label to display the last event. */
     @FXML
@@ -350,8 +350,8 @@ public class FenetrePrincipaleHandler {
         animationDuration.setText("500");*/
 
         // bind the map's center and zoom properties to the corresponding labels and format them
-        labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
-        labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
+        /*labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
+        labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));*/
         logger.trace("options and labels done");
 
         // watch the MapView's initialized property to finish initialization
@@ -477,6 +477,13 @@ public class FenetrePrincipaleHandler {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
 
+        listeLivraisons.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+                labelEvent.setText(newValue.toString(plan));
+            }
+        });
+
         this.parent.setOnMouseClicked(event -> {
             Double x = event.getScreenX();
             Double y = event.getSceneY();
@@ -559,7 +566,7 @@ public class FenetrePrincipaleHandler {
         // add an event handler for extent changes and display them in the status label
         mapView.addEventHandler(MapViewEvent.MAP_BOUNDING_EXTENT, event -> {
             event.consume();
-            labelExtent.setText(event.getExtent().toString());
+            //labelExtent.setText(event.getExtent().toString());
         });
 
         mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
@@ -589,9 +596,15 @@ public class FenetrePrincipaleHandler {
              trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
-            mapView.addCoordinateLine(trackMagenta);
+            //mapView.addCoordinateLine(trackMagenta);
+            for (Intersection i : plan.getIntersections().values()) {
+                if (i.getLatitude() == coordSelectionne.getLatitude() && i.getLongitude() == coordSelectionne.getLongitude()) {
+                    labelEvent.setText(plan.listerTronconsParIntersection(i));
+                    break;
+                }
+            }
 
-            labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
+            //labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
