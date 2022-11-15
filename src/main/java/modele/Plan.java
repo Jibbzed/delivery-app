@@ -56,6 +56,8 @@ public class Plan {
         return new HashSet<>(troncons);
     }
 
+    //TODO: this take alot of cpu and allocations
+    // we can have the security and without being costly like this by returning a stream instead.
     public Map<String, Intersection> getIntersections() {
         return new HashMap<>(intersections);
     }

@@ -46,7 +46,6 @@ public class FenetrePrincipaleController {
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
 
-            //TODO: make entropot id dynamic
     private static String entropotId;
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
@@ -544,7 +543,6 @@ public class FenetrePrincipaleController {
         });
         mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
             event.consume();
-            // TODO: afficher section pour ajouter une livraision ==> FAIT (double click)
             Coordinate coordSelectionne = event.getMarker().getPosition();
             String intersectionIdSelectionne =
                     plan.getIntersections().values().stream()
