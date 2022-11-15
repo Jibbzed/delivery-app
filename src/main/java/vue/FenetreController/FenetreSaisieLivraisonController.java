@@ -99,6 +99,7 @@ public class FenetreSaisieLivraisonController {
         this.controllerMere = controllerMere;
         coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
         coursierSelectionne = livraisonAModifier.getCoursierLivraison().get();
+        //TODO : faire le cas où Coursier est empty
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
