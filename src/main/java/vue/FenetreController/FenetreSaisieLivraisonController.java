@@ -97,7 +97,8 @@ public class FenetreSaisieLivraisonController {
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
         this.controllerMere = controllerMere;
-        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().toString().substring(9, livraisonAModifier.getCoursierLivraison().toString().length() - 1));
+        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
+        coursierSelectionne = livraisonAModifier.getCoursierLivraison().get();
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
