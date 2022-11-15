@@ -10,6 +10,14 @@ public class Intersection {
     private boolean isEntrepot;
 
 
+    /**
+     * Constructeur de la classe.
+     * Crée une intersection à partir d'informations récoltées dans le fichier XML du plan
+     *
+     * @param id        identifiant unique du point
+     * @param latitude  coordonnée de latitude du point
+     * @param longitude coordonnée de longitude du point
+     */
     public Intersection(String id, double latitude, double longitude){
         this.id=id;
         this.longitude=longitude;

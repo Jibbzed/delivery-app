@@ -11,6 +11,17 @@ public class CalculTournee {
     private Map<String, Map<String, Dijkstra>> plusCourtsChemins;
     private Coursier coursierTournee;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @param p          objet <code>Plan</code> correspondant au plan utilisé actuellement par l'utilisateur
+     * @param entrepot   objet <code>Intersection</code> représentant l'entrepôt
+     * @param livraisons liste de <code>Livraison</code> mappées à leurs <code>id</code>, représentant les points de livraisons de la tournée à calculer
+     *
+     * @see Plan
+     * @see Intersection
+     * @see Livraison
+     */
     public CalculTournee(Plan p, Intersection entrepot, Map<String, Livraison> livraisons) {
         this.plan = p;
         this.entrepot = entrepot;
@@ -21,6 +32,14 @@ public class CalculTournee {
         this.coursierTournee = livraisons.values().stream().findFirst().get().getCoursierLivraison().get();
     }
 
+    /**
+     * Initialisation du graphe des plus courts chemins.
+     * Cette méthode génère le graphe des plus courts chemins, en prenant aussi en compte les plages horaires des livraisons
+     *
+     * @return le <code>GrapheComplet</code> des plus courts chemins entre les points de livraisons de la tournée à calculer
+     *
+     * @see GrapheComplet
+     */
     public GrapheComplet initGraphe() {
         // on associe chaque point de livraison à un id entre 1 et n (0 = entrepot) qui nous permettra de faciliter l'usage du TSP
         Map<String, Integer> mappingIdInt = new HashMap<>();
@@ -93,6 +112,16 @@ public class CalculTournee {
         return graphe;
     }
 
+    /**
+     * Calcul de la tournée.
+     * Cette méthode calcule une tournée en se basant sur le graphe des plus court chemin généré par <code>initGraphe</code> :
+     * plus court chemin hamiltonien permettant de parcourir le graphe, en se basant sur l'algorithme du <code>TSP</code>
+     *
+     * @return l'objet <code>Tournee</code> contenant les informations concernant la tournée calculée
+     *
+     * @see TSP
+     * @see Tournee
+     */
     public Tournee calculerTournee() {
         // on associe chaque id du TSP au point de livraison correspondant pour inverser le mapping de initGraphe
         Map<Integer, String> mappingIntId = new HashMap<>();

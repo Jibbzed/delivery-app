@@ -38,29 +38,38 @@ public abstract class TemplateTSP implements TSP {
     }
 
     /**
-     * Method that must be defined in TemplateTSP subclasses
-     * @param currentVertex
-     * @param unvisited
-     * @return a lower bound of the cost of paths in <code>g</code> starting from <code>currentVertex</code>, visiting
-     * every vertex in <code>unvisited</code> exactly once, and returning back to vertex <code>0</code>.
+     * Méthode à redéfinir dans les sous classes de TemplateTSP
+     *
+     * @param currentVertex indice du sommet actuellement exploré
+     * @param unvisited     liste des indices des successeurs de <code>currentVertex</code>
+     *
+     * @return une borne inférieure pour le coût des chemins dans le graphe <code>g</code>, partant de <code>currentVertex</code>,
+     * passant par tous les sommets de <code>unviisted</code>, et revenant au point de départ (sommet 0)
      */
     protected abstract double bound(Integer currentVertex, Collection<Integer> unvisited);
 
     /**
-     * Method that must be defined in TemplateTSP subclasses
-     * @param currentVertex
-     * @param unvisited
-     * @param g
-     * @return an iterator for visiting all vertices in <code>unvisited</code> which are successors of <code>currentVertex</code>
+     * Méthode à redéfinir dans les sous classes de TemplateTSP
+     *
+     * @param currentVertex indice du sommet actuellement exploré
+     * @param unvisited     liste des indices des successeurs de <code>currentVertex</code>
+     * @param g             <code>Graphe</code> sur lequel on applique le TSP
+     *
+     * @return un itérateur pour parcourir tous les sommets de <code>unvisited</code> qui sont les successeurs de <code>currentVertex</code>
+     *
+     * @see Graphe
      */
     protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graphe g);
 
     /**
-     * Template method of a branch and bound algorithm for solving the TSP in <code>g</code>.
-     * @param currentVertex the last visited vertex
-     * @param unvisited the set of vertex that have not yet been visited
-     * @param visited the sequence of vertices that have been already visited (including currentVertex)
-     * @param currentCost the cost of the path corresponding to <code>visited</code>
+     * Modèle de méthode d'un algorithme de branch and bound pour la résolution du TSP dans le <code>Graphe</code> <code>g</code>.
+     *
+     * @param currentVertex indice du sommet actuellement exploré
+     * @param unvisited     liste des indices des successeurs de <code>currentVertex</code>
+     * @param visited       liste ordonnée des sommets qui ont déjà été visités (dont <code>currentVertex</code>)
+     * @param currentCost   le coût du chemin correspondant à <code>visited</code>
+     *
+     * @see Graphe
      */
     private void branchAndBound(int currentVertex, Collection<Integer> unvisited,
                                 Collection<Integer> visited, double currentCost){
