@@ -1,4 +1,4 @@
-package vue.FenetreController;
+package vue.FenetreHandler;
 
 
 import controleur.StateController;
@@ -13,9 +13,7 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import vue.Fenetre.FenetrePrincipale;
 
-import java.util.Optional;
-
-public class FenetreSaisieLivraisonController {
+public class FenetreSaisieLivraisonHandler{
 
     private FenetrePrincipale fenetrePrincipale;
     private Intersection destination;
@@ -92,12 +90,13 @@ public class FenetreSaisieLivraisonController {
         System.out.println(destination);
     }
 
-    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipaleController controllerMere, Plan plan) {
+    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
         destination = livraisonAModifier.destinationLivraison;
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
-        this.controllerMere = controllerMere;
-        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().toString().substring(9, livraisonAModifier.getCoursierLivraison().toString().length() - 1));
+        this.fenetrePrincipale = fenetrePrincipale;
+        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
+        coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
@@ -131,7 +130,7 @@ public class FenetreSaisieLivraisonController {
 //        serviceLivraison.ajouterLivraison(livraison);
         stateController.ajouterLivraison(livraison);
 //        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
-        this.fenetrePrincipale.getController().refreshLivraison();
+        this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
         }

@@ -3,10 +3,8 @@ package vue.Fenetre;
 import com.sothawo.mapjfx.Projection;
 import controleur.StateController;
 import javafx.scene.control.Alert;
-import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
-import vue.FenetreController.FenetreAccueilController;
-import vue.FenetreController.FenetrePrincipaleController;
+import vue.FenetreHandler.FenetrePrincipaleHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,7 +21,7 @@ public class FenetrePrincipale extends Stage{
         setTitle(title);
         setScene(loadSceneFromFXML(controller));
 
-        FenetrePrincipaleController fenetreController = getController();
+        FenetrePrincipaleHandler fenetreController = getFenetreHandler();
 
         fenetreController.initialize(controller,getFXMLoader(), xmlPath, title, rootNode);
         try {
@@ -59,11 +57,8 @@ public class FenetrePrincipale extends Stage{
     public FXMLLoader getFXMLoader() {
         return this.fxmlLoader;
     }
-    public FenetrePrincipaleController getController(){
+    public FenetrePrincipaleHandler getFenetreHandler(){
         return this.fxmlLoader.getController();
     }
 
-    protected Plan getPlan(){
-        return getController().getPlan();
-    }
 }

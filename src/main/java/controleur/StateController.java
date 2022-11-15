@@ -50,13 +50,13 @@ public class StateController {
         mainStage = new FenetreAccueil(this);
         mainStage.show();
     }
-   /* public void generateControllerPageAccueil(FenetreAccueilController controllerPageAccueil) {
+   /* public void generateControllerPageAccueil(FenetreAccueilHandler controllerPageAccueil) {
         this.fenetreAccueilController = controllerPageAccueil;
     }*/
-    /*public void generateAjoutLivraisonController(FenetreSaisieLivraisonController ajoutLivraisonController){
+    /*public void generateAjoutLivraisonController(FenetreSaisieLivraisonHandler ajoutLivraisonController){
         this.fenetreSaisieLivraisonController = ajoutLivraisonController;
     }*/
-    //TODO: save the arguments in the FenetrePrincipaleController instatnce.
+    //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
     public void afficherMap(String title, String xmlMapPath){
         mainStage.close();
         mainStage = new FenetrePrincipale(this, title, xmlMapPath);
@@ -81,11 +81,11 @@ public class StateController {
     }
 
     public void disableLivraisonDisableableComponents() {
-       // ((FenetrePrincipale)this.mainStage).getController().disableLivraisonDisableableComponenets();
+        ((FenetrePrincipale)this.mainStage).getFenetreHandler().disableLivraisonDisableableComponents();
     }
 
     public void enableLivraisonDisableableComponents() {
-       // ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
+       ((FenetrePrincipale)this.mainStage).getFenetreHandler().enableLivraisonDisableableComponents();
     }
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
 
