@@ -20,7 +20,7 @@ public class FenetreSaisieLivraisonHandler{
 
     private Coursier coursierSelectionne;
     @FXML
-    private ComboBox coursierSelector;
+    private ListView coursierSelector;
 
     @FXML
     private Label warningMessage;
@@ -71,8 +71,8 @@ public class FenetreSaisieLivraisonHandler{
 //        coursierSelector.getItems().add("Coursier 1");
 //        coursierSelector.getItems().add("Coursier 2");
         serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
-        coursierSelector.setOnAction(e -> {
-            selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+        coursierSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            coursierSelectionne = (Coursier) newValue;
         });
 
     }
@@ -95,7 +95,8 @@ public class FenetreSaisieLivraisonHandler{
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
         this.fenetrePrincipale = fenetrePrincipale;
-        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
+        //coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
+        coursierSelector.getSelectionModel().select(livraisonAModifier.getCoursierLivraison().get());
         selectionnerCoursier(livraisonAModifier.getCoursierLivraison().get());
         //TODO : faire le cas où Coursier est empty
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
@@ -123,8 +124,13 @@ public class FenetreSaisieLivraisonHandler{
     }
 
     public void saisirLivraison() {
-        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getSelectionModel().getSelectedItem() == null) {
             warningMessage.setVisible(true);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur de saisie");
+            alert.setContentText("Veuillez sélectionner un coursier et une plage horaire");
+            alert.showAndWait();
             return;
         }
 //        this.stateController.getCurrentState().valider(this.stateController);
