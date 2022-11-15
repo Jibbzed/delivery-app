@@ -1,0 +1,28 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.ControllerPageAccueil">
+    <top>
+        <VBox alignment="CENTER" spacing="50.0">
+            <Text layoutX="115.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cliquer sur une carte ou Importer un plan">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Text>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="50.0">
+            <HBox alignment="CENTER" spacing="10.0">
+                <Button fx:id="buttonLargeMap" layoutX="43.0" layoutY="134.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="174.0" text="Grande carte de Lyon" textAlignment="CENTER" />
+                <Button fx:id="buttonMediumMap" layoutX="262.0" layoutY="134.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="174.0" text="Carte moyenne de Lyon" textAlignment="CENTER" />
+                <Button fx:id="buttonSmallMap" layoutX="480.0" layoutY="134.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="174.0" text="Petite carte de Lyon" textAlignment="CENTER" />
+            </HBox>
+            <HBox alignment="CENTER" spacing="10.0">
+                <TextField fx:id="textXML" layoutX="53.0" layoutY="296.0" prefHeight="26.0" prefWidth="984.0" text="Entrer le path du fichier xml à importer" />
+                <Button fx:id="buttonValidate" layoutX="561.0" layoutY="297.0" mnemonicParsing="false" text="Valider" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

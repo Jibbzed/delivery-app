@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.AjoutLivraisonController">
+   <children>
+      <VBox layoutX="306.0" layoutY="154.0" prefHeight="67.0" prefWidth="158.0">
+         <children>
+            <Label prefHeight="18.0" prefWidth="183.0" text="Sélectionnez un coursier" />
+            <ComboBox fx:id="coursierSelector" prefWidth="150.0" />
+         </children>
+      </VBox>
+      <Button fx:id="validationButton" layoutX="494.0" layoutY="344.0" mnemonicParsing="false" onAction="#saisirLivraison" text="Valider" />
+      <Label fx:id="warningMessage" layoutX="21.0" layoutY="347.0" text="Vous devez sélectionner une plage horaire et choisir un coursier dans la liste" textFill="RED" visible="false">
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font>
+      </Label>
+      <VBox layoutX="69.0" layoutY="126.0" prefHeight="94.0" prefWidth="100.0">
+         <children>
+            <Label text="Plage horaire" />
+            <RadioButton fx:id="start8" mnemonicParsing="false" text="8h-9h">
+               <toggleGroup>
+                  <ToggleGroup fx:id="plageHoraireSelector" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="start9" mnemonicParsing="false" text="9h-10h" toggleGroup="$plageHoraireSelector" />
+            <RadioButton fx:id="start10" mnemonicParsing="false" text="10h-12h" toggleGroup="$plageHoraireSelector" />
+            <RadioButton fx:id="start11" mnemonicParsing="false" text="11h-12h" toggleGroup="$plageHoraireSelector" />
+         </children>
+      </VBox>
+      <Label layoutX="41.0" layoutY="25.0" prefHeight="18.0" prefWidth="193.0" text="Saisir une livraison" />
+      <Label layoutX="41.0" layoutY="61.0" prefHeight="18.0" prefWidth="66.0" maxWidth="-Infinity" text="Destination :" />
+      <Label fx:id="destinationIdLabel" layoutX="119.0" layoutY="61.0" text="destID" visible="false" />
+   </children>
+</AnchorPane>
