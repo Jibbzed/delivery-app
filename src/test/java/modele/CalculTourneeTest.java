@@ -2,8 +2,11 @@ package modele;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,18 +37,19 @@ public class CalculTourneeTest {
         plan.ajouterTroncon(new Troncon("f", 3, i1, i2));
         plan.ajouterTroncon(new Troncon("g", 3, i4, i2));
 
-        List<Intersection> pointsLivraison = new ArrayList<>();
-        pointsLivraison.add(i3);
-        pointsLivraison.add(i4);
+        Coursier grinardo = new Coursier("Bonifaccio", "Grinardo");
+        Map<String, Livraison> livraisons = new HashMap<>();
+        livraisons.put(i4.getId(), new Livraison(i4, grinardo, 8));
+        livraisons.put(i3.getId(), new Livraison(i3, grinardo, 10));
 
-        CalculTournee algo = new CalculTournee(plan, i1, pointsLivraison);
+        CalculTournee algo = new CalculTournee(plan, i1, livraisons);
 
         GrapheComplet graphe = algo.initGraphe();
 
         // expected
-        double[] coutsi1 = {0, 3, 5};
-        double[] coutsi3 = {6, 0, 2};
-        double[] coutsi4 = {4, 2, 0};
+        double[] coutsi1 = {0, Double.MAX_VALUE, 5};
+        double[] coutsi3 = {6, 0, Double.MAX_VALUE};
+        double[] coutsi4 = {Double.MAX_VALUE, 2, 0};
         double[][] couts = {coutsi1, coutsi3, coutsi4};
         GrapheComplet grapheAttendu = new GrapheComplet(couts);
 
@@ -79,11 +83,12 @@ public class CalculTourneeTest {
         plan.ajouterTroncon(new Troncon("f", 3, i1, i2));
         plan.ajouterTroncon(new Troncon("g", 3, i4, i2));
 
-        List<Intersection> pointsLivraison = new ArrayList<>();
-        pointsLivraison.add(i3);
-        pointsLivraison.add(i4);
+        Coursier grinardo = new Coursier("Bonifaccio", "Grinardo");
+        Map<String, Livraison> livraisons = new HashMap<>();
+        livraisons.put(i4.getId(), new Livraison(i4, grinardo, 8));
+        livraisons.put(i3.getId(), new Livraison(i3, grinardo, 10));
 
-        CalculTournee algo = new CalculTournee(plan, i1, pointsLivraison);
+        CalculTournee algo = new CalculTournee(plan, i1, livraisons);
 
         Tournee tourneeCalculee = algo.calculerTournee();
 
@@ -91,22 +96,24 @@ public class CalculTourneeTest {
         // tournee calculee a la main sur un exemple simple pour valider le TSP
         List<Troncon> traj1 = new ArrayList<>();
         traj1.add(new Troncon("y", 3, i1, i3));
-        Livraison l1 = new Livraison(i1, i3, traj1);
+        traj1.add(new Troncon("b", 2, i3, i4));
+        Livraison l1 = new Livraison(i1, i4, grinardo, traj1, LocalTime.of(8,20));
 
         List<Troncon> traj2 = new ArrayList<>();
-        traj2.add(new Troncon("b", 2, i3, i4));
-        Livraison l2 = new Livraison(i3, i4, traj2);
+        traj2.add(new Troncon("c", 2, i4, i3));
+        Livraison l2 = new Livraison(i4, i3, grinardo, traj2, LocalTime.of(10,0));
 
         List<Troncon> traj3 = new ArrayList<>();
+        traj3.add(new Troncon("b", 2, i3, i4));
         traj3.add(new Troncon("g", 3, i4, i2));
         traj3.add(new Troncon("x", 1, i2, i1));
-        Livraison l3 = new Livraison(i4, i1 ,traj3);
+        Livraison l3 = new Livraison(i3, i1, grinardo, traj3, LocalTime.of(10,24));
 
-        List<Livraison> livraisons = new ArrayList<>();
-        livraisons.add(l1);
-        livraisons.add(l2);
-        livraisons.add(l3);
-        Tournee attendue = new Tournee(livraisons);
+        List<Livraison> livraisonsTournee = new ArrayList<>();
+        livraisonsTournee.add(l1);
+        livraisonsTournee.add(l2);
+        livraisonsTournee.add(l3);
+        Tournee attendue = new Tournee(livraisonsTournee, grinardo);
 
         // test
         assertEquals(attendue, tourneeCalculee);

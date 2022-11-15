@@ -91,7 +91,7 @@ public class FenetreSaisieLivraisonHandler{
     }
 
     public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
-        destination = livraisonAModifier.destinationLivraison;
+        destination = livraisonAModifier.getDestinationLivraison();
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
         this.fenetrePrincipale = fenetrePrincipale;

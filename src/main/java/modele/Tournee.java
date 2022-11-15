@@ -14,9 +14,9 @@ public class Tournee {
         this.livraisons = new ArrayList<>();
     }
 
-    public Tournee(List<Livraison> livraisons) {
+    public Tournee(List<Livraison> livraisons, Coursier coursier) {
         this.livraisons = new ArrayList<>(livraisons);
-        this.coursier = Optional.empty();
+        this.coursier = Optional.of(coursier);
     }
 
     public void attribuerTournee(Coursier c){
