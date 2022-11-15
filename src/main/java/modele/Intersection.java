@@ -72,4 +72,10 @@ public class Intersection {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public double calculerDistance(double latitude, double longitude) {
+    	return Math.sqrt(Math.pow(this.latitude - latitude, 2) + Math.pow(this.longitude - longitude, 2));
+    }
+
+
 }

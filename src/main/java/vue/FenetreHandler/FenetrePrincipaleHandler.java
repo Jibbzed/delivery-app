@@ -264,10 +264,12 @@ public class FenetrePrincipaleHandler {
         coordinateList.stream()
                 .map(c -> {
                     String imageUrl = "/icons8-pin-24.png";
+                    boolean isVisible = false;
                     if (c.equals(coordCenterWarehouse)) {
                         imageUrl = "/icons8-warehouse-24.png";
+                        isVisible = true;
                     }
-                    return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(false);
+                    return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(isVisible);
                 })
 //                 .map(c-> Marker.createProvided(Marker.Provided.BLUE).setPosition(c).setVisible(false))
                 .forEach(markersIntersections::add);
@@ -399,10 +401,15 @@ public class FenetrePrincipaleHandler {
                 new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
         );*/
         // bind the checkboxes to the markers visibility
-        markersIntersections.forEach(marker-> {
-            marker.setVisible(true);
+        /*markersIntersections.forEach(marker-> {
+            if(coordCenterWarehouse.equals(marker.getPosition())){
+                marker.setVisible(true);
+                System.out.println("marker visible");
+            }
+            System.out.println("marker invisible");
+            marker.setVisible(false);*/
             //checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
-        });
+        //});
         //checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
@@ -482,6 +489,21 @@ public class FenetrePrincipaleHandler {
                 this.stateController.getCurrentState().cliqueLivraison(this.stateController);
                 labelEvent.setText(newValue.toString(plan));
             }
+            String intersectionIdSelectionne = newValue.getDestinationLivraison().getId();
+                    Map<String, Dijkstra> resultatDijkstra =
+                            plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
+                    // TODO: Duplicated code
+                    List<Coordinate> cheminLivraison = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
+                            .map(Troncon::getOrigine)
+                            .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                            .collect(Collectors.toList());
+                    // Ajouter derniere intersection au chemin
+            cheminLivraison.add(new Coordinate(newValue.getDestinationLivraison().getLatitude(), newValue.getDestinationLivraison().getLongitude()));
+                    mapView.removeCoordinateLine(trackMagenta);
+                    trackMagenta = new CoordinateLine(cheminLivraison).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+                    mapView.addCoordinateLine(trackMagenta);
         });
 
         this.parent.setOnMouseClicked(event -> {
@@ -544,7 +566,26 @@ public class FenetrePrincipaleHandler {
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
             final Coordinate newPosition = event.getCoordinate().normalize();
-            labelEvent.setText("Event: map clicked at: " + newPosition);
+            Intersection intersection = plan.getIntersectionProche(newPosition.getLatitude(), newPosition.getLongitude());
+            //set the marker from markerIntersections of the intersection visible
+            if(intersection != null) {
+                for(Marker marker : markersIntersections) {
+                    if (marker.getPosition().getLatitude() == intersection.getLatitude() && marker.getPosition().getLongitude() == intersection.getLongitude()) {
+                        marker.setVisible(true);
+                        System.out.println("le marker choisi"+marker.toString());
+                    } else {
+                        //set marker invisible except for the warehouse
+                        if(!marker.getPosition().equals(coordCenterWarehouse)) {
+                            marker.setVisible(false);
+                        }
+                    }
+                }
+                labelEvent.setText(plan.listerTronconsParIntersection(intersection));
+                System.out.println(intersection.toString());
+            }
+
+
+            //labelEvent.setText("Event: map clicked at: " + nePosition);
 //            if (markerClick.getVisible()) {
 //                final Coordinate oldPosition = markerClick.getPosition();
 //                if (oldPosition != null) {

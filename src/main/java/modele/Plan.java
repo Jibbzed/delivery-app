@@ -162,5 +162,18 @@ public class Plan {
         return intersections.get(idInter);
     }
 
+    public Intersection getIntersectionProche(double latitude, double longitude) {
+    	Intersection intersection = null;
+    	double distanceMin = Double.MAX_VALUE;
+    	for(Intersection inter : intersections.values()) {
+    		double distance = inter.calculerDistance(latitude, longitude);
+    		if(distance < distanceMin) {
+    			distanceMin = distance;
+    			intersection = inter;
+    		}
+    	}
+    	return intersection;
+    }
+
 
 }
