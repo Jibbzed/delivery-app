@@ -8,7 +8,11 @@ import org.jdom2.input.SAXBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.interfaces.ECKey;
 import java.util.List;
+import java.util.Optional;
+
+import static java.lang.Integer.parseInt;
 
 public class Parser {
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
@@ -102,6 +106,38 @@ public class Parser {
     private  static <T> void validerElementXml(List<T> list, String elementName) throws MauvaisFormatXmlException{
         if (list.isEmpty()) {
             throw new MauvaisFormatXmlException("Il n'y a pas d'element " + elementName + " sur le fichier xml fourni" );
+        }
+    }
+
+    public void sauvegarderLivraison(Livraison livraison) throws IOException{
+
+        String xmlFile = "src/test/resources/livraisons.xml";
+
+        SAXBuilder sax= new SAXBuilder();
+        sax.setProperty(ACCESS_EXTERNAL_DTD, "");
+        sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
+
+        try{
+            Document doc = sax.build(new File(xmlFile));
+            Element rootNode = doc.getRootElement();
+
+            // TODO faire le lien avec Coursier, ça ne marche pas pour l'instant
+            //      il suffit de tout décommenter
+            // String prenomCoursier = livraison.getCoursierLivraison().getPrenom();
+            // String nomCoursier = livraison.getCoursierLivraison().getNom();
+            String idIntersection = livraison.destinationLivraison.getId();
+            // String fenetreHoraire = parseInt( livraison.getFenetreHoraireLivr() );
+
+            Element coursier = new Element("coursier");
+            // coursier.addContent(new Element("nom").setText(nomCoursier));
+            // coursier.addContent(new Element("prenom").setText(prenomCoursier));
+
+            Element livraisonElement = new Element("livraison");
+            livraisonElement.addContent(new Element("intersection").setText(idIntersection));
+            // livraisonElement.addContent(new Element("feneHoraire").setText(fenetreHoraire));
+
+        }catch (Exception e){
+            // TODO throw exception mais je sais pas quoi
         }
     }
 }

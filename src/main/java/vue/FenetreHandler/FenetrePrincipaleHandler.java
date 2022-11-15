@@ -1,49 +1,33 @@
-/*
- Copyright 2015-2020 Peter-Josef Meisch (pj.meisch@sothawo.com)
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-package controleur;
+package vue.FenetreHandler;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
-import javafx.animation.AnimationTimer;
+import controleur.StateController;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.ServiceLivraison;
+import service.ServiceCoursier;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -55,23 +39,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Controller for the FXML defined code.
- *
- * @author P.J. Meisch (pj.meisch@sothawo.com).
- */
-public class Controller {
+
+public class FenetrePrincipaleHandler {
 
     /** logger for the class. */
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleHandler.class);
 
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
 
             //TODO: make entropot id dynamic
-    private static final String __ENTROPOT_ID__ = "25303831";
+    private static String entropotId;
     private static Coordinate coordCenterWarehouse;
     private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
+    private StateController stateController;
     private Coordinate coordMin;
     private Coordinate coordMax;
 
@@ -110,11 +91,11 @@ public class Controller {
 
     /** Accordion for all the different options */
     @FXML
-    private Accordion leftControls;
+    private Pane leftControls;
 
     /** section containing the location button */
-    @FXML
-    private TitledPane optionsLocations;
+    //@FXML
+    //private TitledPane optionsLocations;
 
     /** button to set the map's center */
     /** button to set the map's center */
@@ -126,13 +107,23 @@ public class Controller {
     @FXML
     private Button buttonCalculTournee;
 
-    /** for editing the animation duration */
     @FXML
+    private Button buttonSupprimerLivraison;
+
+    @FXML
+    private Button buttonModifierLivraison;
+
+    @FXML
+    private Button buttonAjouterLivraison;
+
+    /** for editing the animation duration */
+    /*@FXML
     private TextField animationDuration;
+     */
 
     /** the BIng Maps API Key. */
-    @FXML
-    private TextField bingMapsApiKey;
+    //@FXML
+    //private TextField bingMapsApiKey;
 
     /** Label to display the current center */
     @FXML
@@ -151,57 +142,57 @@ public class Controller {
     private Label labelEvent;
 
     /** RadioButton for MapStyle OSM */
-    @FXML
-    private RadioButton radioMsOSM;
+    //@FXML
+    //private RadioButton radioMsOSM;
 
     /** RadioButton for MapStyle Stamen Watercolor */
-    @FXML
-    private RadioButton radioMsSTW;
+    //@FXML
+    //private RadioButton radioMsSTW;
 
     /** RadioButton for MapStyle Bing Roads */
-    @FXML
-    private RadioButton radioMsBR;
+    //@FXML
+    //private RadioButton radioMsBR;
 
     /** RadioButton for MapStyle Bing Roads - dark */
-    @FXML
-    private RadioButton radioMsCd;
+    //@FXML
+    //private RadioButton radioMsCd;
 
     /** RadioButton for MapStyle Bing Roads - grayscale */
-    @FXML
-    private RadioButton radioMsCg;
+    //@FXML
+    //private RadioButton radioMsCg;
 
     /** RadioButton for MapStyle Bing Roads - light */
-    @FXML
-    private RadioButton radioMsCl;
+    //@FXML
+    //private RadioButton radioMsCl;
 
     /** RadioButton for MapStyle Bing Aerial */
-    @FXML
-    private RadioButton radioMsBA;
+    //@FXML
+    //private RadioButton radioMsBA;
 
     /** RadioButton for MapStyle Bing Aerial with Label */
-    @FXML
-    private RadioButton radioMsBAwL;
+    //@FXML
+    //private RadioButton radioMsBAwL;
 
     /** RadioButton for MapStyle WMS. */
-    @FXML
-    private RadioButton radioMsWMS;
+    //@FXML
+    //private RadioButton radioMsWMS;
 
     /** RadioButton for MapStyle XYZ */
-    @FXML
-    private RadioButton radioMsXYZ;
+    //@FXML
+    //private RadioButton radioMsXYZ;
 
     /** ToggleGroup for the MapStyle radios */
-    @FXML
-    private ToggleGroup mapTypeGroup;
+    //@FXML
+    //private ToggleGroup mapTypeGroup;
 
     /** Check button for harbour marker */
-    @FXML
-    private CheckBox checkIntersectionsMarkers;
+    //@FXML
+    //private CheckBox checkIntersectionsMarkers;
     /** the first CoordinateLine */
     private CoordinateLine trackMagenta;
     /** Check button for first track */
-    @FXML
-    private CheckBox checkTrackMagenta;
+    //@FXML
+    //private CheckBox checkTrackMagenta;
 
     /** the second CoordinateLine */
     private CoordinateLine trackCyan;
@@ -210,11 +201,24 @@ public class Controller {
     /** Check Button for polygon drawing mode. */
 
     /** Check Button for constraining th extent. */
-    @FXML
-    private CheckBox checkConstrainXmlFile;
+    //@FXML
+    //private CheckBox checkConstrainXmlFile;
 
     @FXML
-    private ListView<?> listeLivraisons;
+    private ListView<Livraison> listeLivraisons;
+
+    @FXML
+    private VBox vBoxLivraison;
+
+    @FXML
+    private VBox vBoxTournee;
+
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+
+    @FXML
+    private ComboBox comboCoursier;
+
+    private Coursier coursierSelectionne;
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -226,19 +230,35 @@ public class Controller {
         .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
         .withAttributions(
             "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
+    private FXMLLoader fxmlLoader;
+    private String xmlMapPath;
+    private String titreStage;
+    private Parent parent;
 
     // TODO: handle exceptions
-    public Controller() throws MauvaisFormatXmlException, IOException {
-        //chargerPlan("src/test/resources/smallMap.xml");
-    }
+    public FenetrePrincipaleHandler() throws MauvaisFormatXmlException, IOException {
 
+    }
+//    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
+    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage, Parent parent) {
+        this.fxmlLoader = fxmlLoader;
+        this.xmlMapPath = xmlMapPath;
+        this.titreStage = titreStage;
+        this.stateController = stateController;
+        this.parent = parent;
+    }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
         Parser parser = new Parser();
         this.plan = parser.lirePlan(path);
         coordinateList =
                 plan.getIntersections().values().stream()
-                        .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .map(intersection -> {
+                            if(intersection.isEntrepot()) {
+                                FenetrePrincipaleHandler.entropotId = intersection.getId();
+                            }
+                            return new Coordinate(intersection.getLatitude(), intersection.getLongitude());
+                        } )
                         .collect(Collectors.toList());
         // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
         coordinateList.stream()
@@ -275,7 +295,8 @@ public class Controller {
     public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
         chargerPlan(path);
         logger.trace("begin initialize");
-
+        vBoxLivraison.setAlignment(Pos.CENTER);
+        vBoxTournee.setAlignment(Pos.CENTER);
 
 
         // init MapView-Cache
@@ -293,13 +314,19 @@ public class Controller {
         // set the custom css file for the MapView
         mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
 
-        leftControls.setExpandedPane(optionsLocations);
+        //leftControls.setExpandedPane(optionsLocations);
 
         // set the controls to disabled, this will be changed when the MapView is intialized
         setControlsDisable(true);
 
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
+
+        serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
+        comboCoursier.setOnAction(e -> {
+            selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+        });
+
 
 //        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
         logger.trace("location buttons done");
@@ -309,7 +336,7 @@ public class Controller {
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         // add a listener to the animationDuration field and make sure we only accept int values
-        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+        /*animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty()) {
                 mapView.setAnimationDuration(0);
             } else {
@@ -320,7 +347,7 @@ public class Controller {
                 }
             }
         });
-        animationDuration.setText("500");
+        animationDuration.setText("500");*/
 
         // bind the map's center and zoom properties to the corresponding labels and format them
         labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
@@ -335,7 +362,7 @@ public class Controller {
         });
 
         // observe the map type radiobuttons
-        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        /*mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             logger.debug("map type toggled to {}", newValue.toString());
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
@@ -362,20 +389,21 @@ public class Controller {
             mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);
         });
-        mapTypeGroup.selectToggle(radioMsOSM);
+        mapTypeGroup.selectToggle(radioMsOSM);*/
 
         setupEventHandlers();
 
         // add the graphics to the checkboxes
 
-        checkIntersectionsMarkers.setGraphic(
+        /*checkIntersectionsMarkers.setGraphic(
                 new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
-        );
+        );*/
         // bind the checkboxes to the markers visibility
         markersIntersections.forEach(marker-> {
-            checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
+            marker.setVisible(true);
+            //checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
         });
-        checkIntersectionsMarkers.setSelected(true);
+        //checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
         // load two coordinate lines
@@ -406,7 +434,7 @@ public class Controller {
         trackMagenta = new CoordinateLine().setColor(Color.MAGENTA).setWidth(7).setVisible(true);
         trackCyan = new CoordinateLine(chemin).setColor(Color.CYAN).setWidth(7);
         logger.trace("tracks loaded");
-        checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
+        //checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
 //        checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
         logger.trace("tracks checks done");
         // get the extent of both tracks
@@ -426,22 +454,62 @@ public class Controller {
             };
 
         // add the constrain listener
-        checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        /*checkConstrainXmlFile.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 mapView.constrainExtent(extentLyon);
             } else {
                 mapView.clearConstrainExtent();
             }
-        }));
+        }));*/
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
+        buttonSupprimerLivraison.setOnAction(event -> {
+//            this.stateController.getCurrentState().cliqueSupprimerLivraison(this.stateController, this.fxmlLoader );
+            supprimerLivraison();
+        });
+
+        buttonModifierLivraison.setOnAction(event -> {
+            modifierLivraison();
+        });
+
+        listeLivraisons.setOnMouseClicked(event -> {
+            this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+        });
+
+        this.parent.setOnMouseClicked(event -> {
+            Double x = event.getScreenX();
+            Double y = event.getSceneY();
+            // TODO: alter this and make it inside the state implementations
+            if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
+                this.stateController.getCurrentState().clique(this.stateController);
+                if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
+//                    this.stateController.getCurrentState().clique();
+
+                }
+            }
+        });
+        disableLivraisonDisableableComponents();
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
             .projection(projection)
             .showZoomControls(false)
             .build());
+        this.listeLivraisons.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty){
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                }
+                else {
+                    setText(livraison.afficherIhm(getPlan()));
+                }
+            }
+        });
+
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -509,7 +577,7 @@ public class Controller {
                     .map(Intersection::getId)
                     .findAny().orElse("");
             Map<String, Dijkstra> resultatDijkstra =
-                    plan.plusCourtChemin(__ENTROPOT_ID__, Collections.singletonList( intersectionIdSelectionne ));
+                    plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
             // TODO: Duplicated code
             List<Coordinate> chemin = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
                     .map(Troncon::getOrigine)
@@ -536,27 +604,8 @@ public class Controller {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/AjoutLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root;
-            try {
-                root = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            final AjoutLivraisonController controller = fxmlLoader.getController();
-
-            controller.initData(plan.getIntersections().get(intersectionIdSelectionne), this);
-
-            Stage stage = new Stage();
-            stage.setTitle("Ajout Livraison");
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.show();
-
-            labelEvent.setText("Event: marker double clicked: " + event.getMarker().getId());
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
@@ -576,6 +625,13 @@ public class Controller {
         logger.trace("map handlers initialized");
     }
 
+    @FXML
+    private void handleKeyPressed(KeyEvent ke){
+        if(ke.getCode() == KeyCode.Z){
+            stateController.undo();
+            refreshLivraison();
+        }
+    }
     private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
         // animate the marker to the new position
         final Transition transition = new Transition() {
@@ -639,16 +695,16 @@ public class Controller {
 
     private void calculTournee() {
         // On récupère la liste de livraisons existantes
-        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons());
-
-        // Pour créer l'objet CalculTournee, on a besoin d'une map des livraisons à l'id de leur destination
-        Map<String, Livraison> livraisons = new HashMap<>();
-        for( Livraison l : listeLivraion ) {
-            livraisons.put(l.getDestinationLivraison().getId(), l);
+        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
+        // On transforme en liste d'intersection
+            Map<String, Livraison> livraisons = new HashMap<>();
+            for( Livraison l : listeLivraion ) {
+                livraisons.put(l.getDestinationLivraison().getId(), l);
         }
 
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(__ENTROPOT_ID__), livraisons);
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
+
         Tournee tournee = calculTournee.calculerTournee();
 
         // On récupère les intersections
@@ -698,10 +754,62 @@ public class Controller {
     }
 
     public void refreshLivraison() {
-        ObservableList listLivraisonObeservable = FXCollections.observableArrayList();
+        ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutLivraisons().stream().map(Livraison::afficherIhm).collect(Collectors.toSet()));
+        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
-        labelEvent.setText("Livraison créée");
+        labelEvent.setText("Liste livraison modifiée");
+    }
+
+    public void supprimerLivraison() {
+        Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.supprimerLivraison(livraisonASupprimer);
+        refreshLivraison();
+    }
+
+    public void modifierLivraison(){
+        Livraison livraisonAModifier = this.listeLivraisons.getSelectionModel().getSelectedItem();
+        stateController.cliqueModifierLivraison(livraisonAModifier);
+        refreshLivraison();
+    }
+
+    public void disableView() {
+        this.parent.setVisible(false);
+
+    }
+    public void enableView() {
+        this.parent.setVisible(true);
+    }
+    // *** GETTERS ** //
+
+
+    public FXMLLoader getFxmlLoader() {
+        return fxmlLoader;
+    }
+
+    public String getXmlMapPath() {
+        return xmlMapPath;
+    }
+
+    public String getTitreStage() {
+        return titreStage;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void disableLivraisonDisableableComponents() {
+        this.buttonSupprimerLivraison.setDisable(true);
+        this.buttonModifierLivraison.setDisable(true);
+    }
+
+    public void enableLivraisonDisableableComponents() {
+        this.buttonSupprimerLivraison.setDisable(false);
+        this.buttonModifierLivraison.setDisable(false);
+    }
+
+    public void selectionnerCoursier(Coursier coursier) {
+        this.coursierSelectionne = coursier;
     }
 }

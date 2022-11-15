@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public class Livraison {
 
+
     protected Optional<Intersection> origineLivraison = Optional.empty();
     protected Intersection destinationLivraison;
     protected Optional<Coursier> coursierLivraison = Optional.empty();
@@ -144,7 +145,7 @@ public class Livraison {
         return Objects.hash(origineLivraison, destinationLivraison, parcoursLivraison);
     }
 
-    public String afficherIhm() {
-        return "livraison sur coord: (" + destinationLivraison.getLatitude() + "," + destinationLivraison.getLongitude() + ")";
+    public String afficherIhm(Plan plan) {
+        return "livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
     }
 }

@@ -22,12 +22,12 @@ public class ServiceLivraisonMockImpl implements ServiceLivraison {
     }
 
     @Override
-    public void suprimmerLivraison(Livraison livraison) {
+    public void supprimerLivraison(Livraison livraison) {
         this.livraisons.remove(livraison);
     }
 
     @Override
-    public Set<Livraison> afficherToutLivraisons() {
+    public Set<Livraison> afficherToutesLivraisons() {
         return new HashSet<>(livraisons);
     }
 

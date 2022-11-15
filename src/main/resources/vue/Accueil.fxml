@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.ControllerPageAccueil">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.FenetreHandler.FenetreAccueilHandler">
     <top>
         <VBox alignment="CENTER" spacing="50.0">
             <Text layoutX="115.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cliquer sur une carte ou Importer un plan">
@@ -21,6 +21,7 @@
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
                 <TextField fx:id="textXML" layoutX="53.0" layoutY="296.0" prefHeight="26.0" prefWidth="984.0" text="Entrer le path du fichier xml à importer" />
+                <Button fx:id="buttonParcourir" layoutX="561.0" layoutY="297.0" mnemonicParsing="false" text="Parcourir" />
                 <Button fx:id="buttonValidate" layoutX="561.0" layoutY="297.0" mnemonicParsing="false" text="Valider" />
             </HBox>
         </VBox>
