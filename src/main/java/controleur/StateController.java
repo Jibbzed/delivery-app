@@ -2,7 +2,6 @@ package controleur;
 
 import controleur.command.ListOfCommands;
 import controleur.state.*;
-import javafx.fxml.FXMLLoader;
 
 import javafx.stage.Stage;
 import modele.Intersection;
@@ -74,19 +73,19 @@ public class StateController {
 
     // TODO: make an interface for all our custom made stages.
     public void disableMapView(){
-        ((FenetrePrincipale)this.mainStage).getController().disableView();
+        //((FenetrePrincipale)this.mainStage).getController().disableView();
     }
 
     public void enableMapView() {
-        ((FenetrePrincipale)this.mainStage).getController().enableView();
+        //((FenetrePrincipale)this.mainStage).getController().enableView();
     }
 
-    public void disableLivraisonDisableableComponenets() {
-        ((FenetrePrincipale)this.mainStage).getController().disableLivraisonDisableableComponenets();
+    public void disableLivraisonDisableableComponents() {
+       // ((FenetrePrincipale)this.mainStage).getController().disableLivraisonDisableableComponenets();
     }
 
-    public void enableLivraisonDisableableComponenets() {
-        ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
+    public void enableLivraisonDisableableComponents() {
+       // ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
     }
     public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
 
@@ -98,7 +97,7 @@ public class StateController {
         // TODO change the attribute to an optional one.
     }
 
-    public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
+    public void doubleCliquePlan(Intersection intersectionSelectionne){
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this);
     }

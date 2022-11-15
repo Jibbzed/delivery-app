@@ -2,7 +2,6 @@ package controleur.state;
 
 import controleur.StateController;
 import controleur.command.ListOfCommands;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
@@ -22,7 +21,7 @@ public class InitialState implements State {
     @Override
     public void cliqueLivraison(StateController stateController) {
         State.super.cliqueLivraison(stateController);
-        stateController.enableLivraisonDisableableComponenets();
+        stateController.enableLivraisonDisableableComponents();
         stateController.setCurrentState(stateController.selectionnerLivraisonState);
     }
 

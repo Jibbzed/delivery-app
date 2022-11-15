@@ -69,5 +69,4 @@ public class FenetreAccueilController {
             this.stateController.afficherMap(title, xmlPath);
         });
     }
-
 }

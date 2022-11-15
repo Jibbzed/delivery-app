@@ -604,10 +604,7 @@ public class FenetrePrincipaleController {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/SaisieLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-
-            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
 
         });
 
@@ -776,7 +773,6 @@ public class FenetrePrincipaleController {
 
     public void disableView() {
         this.parent.setVisible(false);
-
 
     }
     public void enableView() {

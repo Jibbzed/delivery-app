@@ -11,11 +11,11 @@ import modele.Livraison;
 import modele.Plan;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
-import service.impl.ServiceLivraisonMockImpl;
+import vue.Fenetre.FenetrePrincipale;
 
 public class FenetreSaisieLivraisonController {
 
-    private FenetrePrincipaleController controllerMere;
+    private FenetrePrincipale fenetrePrincipale;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -82,11 +82,11 @@ public class FenetreSaisieLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipaleController controllerMere, Plan plan) {
+    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
         destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.controllerMere = controllerMere;
+        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
@@ -112,7 +112,7 @@ public class FenetreSaisieLivraisonController {
 //        serviceLivraison.ajouterLivraison(livraison);
         stateController.ajouterLivraison(livraison);
 //        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
-        this.controllerMere.refreshLivraison();
+        this.fenetrePrincipale.getController().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
         }

@@ -3,7 +3,6 @@ package controleur.state;
 import controleur.command.CommandeSupprimerLivraison;
 import controleur.command.ListOfCommands;
 import modele.Livraison;
-import service.impl.ServiceLivraisonMockImpl;
 import controleur.StateController;
 
 public class SelectionLivraisonState implements State{
@@ -24,6 +23,6 @@ public class SelectionLivraisonState implements State{
     @Override
     public void clique(StateController stateController) {
         stateController.setCurrentState(stateController.initialState);
-        stateController.disableLivraisonDisableableComponenets();
+        stateController.disableLivraisonDisableableComponents();
     }
 }

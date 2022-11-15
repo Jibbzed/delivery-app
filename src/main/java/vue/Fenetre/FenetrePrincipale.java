@@ -3,6 +3,7 @@ package vue.Fenetre;
 import com.sothawo.mapjfx.Projection;
 import controleur.StateController;
 import javafx.scene.control.Alert;
+import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
 import vue.FenetreController.FenetreAccueilController;
 import vue.FenetreController.FenetrePrincipaleController;
@@ -62,7 +63,7 @@ public class FenetrePrincipale extends Stage{
         return this.fxmlLoader.getController();
     }
 
-    public Parent getRootNode() {
-        return rootNode;
+    protected Plan getPlan(){
+        return getController().getPlan();
     }
 }
