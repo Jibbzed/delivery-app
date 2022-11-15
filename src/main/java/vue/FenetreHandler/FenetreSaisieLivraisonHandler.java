@@ -1,23 +1,21 @@
-package controleur;
+package vue.FenetreHandler;
 
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import controleur.StateController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
+import modele.Plan;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
-import service.impl.ServiceLivraisonMockImpl;
+import vue.Fenetre.FenetrePrincipale;
 
-import java.util.Set;
+public class FenetreSaisieLivraisonHandler{
 
-public class AjoutLivraisonController {
-
-    private Controller controllerMere;
+    private FenetrePrincipale fenetrePrincipale;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -44,6 +42,7 @@ public class AjoutLivraisonController {
     @FXML
     private Label destinationIdLabel;
 
+    private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
     private int plageHoraire;
@@ -52,7 +51,8 @@ public class AjoutLivraisonController {
     public void AjoutLivraisonController() {
     }
 
-    public void initialize() {
+    public void initialize(StateController stateController) {
+        this.stateController = stateController;
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -72,7 +72,6 @@ public class AjoutLivraisonController {
 //        coursierSelector.getItems().add("Coursier 2");
         serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.setOnAction(e -> {
-
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
 
@@ -83,24 +82,39 @@ public class AjoutLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, Controller controllerMere) {
+    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
         destination = intersection;
-        destinationIdLabel.setText(destination.getId());
+        destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.controllerMere = controllerMere;
+        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
+    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
+        destination = livraisonAModifier.getDestinationLivraison();
+        destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
+        destinationIdLabel.setVisible(true);
+        this.fenetrePrincipale = fenetrePrincipale;
+        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
+        coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
+        if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
+            start8.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
+            start9.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[10]")) {
+            start10.setSelected(true);
+        } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[11]")) {
+            start11.setSelected(true);
+        }
+    }
 
-    //TODO: compléter cette méthode pour ajouter la plage horaire à la livraison
+
     public void selectionnerPlageHoraire(int plageHoraire) {
         this.plageHoraire = plageHoraire; 
     }
 
-    //TODO: compléter cette méthode pour ajouter le coursier à la livraison
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = coursier;
-
     }
 
     public void saisirLivraison() {
@@ -108,14 +122,16 @@ public class AjoutLivraisonController {
             warningMessage.setVisible(true);
             return;
         }
-        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+//        this.stateController.getCurrentState().valider(this.stateController);
+//        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         Livraison livraison = new Livraison(this.destination);
         livraison.setCoursierLivraison(this.coursierSelectionne);
         livraison.setFenetreHoraireLivr(this.plageHoraire);
-        serviceLivraison.ajouterLivraison(livraison);
+//        serviceLivraison.ajouterLivraison(livraison);
+        stateController.ajouterLivraison(livraison);
 //        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
-        this.controllerMere.refreshLivraison();
+        this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
-    }
+        }
 }
