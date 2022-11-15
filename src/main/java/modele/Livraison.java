@@ -1,5 +1,6 @@
 package modele;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,11 +8,13 @@ import java.util.Optional;
 
 public class Livraison {
 
-    public Optional<Intersection> origineLivraison = Optional.empty();
-    public Intersection destinationLivraison;
-    public Optional<Coursier> coursierLivraison = Optional.empty();
-    public List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
-    public Optional<Integer> fenetreHoraireLivr = Optional.empty();
+
+    protected Optional<Intersection> origineLivraison = Optional.empty();
+    protected Intersection destinationLivraison;
+    protected Optional<Coursier> coursierLivraison = Optional.empty();
+    protected List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
+    protected Optional<Integer> fenetreHoraireLivr = Optional.empty();
+    protected Optional<LocalTime> heurePassage = Optional.empty();
 
     public Livraison() {
     }
@@ -21,12 +24,20 @@ public class Livraison {
         parcoursLivraison = new ArrayList<>();
     }
 
-    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, List<Troncon> parcoursLivraison) {
+    public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursier, List<Troncon> parcoursLivraison, LocalTime heureArrivee) {
         this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
-        coursierLivraison = Optional.empty();
+        coursierLivraison = Optional.of(coursier);
         fenetreHoraireLivr = Optional.empty();
         this.parcoursLivraison = parcoursLivraison;
+        heurePassage = Optional.of(heureArrivee);
+    }
+    public Livraison(Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
+        this.origineLivraison = Optional.empty();
+        this.destinationLivraison = destinationLivraison;
+        this.coursierLivraison = Optional.of(coursierLivraison);
+        this.fenetreHoraireLivr = Optional.of(fenetreHoraireLivr);
+        this.parcoursLivraison = new ArrayList<>();
     }
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
         this.origineLivraison = Optional.of(origineLivraison);
@@ -48,6 +59,10 @@ public class Livraison {
 
     public Optional<Coursier> getCoursierLivraison() {
         return coursierLivraison;
+    }
+
+    public Optional<LocalTime> getHeurePassage() {
+        return heurePassage;
     }
 
     public void setCoursierLivraison(Coursier coursierLivraison) {

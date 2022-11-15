@@ -63,6 +63,10 @@ public class GrapheComplet implements Graphe {
         return cout[i][j];
     }
 
+    public void setCout(int i, int j, double cout) {
+        this.cout[i][j] = cout;
+    }
+
     @Override
     public boolean isArc(int i, int j) {
         if (i<0 || i>= nbSommets || j<0 || j>= nbSommets)

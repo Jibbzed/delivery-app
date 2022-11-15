@@ -697,12 +697,14 @@ public class FenetrePrincipaleHandler {
         // On récupère la liste de livraisons existantes
         List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
         // On transforme en liste d'intersection
-        List<Intersection> listeInter = new ArrayList<Intersection>();
-        for (int i = 0 ; i < listeLivraion.size() ; i++) {
-            listeInter.add(listeLivraion.get(i).destinationLivraison);
+            Map<String, Livraison> livraisons = new HashMap<>();
+            for( Livraison l : listeLivraion ) {
+                livraisons.put(l.getDestinationLivraison().getId(), l);
         }
+
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), listeInter);
+        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
+
         Tournee tournee = calculTournee.calculerTournee();
 
         // On récupère les intersections
