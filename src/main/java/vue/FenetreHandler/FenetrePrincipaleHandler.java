@@ -1,5 +1,5 @@
 
-package vue.FenetreController;
+package vue.FenetreHandler;
 
 import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
@@ -17,6 +17,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -38,10 +40,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class FenetrePrincipaleController {
+public class FenetrePrincipaleHandler {
 
     /** logger for the class. */
-    private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleHandler.class);
 
     /** some coordinates from around town. */
     // TODO: remove those coordinates .
@@ -234,7 +236,7 @@ public class FenetrePrincipaleController {
     private Parent parent;
 
     // TODO: handle exceptions
-    public FenetrePrincipaleController() throws MauvaisFormatXmlException, IOException {
+    public FenetrePrincipaleHandler() throws MauvaisFormatXmlException, IOException {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
@@ -253,7 +255,7 @@ public class FenetrePrincipaleController {
                 plan.getIntersections().values().stream()
                         .map(intersection -> {
                             if(intersection.isEntrepot()) {
-                                FenetrePrincipaleController.entropotId = intersection.getId();
+                                FenetrePrincipaleHandler.entropotId = intersection.getId();
                             }
                             return new Coordinate(intersection.getLatitude(), intersection.getLongitude());
                         } )
@@ -487,7 +489,7 @@ public class FenetrePrincipaleController {
                 }
             }
         });
-        disableLivraisonDisableableComponenets();
+        disableLivraisonDisableableComponents();
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize(Configuration.builder()
@@ -602,10 +604,7 @@ public class FenetrePrincipaleController {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            String fxmlFile = "/vue/SaisieLivraison.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-
-            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne), fxmlLoader);
+            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
 
         });
 
@@ -626,6 +625,13 @@ public class FenetrePrincipaleController {
         logger.trace("map handlers initialized");
     }
 
+    @FXML
+    private void handleKeyPressed(KeyEvent ke){
+        if(ke.getCode() == KeyCode.Z){
+            stateController.undo();
+            refreshLivraison();
+        }
+    }
     private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
         // animate the marker to the new position
         final Transition transition = new Transition() {
@@ -768,7 +774,6 @@ public class FenetrePrincipaleController {
     public void disableView() {
         this.parent.setVisible(false);
 
-
     }
     public void enableView() {
         this.parent.setVisible(true);
@@ -792,12 +797,12 @@ public class FenetrePrincipaleController {
         return plan;
     }
 
-    public void disableLivraisonDisableableComponenets() {
+    public void disableLivraisonDisableableComponents() {
         this.buttonSupprimerLivraison.setDisable(true);
         this.buttonModifierLivraison.setDisable(true);
     }
 
-    public void enableLivraisonDisableableComponenets() {
+    public void enableLivraisonDisableableComponents() {
         this.buttonSupprimerLivraison.setDisable(false);
         this.buttonModifierLivraison.setDisable(false);
     }

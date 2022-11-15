@@ -1,7 +1,7 @@
 package controleur;
 
+import controleur.command.ListOfCommands;
 import controleur.state.*;
-import javafx.fxml.FXMLLoader;
 
 import javafx.stage.Stage;
 import modele.Intersection;
@@ -17,7 +17,6 @@ import java.io.IOException;
 public class StateController {
     private State currentState;
     private Stage mainStage;
-
     private Stage popupStage;
 
     /**  states **/
@@ -36,6 +35,7 @@ public class StateController {
         return currentState;
     }
 
+    private ListOfCommands listOfCommands;
     public void setIntersectionSelectionne(Intersection intersectionSelectionne) {
         this.intersectionSelectionne = intersectionSelectionne;
     }
@@ -46,16 +46,17 @@ public class StateController {
 
     public StateController() {
         this.currentState = initialState;
+        listOfCommands = new ListOfCommands();
         mainStage = new FenetreAccueil(this);
         mainStage.show();
     }
-   /* public void generateControllerPageAccueil(FenetreAccueilController controllerPageAccueil) {
+   /* public void generateControllerPageAccueil(FenetreAccueilHandler controllerPageAccueil) {
         this.fenetreAccueilController = controllerPageAccueil;
     }*/
-    /*public void generateAjoutLivraisonController(FenetreSaisieLivraisonController ajoutLivraisonController){
+    /*public void generateAjoutLivraisonController(FenetreSaisieLivraisonHandler ajoutLivraisonController){
         this.fenetreSaisieLivraisonController = ajoutLivraisonController;
     }*/
-    //TODO: save the arguments in the FenetrePrincipaleController instatnce.
+    //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
     public void afficherMap(String title, String xmlMapPath){
         mainStage.close();
         mainStage = new FenetrePrincipale(this, title, xmlMapPath);
@@ -63,28 +64,30 @@ public class StateController {
     }
 
 
-    public void ajouterLivraison() throws IOException {
+    public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 
+    public void ajouterLivraison(Livraison l){ currentState.validerAjouterLivraison(l,this, listOfCommands); }
+
     // TODO: make an interface for all our custom made stages.
     public void disableMapView(){
-        ((FenetrePrincipale)this.mainStage).getController().disableView();
+        //((FenetrePrincipale)this.mainStage).getController().disableView();
     }
 
     public void enableMapView() {
-        ((FenetrePrincipale)this.mainStage).getController().enableView();
+        //((FenetrePrincipale)this.mainStage).getController().enableView();
     }
 
-    public void disableLivraisonDisableableComponenets() {
-        ((FenetrePrincipale)this.mainStage).getController().disableLivraisonDisableableComponenets();
+    public void disableLivraisonDisableableComponents() {
+        ((FenetrePrincipale)this.mainStage).getFenetreHandler().disableLivraisonDisableableComponents();
     }
 
-    public void enableLivraisonDisableableComponenets() {
-        ((FenetrePrincipale)this.mainStage).getController().enableLivraisonDisableableComponenets();
+    public void enableLivraisonDisableableComponents() {
+       ((FenetrePrincipale)this.mainStage).getFenetreHandler().enableLivraisonDisableableComponents();
     }
-    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer);}
+    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
 
     public void cliqueModifierLivraison(Livraison livraisonAModifier){
         currentState.modifierLivraison(this, livraisonAModifier);
@@ -97,10 +100,11 @@ public class StateController {
         // TODO change the attribute to an optional one.
     }
 
-    public void doubleCliquePlan(Intersection intersectionSelectionne, FXMLLoader fxmlLoader){
+    public void doubleCliquePlan(Intersection intersectionSelectionne){
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this);
     }
+    public void undo(){ currentState.undo(listOfCommands); }
 
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
 

@@ -1,4 +1,4 @@
-package vue.FenetreController;
+package vue.FenetreHandler;
 
 
 import controleur.StateController;
@@ -11,13 +11,11 @@ import modele.Livraison;
 import modele.Plan;
 import service.ServiceCoursier;
 import service.ServiceLivraison;
-import service.impl.ServiceLivraisonMockImpl;
+import vue.Fenetre.FenetrePrincipale;
 
-import java.util.Optional;
+public class FenetreSaisieLivraisonHandler{
 
-public class FenetreSaisieLivraisonController {
-
-    private FenetrePrincipaleController controllerMere;
+    private FenetrePrincipale fenetrePrincipale;
     private Intersection destination;
 
     private Coursier coursierSelectionne;
@@ -84,21 +82,21 @@ public class FenetreSaisieLivraisonController {
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipaleController controllerMere, Plan plan) {
+    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
         destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.controllerMere = controllerMere;
+        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
-    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipaleController controllerMere, Plan plan) {
+    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
         destination = livraisonAModifier.destinationLivraison;
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
-        this.controllerMere = controllerMere;
+        this.fenetrePrincipale = fenetrePrincipale;
         coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
-        coursierSelectionne = livraisonAModifier.getCoursierLivraison().get();
+        coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
         //TODO : faire le cas où Coursier est empty
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
@@ -125,14 +123,15 @@ public class FenetreSaisieLivraisonController {
             warningMessage.setVisible(true);
             return;
         }
-        this.stateController.getCurrentState().valider(this.stateController);
-        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+//        this.stateController.getCurrentState().valider(this.stateController);
+//        this.serviceLivraison = ServiceLivraisonMockImpl.getInstance();
         Livraison livraison = new Livraison(this.destination);
         livraison.setCoursierLivraison(this.coursierSelectionne);
         livraison.setFenetreHoraireLivr(this.plageHoraire);
-        serviceLivraison.ajouterLivraison(livraison);
+//        serviceLivraison.ajouterLivraison(livraison);
+        stateController.ajouterLivraison(livraison);
 //        Set<Livraison> livraisons = serviceLivraison.afficherToutLivraisons();
-        this.controllerMere.refreshLivraison();
+        this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
         }

@@ -1,4 +1,4 @@
-package vue.FenetreController;
+package vue.FenetreHandler;
 
 import controleur.StateController;
 import javafx.fxml.FXML;
@@ -7,9 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 
-public class FenetreAccueilController {
+public class FenetreAccueilHandler {
 
     private StateController stateController;
     @FXML
@@ -30,7 +29,7 @@ public class FenetreAccueilController {
     @FXML
     private TextField textXML;
 
-    public FenetreAccueilController() {
+    public FenetreAccueilHandler() {
 
     }
 
@@ -69,5 +68,4 @@ public class FenetreAccueilController {
             this.stateController.afficherMap(title, xmlPath);
         });
     }
-
 }

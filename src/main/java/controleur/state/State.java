@@ -1,6 +1,7 @@
 package controleur.state;
 
 import controleur.StateController;
+import controleur.command.ListOfCommands;
 import javafx.fxml.FXMLLoader;
 import modele.Livraison;
 
@@ -18,7 +19,7 @@ public interface State {
 
     default void cliqueDroit(StateController stateController){}
 
-    default void cliqueSupprimerLivraison(StateController stateController, Livraison LivraisonASupprimer){}
+    default void cliqueSupprimerLivraison(StateController stateController, Livraison LivraisonASupprimer, ListOfCommands listOfCommands){}
 
     default void cliqueLivraison(StateController stateController){}
     default void setLivraisonAModifier(Livraison livraisonAModifier) {}
@@ -26,6 +27,7 @@ public interface State {
     default void cliqueChargerLivraison(StateController stateController){}
 
     default void validerChargerLivraison(Livraison livraisonACharger, StateController stateController) {}
-
+    default void validerAjouterLivraison(Livraison livraisonAAjouter,StateController stateController, ListOfCommands listOfCommands){}
     default void clique(StateController stateController){};
+    default void undo(ListOfCommands listOfCommands){}
 }

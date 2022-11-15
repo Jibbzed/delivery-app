@@ -1,7 +1,8 @@
 package controleur.state;
 
+import controleur.command.CommandeSupprimerLivraison;
+import controleur.command.ListOfCommands;
 import modele.Livraison;
-import service.impl.ServiceLivraisonMockImpl;
 import controleur.StateController;
 
 public class SelectionLivraisonState implements State{
@@ -15,13 +16,13 @@ public class SelectionLivraisonState implements State{
         //      ou recliquer sur le point affichée si la destination ne change pas
     }
     @Override
-    public void cliqueSupprimerLivraison(StateController stateController, Livraison livraisonASupprimer) {
-        ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraisonASupprimer);
+    public void cliqueSupprimerLivraison(StateController stateController, Livraison livraisonASupprimer, ListOfCommands listOfCommands) {
+        listOfCommands.add(new CommandeSupprimerLivraison(livraisonASupprimer));
         stateController.setCurrentState(stateController.initialState);
     }
     @Override
     public void clique(StateController stateController) {
         stateController.setCurrentState(stateController.initialState);
-        stateController.disableLivraisonDisableableComponenets();
+        stateController.disableLivraisonDisableableComponents();
     }
 }
