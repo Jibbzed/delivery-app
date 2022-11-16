@@ -33,6 +33,14 @@ public class StateController {
     private Intersection intersectionSelectionne;
     private static String xmlPathPlan;
 
+    public static String getXmlPathPlan() {
+        return xmlPathPlan;
+    }
+
+    public static void setXmlPathPlan(String xmlPathPlan) {
+        StateController.xmlPathPlan = xmlPathPlan;
+    }
+
     public void setCurrentState(State state) {
         currentState = state;
     }
@@ -124,7 +132,6 @@ public class StateController {
         serviceLivraison.ajouterLivraison(livraisonACharger);
 
     }
-
 
     public void cliquerAjouterLivraisonATournee(){  }
 
