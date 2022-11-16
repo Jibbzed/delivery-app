@@ -72,9 +72,9 @@ public class FenetreSaisieLivraisonHandler{
         });
 //        coursierSelector.getItems().add("Coursier 1");
 //        coursierSelector.getItems().add("Coursier 2");
-        // TODO: remove after, just for breakpoint.
-        List<Coursier> liste = serviceCoursier.getListeCoursiers();
-        liste.forEach(c -> coursierSelector.getItems().add(c));
+        serviceCoursier.getListeCoursiers().stream()
+                .filter(c -> !c.getPlanifie())
+                .forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
