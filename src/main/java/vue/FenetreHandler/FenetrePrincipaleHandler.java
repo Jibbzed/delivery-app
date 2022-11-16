@@ -240,17 +240,18 @@ public class FenetrePrincipaleHandler {
 
     }
 //    FXMLLoader fxmlLoader, String xmlMapPath, String nomMap string nom
-    public void initialize(StateController stateController, FXMLLoader fxmlLoader, String xmlMapPath, String titreStage, Parent parent) {
+    public void initialize(StateController stateController, FXMLLoader fxmlLoader, Plan plan, String titreStage, Parent parent) {
         this.fxmlLoader = fxmlLoader;
         this.xmlMapPath = xmlMapPath;
+        this.plan = plan;
         this.titreStage = titreStage;
         this.stateController = stateController;
         this.parent = parent;
     }
-    private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
+    private void chargerPlan(Plan plan) {//throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
-        Parser parser = new Parser();
-        this.plan = parser.lirePlan(path);
+
+        this.plan = plan;
         coordinateList =
                 plan.getIntersections().values().stream()
                         .map(intersection -> {
@@ -292,8 +293,8 @@ public class FenetrePrincipaleHandler {
      * @param projection
      *     the projection to use in the map.
      */
-    public void initMapAndControls(Projection projection, String path) throws MauvaisFormatXmlException, IOException {
-        chargerPlan(path);
+    public void initMapAndControls(Projection projection, Plan plan) {
+        chargerPlan(plan);
         logger.trace("begin initialize");
         vBoxLivraison.setAlignment(Pos.CENTER);
         vBoxTournee.setAlignment(Pos.CENTER);

@@ -3,9 +3,13 @@ package controleur;
 import controleur.command.ListOfCommands;
 import controleur.state.*;
 
+import javafx.scene.effect.BoxBlur;
 import javafx.stage.Stage;
 import modele.Intersection;
 import modele.Livraison;
+import modele.Parser;
+import modele.Plan;
+import modele.exception.MauvaisFormatXmlException;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.FenetreAccueil;
@@ -57,10 +61,11 @@ public class StateController {
         this.fenetreSaisieLivraisonController = ajoutLivraisonController;
     }*/
     //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
-    public void afficherMap(String title, String xmlMapPath){
+    public void afficherMap(String title, Plan plan){
+        FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(this, title, plan);
+        fenetrePrincipale.show();//showAndWait();
         mainStage.close();
-        mainStage = new FenetrePrincipale(this, title, xmlMapPath);
-        mainStage.showAndWait();
+        mainStage=fenetrePrincipale;
     }
 
 
@@ -94,6 +99,10 @@ public class StateController {
         this.modifierLivraison(livraisonAModifier);
     }
 
+    public void abandonAjoutLivraison(){
+        currentState.abandonnerLivraison(this);
+    }
+
     public void modifierLivraison(Livraison livraisonAModifier){
          popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
@@ -113,5 +122,12 @@ public class StateController {
         serviceLivraison.ajouterLivraison(livraisonACharger);
 
     }
+
+
     public void cliquerAjouterLivraisonATournee(){  }
+
+    public Plan chargerPlan(String xmlPath) throws MauvaisFormatXmlException, IOException{
+        Parser parser = new Parser();
+        return parser.lirePlan(xmlPath);
+    }
 }
