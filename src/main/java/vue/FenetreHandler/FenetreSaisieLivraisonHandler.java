@@ -42,6 +42,9 @@ public class FenetreSaisieLivraisonHandler{
     @FXML
     private Label destinationIdLabel;
 
+    @FXML
+    private Button sauvegarderLivraison;
+
     private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -133,5 +136,19 @@ public class FenetreSaisieLivraisonHandler{
         this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void sauvegarderLivraison(){
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
+            warningMessage.setVisible(true);
+            return;
         }
+        Livraison livraison = new Livraison(this.destination);
+        livraison.setCoursierLivraison(this.coursierSelectionne);
+        livraison.setFenetreHoraireLivr(this.plageHoraire);
+        stateController.sauvegarderLivraison(livraison);
+        sauvegarderLivraison.setText("Livraison sauvegardée");
+        sauvegarderLivraison.setMouseTransparent(true);
+    }
+
 }

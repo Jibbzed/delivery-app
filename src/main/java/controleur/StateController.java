@@ -27,6 +27,7 @@ public class StateController {
     public final State chargementLivraisonState = new ChargementLivraisonState();
     public final State selectionTourneeState = new SelectionTourneeState();
     private Intersection intersectionSelectionne;
+    private static String xmlPathPlan;
 
     public void setCurrentState(State state) {
         currentState = state;
@@ -59,6 +60,7 @@ public class StateController {
     //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
     public void afficherMap(String title, String xmlMapPath){
         mainStage.close();
+        xmlPathPlan=xmlMapPath;
         mainStage = new FenetrePrincipale(this, title, xmlMapPath);
         mainStage.showAndWait();
     }
@@ -114,4 +116,6 @@ public class StateController {
 
     }
     public void cliquerAjouterLivraisonATournee(){  }
+    public void sauvegarderLivraison(Livraison livraison){ currentState.sauvegarderLivraison(livraison, xmlPathPlan);
+        System.out.println(xmlPathPlan); }
 }

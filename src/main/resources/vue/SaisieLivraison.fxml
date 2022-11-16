@@ -18,6 +18,7 @@
          </children>
       </VBox>
       <Button fx:id="validationButton" layoutX="494.0" layoutY="344.0" mnemonicParsing="false" onAction="#saisirLivraison" text="Valider" />
+      <Button fx:id="sauvegarderLivraison" layoutX="200.0" layoutY="344.0" mnemonicParsing="false" onAction="#sauvegarderLivraison" text="Sauvegarder la demande de Livraison" />
       <Label fx:id="warningMessage" layoutX="21.0" layoutY="347.0" text="Vous devez sélectionner une plage horaire et choisir un coursier dans la liste" textFill="RED" visible="false">
          <font>
             <Font name="System Bold Italic" size="13.0" />

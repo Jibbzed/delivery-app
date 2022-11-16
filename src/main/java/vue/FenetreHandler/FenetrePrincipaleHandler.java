@@ -72,7 +72,7 @@ public class FenetrePrincipaleHandler {
 
     /** Le plan */
     private Plan plan;
-
+    private String xmlPathPlan;
     @FXML
     /** button to set the map's zoom. */
     private Button buttonZoom;
@@ -249,8 +249,9 @@ public class FenetrePrincipaleHandler {
     }
     private void chargerPlan(String path) throws MauvaisFormatXmlException, IOException {
         initCoordStatic();
+        xmlMapPath = path;
         Parser parser = new Parser();
-        this.plan = parser.lirePlan(path);
+        this.plan = parser.lirePlan(xmlMapPath);
         coordinateList =
                 plan.getIntersections().values().stream()
                         .map(intersection -> {
@@ -807,6 +808,10 @@ public class FenetrePrincipaleHandler {
     public void enableLivraisonDisableableComponents() {
         this.buttonSupprimerLivraison.setDisable(false);
         this.buttonModifierLivraison.setDisable(false);
+    }
+
+    public String getXmlPathPlan() {
+        return xmlPathPlan;
     }
 
     public void selectionnerCoursier(Coursier coursier) {
