@@ -33,6 +33,7 @@ public class FenetrePrincipale extends Stage{
             alert.setHeaderText("Le fichier XML n'est pas valide");
             alert.setContentText("Veuillez charger un fichier XML valide");
             alert.showAndWait();
+            new StateController();
             throw new RuntimeException(e);
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -40,6 +41,7 @@ public class FenetrePrincipale extends Stage{
             alert.setHeaderText("Aucun fichier XML n'a été chargé");
             alert.setContentText("Veuillez charger un fichier XML");
             alert.showAndWait();
+            new StateController();
             throw new RuntimeException(e);
         }
 

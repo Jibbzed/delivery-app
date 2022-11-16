@@ -504,6 +504,13 @@ public class FenetrePrincipaleHandler {
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
                     mapView.addCoordinateLine(trackMagenta);
+                    for(Marker m : markersIntersections) {
+                        if(m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
+                            m.setVisible(true);
+                        } else if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+                            m.setVisible(false);
+                        }
+                    }
         });
 
         this.parent.setOnMouseClicked(event -> {
@@ -512,6 +519,8 @@ public class FenetrePrincipaleHandler {
             // TODO: alter this and make it inside the state implementations
             if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
                 this.stateController.getCurrentState().clique(this.stateController);
+                trackMagenta.setVisible(false);
+                listeLivraisons.getSelectionModel().clearSelection();
                 if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
 //                    this.stateController.getCurrentState().clique();
 
