@@ -711,21 +711,37 @@ public class FenetrePrincipaleHandler {
 //        }
         //  on calcule tournee et la groupe par coursier.
         Map<Coursier, Tournee> tourneeParCoursier = new HashMap<>();
-        listeLivraisonByCoursier.keySet().forEach(
+        listeLivraisonByCoursier.keySet().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                //TODO: remove this filter after filtering the courtier in the creating livraison vue handler.
+                .filter(coursier -> !coursier.getPlanifie())
+                .forEach(
                 coursier -> {
                     Map<String, Livraison> livraisons = new HashMap<>();
-                    listeLivraisonByCoursier.get(coursier).forEach(
+                    listeLivraisonByCoursier.get(Optional.of(coursier)).forEach(
                             livraison -> {
                                 livraisons.put(livraison.getDestinationLivraison().getId(), livraison);
                             }
                     );
-                    tourneeParCoursier.put(
-                            coursier.get(),
-                            new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons).calculerTournee());
+                    //TODO: Try catch here for the tounee with NullPointerException.
+                    Tournee tournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons).calculerTournee();
+                    tourneeParCoursier.put(coursier, tournee);
+                    tournee.getLivraisons().forEach(
+                            l -> ServiceLivraisonMockImpl.getInstance().ajouterLivraison(l)
+                    );
+                    coursier.setPlanifie(true);
+                    ServiceCoursier.getInstance().modifierCoursier(coursier);
+
                 }
         );
 
-
+        listeLivraisons.getItems().forEach(
+                livraison -> {
+                    ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraison);
+                }
+        );
+        refreshLivraison();
 
         // afficher toutes les tournee
 
@@ -835,7 +851,10 @@ public class FenetrePrincipaleHandler {
     public void refreshLivraison() {
         ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
+        listLivraisonObeservable.addAll(
+                ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
+                        .stream().filter(l-> l.getParcoursLivraison().isEmpty()).collect(Collectors.toList())
+        );
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
         labelEvent.setText("Liste livraison modifiée");
     }

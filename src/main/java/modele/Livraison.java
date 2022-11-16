@@ -12,7 +12,7 @@ public class Livraison {
     protected Optional<Intersection> origineLivraison = Optional.empty();
     protected Intersection destinationLivraison;
     protected Optional<Coursier> coursierLivraison = Optional.empty();
-    protected List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
+    protected List<Troncon> parcoursLivraison = new ArrayList<>(); // parcours à faire pour la livraison
     protected Optional<Integer> fenetreHoraireLivr = Optional.empty();
     protected Optional<LocalTime> heurePassage = Optional.empty();
 

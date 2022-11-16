@@ -18,7 +18,10 @@ public class ServiceCoursier {
     public void ajouterCoursier(Coursier coursier){
         this.listeCoursiers.add(coursier);
     }
-
+    public void modifierCoursier(Coursier coursier) {
+        retirerCoursier(coursier);
+        ajouterCoursier(coursier);
+    }
     public void retirerCoursier(String nom, String prenom){
         Coursier c = new Coursier(nom, prenom);
         this.listeCoursiers.remove(c);
