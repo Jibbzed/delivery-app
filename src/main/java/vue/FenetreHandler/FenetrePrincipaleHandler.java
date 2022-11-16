@@ -221,7 +221,7 @@ public class FenetrePrincipaleHandler {
     @FXML
     private ComboBox comboCoursier;
 
-    private Coursier coursierSelectionne;
+    private Optional<Coursier> coursierSelectionne = Optional.empty();
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -328,6 +328,8 @@ public class FenetrePrincipaleHandler {
         serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
         comboCoursier.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+            disableToutChemin();
+            coursierSelectionne.ifPresent(c-> enableCheminByCoursier(c));
         });
 
 
@@ -776,13 +778,34 @@ public class FenetrePrincipaleHandler {
                                 )).setWidth(7).setVisible(true);
                     trackMap.put(c, coordinateLine);
                     mapView.addCoordinateLine(coordinateLine);
+                    this.coursierSelectionne.ifPresent(
+                            coursierSelectionner -> {
+                                disableToutChemin();
+                                enableCheminByCoursier(c);
+                            }
+                    );
                 }
+
         );
 
 //        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
 //        mapView.addCoordinateLine(trackMagenta);
+    }
+
+    private void enableCheminByCoursier(Coursier c) {
+        if(this.trackMap.containsKey(c)) {
+            this.trackMap.get(c).setVisible(true);
+        }
+    }
+
+    private void disableToutChemin() {
+        this.trackMap.forEach(
+                (coursier, chemin) -> {
+                    chemin.setVisible(false);
+                }
+        );
     }
 
     /**
@@ -866,6 +889,6 @@ public class FenetrePrincipaleHandler {
     }
 
     public void selectionnerCoursier(Coursier coursier) {
-        this.coursierSelectionne = coursier;
+        this.coursierSelectionne = Optional.of(coursier);
     }
 }
