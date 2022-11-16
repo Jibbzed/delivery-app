@@ -13,6 +13,8 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import vue.Fenetre.FenetrePrincipale;
 
+import java.util.List;
+
 public class FenetreSaisieLivraisonHandler{
 
     private FenetrePrincipale fenetrePrincipale;
@@ -70,7 +72,9 @@ public class FenetreSaisieLivraisonHandler{
         });
 //        coursierSelector.getItems().add("Coursier 1");
 //        coursierSelector.getItems().add("Coursier 2");
-        serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
+        // TODO: remove after, just for breakpoint.
+        List<Coursier> liste = serviceCoursier.getListeCoursiers();
+        liste.forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
