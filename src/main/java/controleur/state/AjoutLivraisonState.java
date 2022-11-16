@@ -25,4 +25,9 @@ public class AjoutLivraisonState implements State {
         stateController.enableMapView();
         stateController.setCurrentState(stateController.initialState);
     }
+
+    @Override
+    public void abandonnerLivraison(StateController stateController) {
+        stateController.setCurrentState(stateController.initialState);
+    }
 }
