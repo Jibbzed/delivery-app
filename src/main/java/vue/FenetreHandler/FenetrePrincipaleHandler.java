@@ -211,6 +211,9 @@ public class FenetrePrincipaleHandler {
     private ListView<Livraison> listeLivraisons;
 
     @FXML
+    private ListView<Livraison> listeLivraisonsSurTournee;
+
+    @FXML
     private VBox vBoxLivraison;
 
     @FXML
@@ -330,6 +333,7 @@ public class FenetrePrincipaleHandler {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
             disableToutChemin();
             coursierSelectionne.ifPresent(c-> enableCheminByCoursier(c));
+            refreshLivraison();
         });
 
 
@@ -514,7 +518,19 @@ public class FenetrePrincipaleHandler {
                 }
             }
         });
-
+        this.listeLivraisonsSurTournee.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty){
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                }
+                else {
+                    setText(livraison.afficherIhm(getPlan()));
+                }
+            }
+        });
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -850,13 +866,35 @@ public class FenetrePrincipaleHandler {
 
     public void refreshLivraison() {
         ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
+        ObservableList<Livraison> listLivraisonSurTourneeObeservable = FXCollections.observableArrayList();
+
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
+        listeLivraisonsSurTournee.getItems().removeAll(listeLivraisonsSurTournee.getItems());
+
         listLivraisonObeservable.addAll(
                 ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
                         .stream().filter(l-> l.getParcoursLivraison().isEmpty()).collect(Collectors.toList())
         );
+        listLivraisonSurTourneeObeservable.addAll(
+                ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
+                        .stream()
+                            .filter(l-> !l.getParcoursLivraison().isEmpty())
+                            .filter(l -> {
+                                if(coursierSelectionne.isPresent()) {
+                                    return l.getCoursierLivraison().equals(coursierSelectionne);
+                                }
+                                // when there is no selected courtier, list all deliveries that are in a tournee
+                                return true;
+                            })
+                            .collect(Collectors.toList())
+        );
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
+        listeLivraisonsSurTournee.getItems().addAll(listLivraisonSurTourneeObeservable);
+
         labelEvent.setText("Liste livraison modifiée");
+
+
+
     }
 
     public void supprimerLivraison() {
