@@ -5,14 +5,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.interfaces.ECKey;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import java.io.*;
 import java.util.List;
-import java.util.Optional;
-
-import static java.lang.Integer.parseInt;
+import java.util.Set;
 
 public class Parser {
     private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
@@ -94,35 +91,36 @@ public class Parser {
         }
     }
 
-    public void sauvegarderLivraison(Livraison livraison) throws IOException{
+    public void sauvegarderLivraison(Livraison livraison, String mapFileXml) throws Exception{
 
         String xmlFile = "src/test/resources/livraisons.xml";
-
         SAXBuilder sax= new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");
 
-        try{
-            Document doc = sax.build(new File(xmlFile));
-            Element rootNode = doc.getRootElement();
+        Document doc = sax.build(new File(xmlFile));
+        Element rootNode = doc.getRootElement();
 
-            // TODO faire le lien avec Coursier, ça ne marche pas pour l'instant
-            //      il suffit de tout décommenter
-            // String prenomCoursier = livraison.getCoursierLivraison().getPrenom();
-            // String nomCoursier = livraison.getCoursierLivraison().getNom();
-            String idIntersection = livraison.destinationLivraison.getId();
-            // String fenetreHoraire = parseInt( livraison.getFenetreHoraireLivr() );
+        Element livraisonElement = new Element("livraison");
+        String prenomCoursier = livraison.getCoursierLivraison().get().getPrenom();
+        String nomCoursier = livraison.getCoursierLivraison().get().getNom();
+        String idIntersection = livraison.destinationLivraison.getId();
+        String fenetreHoraire = livraison.getFenetreHoraireLivr().get().toString();
 
-            Element coursier = new Element("coursier");
-            // coursier.addContent(new Element("nom").setText(nomCoursier));
-            // coursier.addContent(new Element("prenom").setText(prenomCoursier));
+        livraisonElement.addContent(new Element("fichierPlan").setText(mapFileXml));
+        Element coursier = new Element("coursier");
+        coursier.addContent(new Element("nom").setText(nomCoursier));
+        coursier.addContent(new Element("prenom").setText(prenomCoursier));
+        livraisonElement.addContent(coursier);
 
-            Element livraisonElement = new Element("livraison");
-            livraisonElement.addContent(new Element("intersection").setText(idIntersection));
-            // livraisonElement.addContent(new Element("feneHoraire").setText(fenetreHoraire));
+        Element intersecEl = new Element("intersection").setText(idIntersection);
+        Element fenetreHEl = new Element("feneHoraire").setText(fenetreHoraire);
+        livraisonElement.addContent(new Element("intersection").setText(idIntersection));
+        livraisonElement.addContent(new Element("feneHoraire").setText(fenetreHoraire));
 
-        }catch (Exception e){
-            // TODO throw exception mais je sais pas quoi
-        }
+        rootNode.addContent(livraisonElement);
+
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        xmlOutputter.output(doc, new FileWriter(xmlFile));
     }
 }

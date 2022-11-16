@@ -31,6 +31,7 @@ public class StateController {
     public final State chargementLivraisonState = new ChargementLivraisonState();
     public final State selectionTourneeState = new SelectionTourneeState();
     private Intersection intersectionSelectionne;
+    private static String xmlPathPlan;
 
     public void setCurrentState(State state) {
         currentState = state;
@@ -66,6 +67,7 @@ public class StateController {
         fenetrePrincipale.show();//showAndWait();
         mainStage.close();
         mainStage=fenetrePrincipale;
+
     }
 
 
@@ -130,4 +132,6 @@ public class StateController {
         Parser parser = new Parser();
         return parser.lirePlan(xmlPath);
     }
+    public void sauvegarderLivraison(Livraison livraison){ currentState.sauvegarderLivraison(livraison, xmlPathPlan);
+        System.out.println(xmlPathPlan); }
 }
