@@ -140,7 +140,7 @@ public class FenetrePrincipaleHandler {
      * the first CoordinateLine
      */
     private CoordinateLine trackMagenta;
-    private Map<Coursier, CoordinateLine> trackMap = new HashMap<>();
+    private Map<Coursier, List<CoordinateLine>> trackMap = new HashMap<>();
 
     /**
      * the second CoordinateLine
@@ -303,27 +303,30 @@ public class FenetrePrincipaleHandler {
             if (newValue != null) {
                 this.stateController.getCurrentState().cliqueLivraison(this.stateController);
                 labelEvent.setText(newValue.toString(plan));
-            }
-            String intersectionIdSelectionne = newValue.getDestinationLivraison().getId();
-            Map<String, Dijkstra> resultatDijkstra =
-                    plan.plusCourtChemin(entropotId, Collections.singletonList(intersectionIdSelectionne));
-            // TODO: Duplicated code
-            List<Coordinate> cheminLivraison = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
-                    .map(Troncon::getOrigine)
-                    .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
-                    .collect(Collectors.toList());
-            // Ajouter derniere intersection au chemin
-            cheminLivraison.add(new Coordinate(newValue.getDestinationLivraison().getLatitude(), newValue.getDestinationLivraison().getLongitude()));
-            mapView.removeCoordinateLine(trackMagenta);
-            trackMagenta = new CoordinateLine(cheminLivraison).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
-            mapView.addCoordinateLine(trackMagenta);
-            for (Marker m : markersIntersections) {
-                if (m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
-                    m.setVisible(true);
-                } else if (!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
-                    m.setVisible(false);
+                String intersectionIdSelectionne = newValue.getDestinationLivraison().getId();
+                Map<String, Dijkstra> resultatDijkstra =
+                        plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
+                // TODO: Duplicated code
+                List<Coordinate> cheminLivraison = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
+                        .map(Troncon::getOrigine)
+                        .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .collect(Collectors.toList());
+                // Ajouter derniere intersection au chemin
+                cheminLivraison.add(new Coordinate(newValue.getDestinationLivraison().getLatitude(), newValue.getDestinationLivraison().getLongitude()));
+                mapView.removeCoordinateLine(trackMagenta);
+                trackMagenta = new CoordinateLine(cheminLivraison).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+                mapView.addCoordinateLine(trackMagenta);
+                for(Marker m : markersIntersections) {
+                    if(m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
+                        m.setVisible(true);
+                    } else if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+                        m.setVisible(false);
+                    }
                 }
             }
+
         });
 
         this.parent.setOnMouseClicked(event -> {
@@ -352,6 +355,19 @@ public class FenetrePrincipaleHandler {
                     setText(null);
                 } else {
                     setText(livraison.afficherIhm(getPlan()));
+                }
+            }
+        });
+
+        this.listeLivraisonsSurTournee.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty) {
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if (empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                } else {
+                    setText(livraison.toString(getPlan()));
                 }
             }
         });
@@ -537,60 +553,68 @@ public class FenetrePrincipaleHandler {
         refreshLivraison();
 
         // On récupère les intersections en groupant par coursier
-        Map<Coursier, List<Intersection>> listIntersectionsOrderedByCourtier = new HashMap<>();
+        Map<Coursier, List<Troncon>> listTronconsOrderedByCourtier = new HashMap<>();
         tourneeParCoursier.forEach(
-                (c, t) -> {
-                    List<Intersection> listeIntersectionForTournee = new ArrayList<>();
-                    t.getLivraisons().stream().flatMap(livraison -> livraison.getParcoursLivraison().stream())
-                            .forEach(parcours -> {
-                                listeIntersectionForTournee.add(parcours.getOrigine());
-                                listeIntersectionForTournee.add(parcours.getDestination());
-                            });
-                    listIntersectionsOrderedByCourtier.put(c, listeIntersectionForTournee);
-                }
+                (c , t) ->
+                    listTronconsOrderedByCourtier.put(
+                            c,
+                            t.getLivraisons()
+                                    .stream()
+                                    .flatMap(livraison -> livraison.getParcoursLivraison().stream())
+                                    .collect(Collectors.toList()))
         );
 
-        // On transforme en coordonnée
-        Map<Coursier, List<Coordinate>> cheminParCoursier = new HashMap<>();
-        listIntersectionsOrderedByCourtier.forEach(
-                (c, listIntersection) ->
-                        cheminParCoursier.put(
-                                c,
-                                listIntersection.stream().map(i -> new Coordinate(i.getLatitude(), i.getLongitude())).collect(Collectors.toList())
-                        )
-        );
+
 
         mapView.removeCoordinateLine(trackMagenta);
+        tourneeParCoursier.forEach(
+                (c, tournee) -> {
+                    final double r =Math.abs(Math.random());
+                    final double g = Math.abs(Math.random());
+                    final double b = Math.abs(Math.random());
+                    List<CoordinateLine> coordinateLinesForTournee = new ArrayList<>();
+                    tournee.getLivraisons().forEach(
+                            livraison -> {
+                                List<Coordinate> coordonnesSurLivraison = new ArrayList<>();
+                                livraison.getParcoursLivraison().stream().forEach(
+                                        parcours -> {
+                                            coordonnesSurLivraison.add(new Coordinate(parcours.getOrigine().getLatitude(), parcours.getOrigine().getLongitude()));
+                                            coordonnesSurLivraison.add(new Coordinate(parcours.getDestination().getLatitude(), parcours.getDestination().getLongitude()));
+                                        }
+                                );
 
-        cheminParCoursier.forEach(
-                (c, listCoord) -> {
-                    CoordinateLine coordinateLine =
-                            new CoordinateLine(listCoord).setColor(
-                                    Color.color(
-                                            Math.abs(Math.random()), Math.abs(Math.random()), Math.abs(Math.random())
-                                    )).setWidth(7).setVisible(true);
-                    trackMap.put(c, coordinateLine);
-                    mapView.addCoordinateLine(coordinateLine);
+                                float opacity = ((float) tournee.getLivraisons().indexOf(livraison) + 1) / ((float)tournee.getLivraisons().size());
+                                CoordinateLine coordinateLineForLivraison =  new CoordinateLine(coordonnesSurLivraison)
+                                        .setColor(Color.color(r, g, b, opacity))
+                                        .setWidth(7)
+                                        .setVisible(true);
+                                coordinateLinesForTournee.add(coordinateLineForLivraison);
+                            }
+                    );
+                    trackMap.put(c, coordinateLinesForTournee);
+                    coordinateLinesForTournee.forEach(mapView::addCoordinateLine);
+
                     this.coursierSelectionne.ifPresent(
                             coursierSelectionner -> {
                                 disableToutChemin();
-                                enableCheminByCoursier(c);
+                                enableCheminByCoursier(coursierSelectionner);
                             }
+
                     );
                 }
         );
     }
 
     private void enableCheminByCoursier(Coursier c) {
-        if (this.trackMap.containsKey(c)) {
-            this.trackMap.get(c).setVisible(true);
+        if(this.trackMap.containsKey(c)) {
+            this.trackMap.get(c).forEach(cor-> cor.setVisible(true));
         }
     }
 
     private void disableToutChemin() {
         this.trackMap.forEach(
                 (coursier, chemin) -> {
-                    chemin.setVisible(false);
+                    chemin.forEach(coordinateLine -> coordinateLine.setVisible(false));
                 }
         );
     }
