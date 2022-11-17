@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import modele.Intersection;
 import modele.Livraison;
 import javafx.fxml.FXMLLoader;
-import vue.FenetreHandler.FenetreAccueilHandler;
 import vue.FenetreHandler.FenetreSaisieLivraisonHandler;
 
 import java.io.IOException;
@@ -18,23 +17,23 @@ public class FenetreSaisieLivraison extends Stage {
     private final String fxmlFile= "/vue/SaisieLivraison.fxml";
     private FXMLLoader fxmlLoader;
 
-    public FenetreSaisieLivraison(StateController controller, Intersection intersection, FenetrePrincipale fenetrePincipale){
-        setOnCloseRequest(e -> {
-            controller.abandonAjoutLivraison();
-            fenetrePincipale.enleverFlou();
-        });
-        setTitle("Ajouter Livraison");
-        setScene(loadSceneFromFXML(controller, fenetrePincipale));
-        getFenetreHandler().initData(intersection, fenetrePincipale.getFenetreHandler().getPlan());
-        centerOnScreen();
-        initModality(Modality.APPLICATION_MODAL);
-
+    public FenetreSaisieLivraison(StateController controller, Intersection intersection, FenetrePrincipale fenetrePrincipale){
+        construireFenetre(controller, fenetrePrincipale);
+        getFenetreHandler().initData(intersection, fenetrePrincipale.getFenetreHandler().getPlan());
     }
 
-    public FenetreSaisieLivraison(StateController controller, Livraison livraison, FenetrePrincipale fenetrePincipale){
+    public FenetreSaisieLivraison(StateController controller, Livraison livraison, FenetrePrincipale fenetrePrincipale){
+        construireFenetre(controller, fenetrePrincipale);
+        getFenetreHandler().initDataLivraison(livraison, fenetrePrincipale.getFenetreHandler().getPlan());
+    }
+
+    private void construireFenetre(StateController controller, FenetrePrincipale fenetrePrincipale){
+        setOnCloseRequest(e -> {
+            controller.abandonAjoutLivraison();
+            fenetrePrincipale.enleverFlou();
+        });
         setTitle("Ajouter Livraison");
-        setScene(loadSceneFromFXML(controller, fenetrePincipale));
-        getFenetreHandler().initDataLivraison(livraison, fenetrePincipale.getFenetreHandler().getPlan());
+        setScene(loadSceneFromFXML(controller, fenetrePrincipale));
         centerOnScreen();
         initModality(Modality.APPLICATION_MODAL);
     }
