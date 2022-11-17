@@ -537,38 +537,38 @@ public class FenetrePrincipaleHandler {
                     }
         });
 
-        listeTournees.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                //this.stateController.getCurrentState().cliqueLivraison(this.stateController);
-                labelEvent.setText(newValue.toString(plan));
-            }
-
-            // On récupère les intersections
-            List<Intersection> listeIntersections= new ArrayList<Intersection>();
-            // Origine et destination des livraisons
-            for (int i = 0 ; i < newValue.getLivraisons().size() ; i++) {
-                // Tronçons de chaque livraison
-                for(int j = 0 ; j < newValue.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
-                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
-                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
-                }
-            }
-            // On transforme en coordonnée
-            List<Coordinate> cheminTournee = new ArrayList<Coordinate>();
-            for (int i = 0 ; i<listeIntersections.size() ; i++) {
-                cheminTournee.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
-            }
-            mapView.removeCoordinateLine(trackMagenta);
-            mapView.removeCoordinateLine(trackCyan);
-            trackCyan = new CoordinateLine(cheminTournee).setColor(Color.CYAN).setWidth(7).setVisible(true);
-//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
-//            mapView.setExtent(tracksExtent);
-            mapView.addCoordinateLine(trackCyan);
-            for(Marker m : markersIntersections) {
-                if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
-                    m.setVisible(false);
-                }
-            }
+//        listeTournees.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                //this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+//                labelEvent.setText(newValue.toString(plan));
+//            }
+//
+//            // On récupère les intersections
+//            List<Intersection> listeIntersections= new ArrayList<Intersection>();
+//            // Origine et destination des livraisons
+//            for (int i = 0 ; i < newValue.getLivraisons().size() ; i++) {
+//                // Tronçons de chaque livraison
+//                for(int j = 0 ; j < newValue.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+//                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+//                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+//                }
+//            }
+//            // On transforme en coordonnée
+//            List<Coordinate> cheminTournee = new ArrayList<Coordinate>();
+//            for (int i = 0 ; i<listeIntersections.size() ; i++) {
+//                cheminTournee.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
+//            }
+//            mapView.removeCoordinateLine(trackMagenta);
+//            mapView.removeCoordinateLine(trackCyan);
+//            trackCyan = new CoordinateLine(cheminTournee).setColor(Color.CYAN).setWidth(7).setVisible(true);
+////            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+////            mapView.setExtent(tracksExtent);
+//            mapView.addCoordinateLine(trackCyan);
+//            for(Marker m : markersIntersections) {
+//                if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+//                    m.setVisible(false);
+//                }
+//            }
 
 //            for(Marker m : markersIntersections) {
 //                for(Intersection i : newValue.getLivraisons().get(0).getDestinationLivraison()) {
@@ -577,7 +577,7 @@ public class FenetrePrincipaleHandler {
 //                    }
 //                }
 //            }
-        });
+        //});
 
         this.parent.setOnMouseClicked(event -> {
             Double x = event.getScreenX();
@@ -614,19 +614,19 @@ public class FenetrePrincipaleHandler {
             }
         });
 
-        this.listeTournees.setCellFactory(param -> new ListCell<Tournee>() {
-            @Override
-            protected void updateItem(Tournee tournee, boolean empty){
-                super.updateItem(tournee, empty);
-                //TODO: change the display format (address)
-                if(empty || tournee == null) {
-                    setText(null);
-                }
-                else {
-                    setText(tournee.toString(plan));
-                }
-            }
-        });
+//        this.listeTournees.setCellFactory(param -> new ListCell<Tournee>() {
+//            @Override
+//            protected void updateItem(Tournee tournee, boolean empty){
+//                super.updateItem(tournee, empty);
+//                //TODO: change the display format (address)
+//                if(empty || tournee == null) {
+//                    setText(null);
+//                }
+//                else {
+//                    setText(tournee.toString(plan));
+//                }
+//            }
+//        });
 
         logger.debug("initialization finished");
 
@@ -884,10 +884,10 @@ public class FenetrePrincipaleHandler {
         // afficher toutes les tournee
 
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
-
-        Tournee tournee = calculTournee.calculerTournee();
-        listeTournees.getItems().add(tournee);
+//        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
+//
+//        Tournee tournee = calculTournee.calculerTournee();
+//        listeTournees.getItems().add(tournee);
 
         // On récupère les intersections en groupant par coursier
         Map<Coursier, List<Intersection>> listIntersectionsOrderedByCourtier = new HashMap<>();
