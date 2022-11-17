@@ -2,8 +2,10 @@ package controleur.state;
 
 import controleur.StateController;
 import controleur.command.ListOfCommands;
-import javafx.fxml.FXMLLoader;
+import modele.Coursier;
 import modele.Livraison;
+
+import java.util.ArrayList;
 
 public interface State {
     default void doubleCliquePlan(StateController stateController){}
@@ -14,6 +16,14 @@ public interface State {
     default void modifierLivraison(StateController stateController, Livraison livraisonAModifier){}
 
     default void ajouterCoursier(StateController stateController){}
+
+    default ArrayList<Coursier> recupererListeCoursiers(StateController stateController){
+        return null;
+    }
+
+    default void ajouterCoursier(String nom, String prenom) {}
+
+    default void supprimerCoursier(Coursier coursier) {}
 
     default void chargerLivraison(StateController stateController){}
 
@@ -28,6 +38,8 @@ public interface State {
 
     default void validerChargerLivraison(Livraison livraisonACharger, StateController stateController) {}
     default void validerAjouterLivraison(Livraison livraisonAAjouter,StateController stateController, ListOfCommands listOfCommands){}
+    default void abandonnerLivraison(StateController stateController){}
     default void clique(StateController stateController){};
     default void undo(ListOfCommands listOfCommands){}
+    default void sauvegarderLivraison(Livraison livraisonASauvegarder, String xmlPath) {}
 }

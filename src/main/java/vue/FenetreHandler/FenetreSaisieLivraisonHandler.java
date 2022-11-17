@@ -44,6 +44,9 @@ public class FenetreSaisieLivraisonHandler{
     @FXML
     private Label destinationIdLabel;
 
+    @FXML
+    private Button sauvegarderLivraison;
+
     private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -53,8 +56,10 @@ public class FenetreSaisieLivraisonHandler{
     public void AjoutLivraisonController() {
     }
 
-    public void initialize(StateController stateController) {
+    public void initialize(StateController stateController, FenetrePrincipale fenetrePrincipale) {
         this.stateController = stateController;
+        this.fenetrePrincipale = fenetrePrincipale;
+        fenetrePrincipale.rendreFlou();
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -78,7 +83,6 @@ public class FenetreSaisieLivraisonHandler{
         coursierSelector.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
         });
-
     }
 
     /**
@@ -86,19 +90,17 @@ public class FenetreSaisieLivraisonHandler{
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initData(Intersection intersection, Plan plan) {
         destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
-    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initDataLivraison(Livraison livraisonAModifier, Plan plan) {
         destination = livraisonAModifier.getDestinationLivraison();
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
         coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
         coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
         if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
@@ -137,5 +139,21 @@ public class FenetreSaisieLivraisonHandler{
         this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
+        fenetrePrincipale.enleverFlou();
+
+    }
+
+    public void sauvegarderLivraison(){
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
+            warningMessage.setVisible(true);
+            return;
         }
+        Livraison livraison = new Livraison(this.destination);
+        livraison.setCoursierLivraison(this.coursierSelectionne);
+        livraison.setFenetreHoraireLivr(this.plageHoraire);
+        stateController.sauvegarderLivraison(livraison);
+        sauvegarderLivraison.setText("Livraison sauvegardée");
+        sauvegarderLivraison.setMouseTransparent(true);
+    }
+
 }
