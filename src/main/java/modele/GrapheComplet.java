@@ -9,8 +9,11 @@ public class GrapheComplet implements Graphe {
     double[][] cout;
 
     /**
-     * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-     * @param plusCourtsChemins
+     * Constructeur de la classe.
+     * Crée un graphe complet sous la forme d'une matrice des distances entre chaque point
+     *
+     * @param plusCourtsChemins informations concernant les plus courts chemins de chaque point à chaque autre (avec mapping sur les <code>id</code>)
+     * @param mapping           mapping des <code>id</code> des intersections (points de livraison) à des entiers : utilisé pour faciliter l'utilisation du <code>TSP</code>
      */
     public GrapheComplet(Map<String, Map<String, Dijkstra>> plusCourtsChemins, Map<String, Integer> mapping){
         this.nbSommets = mapping.size();
@@ -41,6 +44,11 @@ public class GrapheComplet implements Graphe {
         return result;
     }
 
+    /**
+     * Constructeur de la classe à partir d'une matrice des distances.
+     *
+     * @param couts matrice des distances entre les points
+     */
     public GrapheComplet(double[][] couts) {
         this.nbSommets = couts.length;
         this.cout = new double[nbSommets][nbSommets];
@@ -67,6 +75,16 @@ public class GrapheComplet implements Graphe {
         this.cout[i][j] = cout;
     }
 
+    /**
+     * Vérification de si un arc appartient au graphe.
+     * Recherche un arc dans le graphe entre les sommets i et j
+     * Pour un <code>GrapheComplet</code>, cette méthode renvoie toujours <code>true</code> par définition d'un graphe complet
+     *
+     * @param i indice du sommet n°1
+     * @param j indice du sommet n°2
+     *
+     * @return <code>true</code> si l'arc existe, <code>false</code> sinon
+     */
     @Override
     public boolean isArc(int i, int j) {
         if (i<0 || i>= nbSommets || j<0 || j>= nbSommets)

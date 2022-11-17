@@ -23,6 +23,21 @@ public class Parser {
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
     private static Map<String, Intersection> intersectionsPlan;
 
+    /**
+     * Lecture du fichier XML et création du plan.
+     * Cette méthode <code>throw</code> une exception spéciale (<code>MauvaisFormatXmlException</code>) si le fichier XML
+     * corrompu ou mal formé
+     *
+     * @param fileName nom du fichier XML contenant les informations du plan
+     *
+     * @return objet <code>Plan</code> contenant toutes les informations du fichier XML
+     *
+     * @throws MauvaisFormatXmlException
+     * @throws IOException
+     *
+     * @see Plan
+     * @see MauvaisFormatXmlException
+     */
     public Plan lirePlan(String fileName) throws MauvaisFormatXmlException, IOException {
         Plan plan = new Plan();
         SAXBuilder sax = new SAXBuilder();

@@ -22,12 +22,9 @@
         <MapView fx:id="mapView" BorderPane.alignment="CENTER" />
     </center>
     <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="labelCenter" text="Center: " />
-                <Label fx:id="labelExtent" text="Extent: " />
-                <Label fx:id="labelZoom" text="Zoom: " />
-                <Label fx:id="labelEvent" text="Event: " />
+                <Label fx:id="labelEvent" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -50,7 +47,7 @@
                 <VBox fx:id="vBoxTournee" spacing="10.0">
                     <Label text="Tournées" />
                     <ComboBox fx:id="comboCoursier" prefHeight="26.0" prefWidth="198.0" promptText="Coursier" />
-                    <ListView fx:id="listeTournees" prefHeight="150.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
+                    <ListView fx:id="listeLivraisonsSurTournee" prefHeight="150.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" />
                     <Button fx:id="buttonAjouterLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Ajouter une livraison" />
                     <Button fx:id="buttonSupprimerLivraisonTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer une livraison" />
                     <Button fx:id="buttonSupprimerTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer la tournée" />
