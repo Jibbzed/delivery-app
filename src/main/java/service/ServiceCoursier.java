@@ -15,15 +15,28 @@ public class ServiceCoursier {
         initCoursier();
     }
 
+    /**
+     * Ajoute un coursier à la liste
+     * @param coursier : coursier à ajouter
+     */
     public void ajouterCoursier(Coursier coursier){
         this.listeCoursiers.add(coursier);
     }
 
+    /**
+     * Retire un coursier de la liste à partir de son nom et de son prénom
+     * @param nom
+     * @param prenom
+     */
     public void retirerCoursier(String nom, String prenom){
         Coursier c = new Coursier(nom, prenom);
         this.listeCoursiers.remove(c);
     }
 
+    /**
+     * Retire un coursier de la liste
+     * @param coursier
+     */
     public void retirerCoursier(Coursier coursier){
         listeCoursiers.remove(coursier);
     }

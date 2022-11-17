@@ -105,6 +105,9 @@ public class FenetrePrincipaleHandler {
     private Button buttonWarhouse;
 
     @FXML
+    private Button buttonCoursier;
+
+    @FXML
     private Button buttonCalculTournee;
 
     @FXML
@@ -322,6 +325,14 @@ public class FenetrePrincipaleHandler {
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
 
+        buttonCoursier.setOnAction(event -> {
+            try {
+                this.stateController.allerGestionnaireCoursier();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
         comboCoursier.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
@@ -461,6 +472,7 @@ public class FenetrePrincipaleHandler {
                 mapView.clearConstrainExtent();
             }
         }));*/
+
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
