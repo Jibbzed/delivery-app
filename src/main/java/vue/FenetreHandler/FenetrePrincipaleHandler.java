@@ -1034,7 +1034,6 @@ public class FenetrePrincipaleHandler {
 
     public void disableView() {
         this.parent.setVisible(false);
-
     }
     public void enableView() {
         this.parent.setVisible(true);
