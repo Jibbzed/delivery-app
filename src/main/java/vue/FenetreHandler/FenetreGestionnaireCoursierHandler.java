@@ -58,7 +58,7 @@ public class FenetreGestionnaireCoursierHandler {
                 this.labelTexte.setTextFill(Color.RED);
                 this.labelTexte.setText("Veuillez saisir un nom et un prénom.");
             } else {
-                controller.ajouterCoursier(this.texteNom.getText().toUpperCase(), this.textePrenom.getText());
+                controller.getCurrentState().ajouterCoursier(this.texteNom.getText().toUpperCase(), this.textePrenom.getText());
                 String message = "Le coursier " + this.texteNom.getText().toUpperCase() + " " + this.textePrenom.getText() + " a bien été ajouté";
                 this.labelTexte.setTextFill(Color.GREEN);
                 this.labelTexte.setText(message);
@@ -78,7 +78,7 @@ public class FenetreGestionnaireCoursierHandler {
                 String nom = coursierASupprimer.getNom();
                 String prenom = coursierASupprimer.getPrenom();
                 // On regarde s'il est affecté à des livraisons
-                int count = controller.nbLivraisonAffecteCoursier(coursierASupprimer);
+                int count = controller.getCurrentState().nbLivraisonAffecteCoursier(coursierASupprimer);
                 // Si oui on refuse la suppression
                 if (count != 0) {
                     // Création d'une alerte (Label en rouge)
@@ -87,7 +87,7 @@ public class FenetreGestionnaireCoursierHandler {
                 }
                 // cas où le coursier est sélectionné et non affecté
                 else {
-                    controller.supprimerCoursier(coursierASupprimer);
+                    controller.getCurrentState().supprimerCoursier(coursierASupprimer);
                     this.labelTexte.setTextFill(Color.GREEN);
                     this.labelTexte.setText("Le coursier " + nom + " " + prenom + " a été retiré de la liste.");
                     this.refreshCoursiers(controller);
@@ -98,7 +98,7 @@ public class FenetreGestionnaireCoursierHandler {
 
     public void refreshCoursiers(StateController controller) {
         listeCoursiers.getItems().clear();
-        ArrayList<Coursier> list = controller.recupererListeCoursiers();
+        ArrayList<Coursier> list = controller.getCurrentState().recupererListeCoursiers();
         for (Coursier coursier : list) {
             listeCoursiers.setItems(items);
             items.add(coursier);
