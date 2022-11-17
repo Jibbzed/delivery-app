@@ -19,24 +19,27 @@ public class FenetreSaisieLivraison extends Stage {
     private FXMLLoader fxmlLoader;
 
     public FenetreSaisieLivraison(StateController controller, Intersection intersection, FenetrePrincipale fenetrePincipale){
+        setOnCloseRequest(e -> {
+            controller.abandonAjoutLivraison();
+            fenetrePincipale.enleverFlou();
+        });
         setTitle("Ajouter Livraison");
-        setScene(loadSceneFromFXML(controller));
-        getFenetreHandler().initialize(controller);
-        getFenetreHandler().initData(intersection, fenetrePincipale, fenetrePincipale.getFenetreHandler().getPlan());
+        setScene(loadSceneFromFXML(controller, fenetrePincipale));
+        getFenetreHandler().initData(intersection, fenetrePincipale.getFenetreHandler().getPlan());
         centerOnScreen();
         initModality(Modality.APPLICATION_MODAL);
+
     }
 
     public FenetreSaisieLivraison(StateController controller, Livraison livraison, FenetrePrincipale fenetrePincipale){
         setTitle("Ajouter Livraison");
-        setScene(loadSceneFromFXML(controller));
-        getFenetreHandler().initialize(controller);
-        getFenetreHandler().initDataLivraison(livraison, fenetrePincipale, fenetrePincipale.getFenetreHandler().getPlan());
+        setScene(loadSceneFromFXML(controller, fenetrePincipale));
+        getFenetreHandler().initDataLivraison(livraison, fenetrePincipale.getFenetreHandler().getPlan());
         centerOnScreen();
         initModality(Modality.APPLICATION_MODAL);
     }
 
-    private Scene loadSceneFromFXML(StateController controller){
+    private Scene loadSceneFromFXML(StateController controller, FenetrePrincipale fenetrePrincipale){
         this.fxmlLoader = new FXMLLoader();
         Parent rootNode;
         try {
@@ -44,7 +47,7 @@ public class FenetreSaisieLivraison extends Stage {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ((FenetreSaisieLivraisonHandler)fxmlLoader.getController()).initialize(controller);
+        ((FenetreSaisieLivraisonHandler)fxmlLoader.getController()).initialize(controller,fenetrePrincipale);
         Scene scene =new Scene(rootNode);
         return scene ;
     }

@@ -42,6 +42,9 @@ public class FenetreSaisieLivraisonHandler{
     @FXML
     private Label destinationIdLabel;
 
+    @FXML
+    private Button sauvegarderLivraison;
+
     private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -51,8 +54,10 @@ public class FenetreSaisieLivraisonHandler{
     public void AjoutLivraisonController() {
     }
 
-    public void initialize(StateController stateController) {
+    public void initialize(StateController stateController, FenetrePrincipale fenetrePrincipale) {
         this.stateController = stateController;
+        this.fenetrePrincipale = fenetrePrincipale;
+        fenetrePrincipale.rendreFlou();
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -74,7 +79,6 @@ public class FenetreSaisieLivraisonHandler{
         coursierSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             coursierSelectionne = (Coursier) newValue;
         });
-
     }
 
     /**
@@ -82,24 +86,21 @@ public class FenetreSaisieLivraisonHandler{
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initData(Intersection intersection, Plan plan) {
         destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
-    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initDataLivraison(Livraison livraisonAModifier, Plan plan) {
         destination = livraisonAModifier.getDestinationLivraison();
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
-        //coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
         coursierSelector.getSelectionModel().select(livraisonAModifier.getCoursierLivraison().get());
         selectionnerCoursier(livraisonAModifier.getCoursierLivraison().get());
         //TODO : faire le cas où Coursier est empty
-        if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
+       if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
             selectionnerPlageHoraire(8);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
@@ -144,5 +145,21 @@ public class FenetreSaisieLivraisonHandler{
         this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
+        fenetrePrincipale.enleverFlou();
+
+    }
+
+    public void sauvegarderLivraison(){
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
+            warningMessage.setVisible(true);
+            return;
         }
+        Livraison livraison = new Livraison(this.destination);
+        livraison.setCoursierLivraison(this.coursierSelectionne);
+        livraison.setFenetreHoraireLivr(this.plageHoraire);
+        stateController.sauvegarderLivraison(livraison);
+        sauvegarderLivraison.setText("Livraison sauvegardée");
+        sauvegarderLivraison.setMouseTransparent(true);
+    }
+
 }

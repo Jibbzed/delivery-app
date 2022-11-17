@@ -3,6 +3,9 @@ package vue.Fenetre;
 import com.sothawo.mapjfx.Projection;
 import controleur.StateController;
 import javafx.scene.control.Alert;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
+import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
 import vue.FenetreHandler.FenetrePrincipaleHandler;
 import javafx.fxml.FXMLLoader;
@@ -17,34 +20,14 @@ public class FenetrePrincipale extends Stage{
     FXMLLoader fxmlLoader;
 
     private Parent rootNode;
-    public FenetrePrincipale(StateController controller, String title, String xmlPath){
+    public FenetrePrincipale(StateController controller, String title, Plan plan){
         setTitle(title);
         setScene(loadSceneFromFXML(controller));
 
         FenetrePrincipaleHandler fenetreController = getFenetreHandler();
 
-        fenetreController.initialize(controller,getFXMLoader(), xmlPath, title, rootNode);
-        try {
-            fenetreController.initMapAndControls(Projection.WEB_MERCATOR, xmlPath);
-        } catch (
-                MauvaisFormatXmlException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText("Le fichier XML n'est pas valide");
-            alert.setContentText("Veuillez charger un fichier XML valide");
-            alert.showAndWait();
-            new StateController();
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText("Aucun fichier XML n'a été chargé");
-            alert.setContentText("Veuillez charger un fichier XML");
-            alert.showAndWait();
-            new StateController();
-            throw new RuntimeException(e);
-        }
-
+        fenetreController.initialize(controller,getFXMLoader(), plan, title, rootNode);
+        fenetreController.initMapAndControls(Projection.WEB_MERCATOR, plan);
     }
     private Scene loadSceneFromFXML(StateController controller){
         this.fxmlLoader = new FXMLLoader();
@@ -56,6 +39,13 @@ public class FenetrePrincipale extends Stage{
         return new Scene(rootNode);
     }
 
+    public void rendreFlou(){
+        getScene().getRoot().setEffect(new GaussianBlur());
+    }
+
+    public void enleverFlou() {
+        getScene().getRoot().setEffect(null);
+    }
     public FXMLLoader getFXMLoader() {
         return this.fxmlLoader;
     }
