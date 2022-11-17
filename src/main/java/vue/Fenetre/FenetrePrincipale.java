@@ -22,14 +22,12 @@ public class FenetrePrincipale extends Stage{
     private Parent rootNode;
     public FenetrePrincipale(StateController controller, String title, Plan plan){
         setTitle(title);
-        setScene(loadSceneFromFXML(controller));
-
+        setScene(loadSceneFromFXML());
         FenetrePrincipaleHandler fenetreController = getFenetreHandler();
-
-        fenetreController.initialize(controller,getFXMLoader(), plan, title, rootNode);
+        fenetreController.initialize(controller, plan, rootNode);
         fenetreController.initMapAndControls(Projection.WEB_MERCATOR, plan);
     }
-    private Scene loadSceneFromFXML(StateController controller){
+    private Scene loadSceneFromFXML(){
         this.fxmlLoader = new FXMLLoader();
         try {
             rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
