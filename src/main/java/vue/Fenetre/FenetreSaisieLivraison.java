@@ -47,7 +47,7 @@ public class FenetreSaisieLivraison extends Stage {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        ((FenetreSaisieLivraisonHandler)fxmlLoader.getController()).initialize(controller, fenetrePrincipale);
         Scene scene =new Scene(rootNode);
         return scene ;
     }
