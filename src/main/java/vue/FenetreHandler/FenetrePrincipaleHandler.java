@@ -382,7 +382,6 @@ public class FenetrePrincipaleHandler {
                     }
                 }
                 labelEvent.setText(plan.listerTronconsParIntersection(intersection));
-                System.out.println(intersection.toString());
             }
         });
 
@@ -428,6 +427,8 @@ public class FenetrePrincipaleHandler {
         mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
             event.consume();
             Coordinate coordSelectionne = event.getMarker().getPosition();
+
+            //retrouver l'id de l'intersection depuis les coordonnées du marker
             String intersectionIdSelectionne =
                     plan.getIntersections().values().stream()
                             .filter(i -> i.getLatitude() == coordSelectionne.getLatitude()
@@ -435,8 +436,12 @@ public class FenetrePrincipaleHandler {
                             .map(Intersection::getId)
                             .findAny().orElse("");
 
-            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
+            //obtenir l'intersection depuis son id
+            Intersection intersection = plan.getIntersections().get(intersectionIdSelectionne);
 
+            if(!intersection.isEntrepot()){
+                this.stateController.doubleCliquePlan(intersection);
+            }
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
