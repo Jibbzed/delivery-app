@@ -131,16 +131,16 @@ public class FenetrePrincipaleHandler {
     //private TextField bingMapsApiKey;
 
     /** Label to display the current center */
-    @FXML
-    private Label labelCenter;
+   /* @FXML
+    private Label labelCenter;*/
 
     /** Label to display the current extent */
-    @FXML
-    private Label labelExtent;
+    /*@FXML
+    private Label labelExtent;*/
 
     /** Label to display the current zoom */
-    @FXML
-    private Label labelZoom;
+   /* @FXML
+    private Label labelZoom;*/
 
     /** label to display the last event. */
     @FXML
@@ -220,6 +220,9 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxLivraison;
 
     @FXML
+    private ListView<Tournee> listeTournees;
+
+    @FXML
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -273,10 +276,12 @@ public class FenetrePrincipaleHandler {
         coordinateList.stream()
                 .map(c -> {
                     String imageUrl = "/icons8-pin-24.png";
+                    boolean isVisible = false;
                     if (c.equals(coordCenterWarehouse)) {
                         imageUrl = "/icons8-warehouse-24.png";
+                        isVisible = true;
                     }
-                    return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(false);
+                    return new Marker(getClass().getResource(imageUrl), -15, -20).setPosition(c).setVisible(isVisible);
                 })
 //                 .map(c-> Marker.createProvided(Marker.Provided.BLUE).setPosition(c).setVisible(false))
                 .forEach(markersIntersections::add);
@@ -370,8 +375,8 @@ public class FenetrePrincipaleHandler {
         animationDuration.setText("500");*/
 
         // bind the map's center and zoom properties to the corresponding labels and format them
-        labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
-        labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
+        /*labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
+        labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));*/
         logger.trace("options and labels done");
 
         // watch the MapView's initialized property to finish initialization
@@ -419,10 +424,15 @@ public class FenetrePrincipaleHandler {
                 new ImageView(new Image(markerMaxCoord.getImageURL().toExternalForm(), 16.0, 16.0, true, true))
         );*/
         // bind the checkboxes to the markers visibility
-        markersIntersections.forEach(marker-> {
-            marker.setVisible(true);
+        /*markersIntersections.forEach(marker-> {
+            if(coordCenterWarehouse.equals(marker.getPosition())){
+                marker.setVisible(true);
+                System.out.println("marker visible");
+            }
+            System.out.println("marker invisible");
+            marker.setVisible(false);*/
             //checkIntersectionsMarkers.selectedProperty().bindBidirectional(marker.visibleProperty());
-        });
+        //});
         //checkIntersectionsMarkers.setSelected(true);
         logger.trace("marker checks done");
 
@@ -498,12 +508,85 @@ public class FenetrePrincipaleHandler {
             this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
 
+        listeLivraisons.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+                labelEvent.setText(newValue.toString(plan));
+            }
+            String intersectionIdSelectionne = newValue.getDestinationLivraison().getId();
+                    Map<String, Dijkstra> resultatDijkstra =
+                            plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
+                    // TODO: Duplicated code
+                    List<Coordinate> cheminLivraison = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
+                            .map(Troncon::getOrigine)
+                            .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                            .collect(Collectors.toList());
+                    // Ajouter derniere intersection au chemin
+            cheminLivraison.add(new Coordinate(newValue.getDestinationLivraison().getLatitude(), newValue.getDestinationLivraison().getLongitude()));
+                    mapView.removeCoordinateLine(trackMagenta);
+                    trackMagenta = new CoordinateLine(cheminLivraison).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+                    mapView.addCoordinateLine(trackMagenta);
+                    for(Marker m : markersIntersections) {
+                        if(m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
+                            m.setVisible(true);
+                        } else if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+                            m.setVisible(false);
+                        }
+                    }
+        });
+
+//        listeTournees.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                //this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+//                labelEvent.setText(newValue.toString(plan));
+//            }
+//
+//            // On récupère les intersections
+//            List<Intersection> listeIntersections= new ArrayList<Intersection>();
+//            // Origine et destination des livraisons
+//            for (int i = 0 ; i < newValue.getLivraisons().size() ; i++) {
+//                // Tronçons de chaque livraison
+//                for(int j = 0 ; j < newValue.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+//                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+//                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+//                }
+//            }
+//            // On transforme en coordonnée
+//            List<Coordinate> cheminTournee = new ArrayList<Coordinate>();
+//            for (int i = 0 ; i<listeIntersections.size() ; i++) {
+//                cheminTournee.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
+//            }
+//            mapView.removeCoordinateLine(trackMagenta);
+//            mapView.removeCoordinateLine(trackCyan);
+//            trackCyan = new CoordinateLine(cheminTournee).setColor(Color.CYAN).setWidth(7).setVisible(true);
+////            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+////            mapView.setExtent(tracksExtent);
+//            mapView.addCoordinateLine(trackCyan);
+//            for(Marker m : markersIntersections) {
+//                if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+//                    m.setVisible(false);
+//                }
+//            }
+
+//            for(Marker m : markersIntersections) {
+//                for(Intersection i : newValue.getLivraisons().get(0).getDestinationLivraison()) {
+//                    if(m.getPosition().getLatitude() == i.getLatitude() && m.getPosition().getLongitude() == i.getLongitude()) {
+//                        m.setVisible(true);
+//                    }
+//                }
+//            }
+        //});
+
         this.parent.setOnMouseClicked(event -> {
             Double x = event.getScreenX();
             Double y = event.getSceneY();
             // TODO: alter this and make it inside the state implementations
             if(!this.vBoxLivraison.getLayoutBounds().contains(x,y)) {
                 this.stateController.getCurrentState().clique(this.stateController);
+                trackMagenta.setVisible(false);
+                listeLivraisons.getSelectionModel().clearSelection();
                 if(this.stateController.getCurrentState().equals(this.stateController.selectionnerLivraisonState)) {
 //                    this.stateController.getCurrentState().clique();
 
@@ -530,19 +613,21 @@ public class FenetrePrincipaleHandler {
                 }
             }
         });
-        this.listeLivraisonsSurTournee.setCellFactory(param -> new ListCell<Livraison>() {
-            @Override
-            protected void updateItem(Livraison livraison, boolean empty){
-                super.updateItem(livraison, empty);
-                //TODO: change the display format (address)
-                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
-                    setText(null);
-                }
-                else {
-                    setText(livraison.afficherIhm(getPlan()));
-                }
-            }
-        });
+
+//        this.listeTournees.setCellFactory(param -> new ListCell<Tournee>() {
+//            @Override
+//            protected void updateItem(Tournee tournee, boolean empty){
+//                super.updateItem(tournee, empty);
+//                //TODO: change the display format (address)
+//                if(empty || tournee == null) {
+//                    setText(null);
+//                }
+//                else {
+//                    setText(tournee.toString(plan));
+//                }
+//            }
+//        });
+
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -570,7 +655,26 @@ public class FenetrePrincipaleHandler {
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
             final Coordinate newPosition = event.getCoordinate().normalize();
-            labelEvent.setText("Event: map clicked at: " + newPosition);
+            Intersection intersection = plan.getIntersectionProche(newPosition.getLatitude(), newPosition.getLongitude());
+            //set the marker from markerIntersections of the intersection visible
+            if(intersection != null) {
+                for(Marker marker : markersIntersections) {
+                    if (marker.getPosition().getLatitude() == intersection.getLatitude() && marker.getPosition().getLongitude() == intersection.getLongitude()) {
+                        marker.setVisible(true);
+                        System.out.println("le marker choisi"+marker.toString());
+                    } else {
+                        //set marker invisible except for the warehouse
+                        if(!marker.getPosition().equals(coordCenterWarehouse)) {
+                            marker.setVisible(false);
+                        }
+                    }
+                }
+                labelEvent.setText(plan.listerTronconsParIntersection(intersection));
+                System.out.println(intersection.toString());
+            }
+
+
+            //labelEvent.setText("Event: map clicked at: " + nePosition);
 //            if (markerClick.getVisible()) {
 //                final Coordinate oldPosition = markerClick.getPosition();
 //                if (oldPosition != null) {
@@ -592,7 +696,7 @@ public class FenetrePrincipaleHandler {
         // add an event handler for extent changes and display them in the status label
         mapView.addEventHandler(MapViewEvent.MAP_BOUNDING_EXTENT, event -> {
             event.consume();
-            labelExtent.setText(event.getExtent().toString());
+            //labelExtent.setText(event.getExtent().toString());
         });
 
         mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
@@ -622,9 +726,15 @@ public class FenetrePrincipaleHandler {
              trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
-            mapView.addCoordinateLine(trackMagenta);
+            //mapView.addCoordinateLine(trackMagenta);
+            for (Intersection i : plan.getIntersections().values()) {
+                if (i.getLatitude() == coordSelectionne.getLatitude() && i.getLongitude() == coordSelectionne.getLongitude()) {
+                    labelEvent.setText(plan.listerTronconsParIntersection(i));
+                    break;
+                }
+            }
 
-            labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
+            //labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
 
         mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
@@ -775,8 +885,9 @@ public class FenetrePrincipaleHandler {
 
         // On a un objet calculTournee et on calcule la tournee
 //        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
-
+//
 //        Tournee tournee = calculTournee.calculerTournee();
+//        listeTournees.getItems().add(tournee);
 
         // On récupère les intersections en groupant par coursier
         Map<Coursier, List<Intersection>> listIntersectionsOrderedByCourtier = new HashMap<>();

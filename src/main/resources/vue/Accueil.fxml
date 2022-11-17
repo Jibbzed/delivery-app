@@ -32,7 +32,7 @@
             </font>
          </Label>
             <HBox alignment="CENTER" spacing="10.0">
-                <TextField fx:id="textXML" layoutX="53.0" layoutY="296.0" prefHeight="26.0" prefWidth="984.0" text="Entrer le path du fichier xml à importer" />
+                <TextField fx:id="textXML" layoutX="53.0" layoutY="296.0" prefHeight="26.0" prefWidth="984.0" promptText="Entrer le path du fichier xml à importer"  />
                 <Button fx:id="buttonParcourir" layoutX="561.0" layoutY="297.0" mnemonicParsing="false" text="Parcourir" />
                 <Button fx:id="buttonValidate" layoutX="561.0" layoutY="297.0" mnemonicParsing="false" text="Valider" />
             </HBox>

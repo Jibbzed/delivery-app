@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <livraisons>
-
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>LEPOLLO</nom>
+      <prenom>Maylina</prenom>
+    </coursier>
+    <intersection>25303840</intersection>
+    <feneHoraire>10</feneHoraire>
+  </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>LEPOLLO</nom>
+      <prenom>Maylina</prenom>
+    </coursier>
+    <intersection>26317232</intersection>
+    <feneHoraire>11</feneHoraire>
+  </livraison>
 </livraisons>
