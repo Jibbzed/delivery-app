@@ -126,7 +126,7 @@ public class FenetreSaisieLivraisonHandler{
 
     public void saisirLivraison() {
         if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getSelectionModel().getSelectedItem() == null) {
-            warningMessage.setVisible(true);
+            //warningMessage.setVisible(true);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
             alert.setHeaderText("Erreur de saisie");
@@ -150,7 +150,7 @@ public class FenetreSaisieLivraisonHandler{
     }
 
     public void sauvegarderLivraison(){
-        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getSelectionModel().getSelectedItem() == null) {
             warningMessage.setVisible(true);
             return;
         }

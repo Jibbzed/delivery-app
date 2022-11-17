@@ -211,6 +211,9 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxLivraison;
 
     @FXML
+    private ListView<Tournee> listeTournees;
+
+    @FXML
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -513,6 +516,48 @@ public class FenetrePrincipaleHandler {
                     }
         });
 
+        listeTournees.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                //this.stateController.getCurrentState().cliqueLivraison(this.stateController);
+                labelEvent.setText(newValue.toString(plan));
+            }
+
+            // On récupère les intersections
+            List<Intersection> listeIntersections= new ArrayList<Intersection>();
+            // Origine et destination des livraisons
+            for (int i = 0 ; i < newValue.getLivraisons().size() ; i++) {
+                // Tronçons de chaque livraison
+                for(int j = 0 ; j < newValue.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+                    listeIntersections.add(newValue.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+                }
+            }
+            // On transforme en coordonnée
+            List<Coordinate> cheminTournee = new ArrayList<Coordinate>();
+            for (int i = 0 ; i<listeIntersections.size() ; i++) {
+                cheminTournee.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
+            }
+            mapView.removeCoordinateLine(trackMagenta);
+            mapView.removeCoordinateLine(trackCyan);
+            trackCyan = new CoordinateLine(cheminTournee).setColor(Color.CYAN).setWidth(7).setVisible(true);
+//            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
+//            mapView.setExtent(tracksExtent);
+            mapView.addCoordinateLine(trackCyan);
+            for(Marker m : markersIntersections) {
+                if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+                    m.setVisible(false);
+                }
+            }
+
+//            for(Marker m : markersIntersections) {
+//                for(Intersection i : newValue.getLivraisons().get(0).getDestinationLivraison()) {
+//                    if(m.getPosition().getLatitude() == i.getLatitude() && m.getPosition().getLongitude() == i.getLongitude()) {
+//                        m.setVisible(true);
+//                    }
+//                }
+//            }
+        });
+
         this.parent.setOnMouseClicked(event -> {
             Double x = event.getScreenX();
             Double y = event.getSceneY();
@@ -544,6 +589,20 @@ public class FenetrePrincipaleHandler {
                 }
                 else {
                     setText(livraison.afficherIhm(getPlan()));
+                }
+            }
+        });
+
+        this.listeTournees.setCellFactory(param -> new ListCell<Tournee>() {
+            @Override
+            protected void updateItem(Tournee tournee, boolean empty){
+                super.updateItem(tournee, empty);
+                //TODO: change the display format (address)
+                if(empty || tournee == null) {
+                    setText(null);
+                }
+                else {
+                    setText(tournee.toString(plan));
                 }
             }
         });
@@ -769,6 +828,7 @@ public class FenetrePrincipaleHandler {
         CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
 
         Tournee tournee = calculTournee.calculerTournee();
+        listeTournees.getItems().add(tournee);
 
         // On récupère les intersections
         List<Intersection> listeIntersections= new ArrayList<Intersection>();

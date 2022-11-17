@@ -48,4 +48,12 @@ public class Tournee {
     public int hashCode() {
         return Objects.hash(livraisons);
     }
+
+    public String toString(Plan plan) {
+        String s = "Tournee : ";
+        for(Livraison l : livraisons) {
+            s += l.toString(plan) + " ";
+        }
+        return s;
+    }
 }

@@ -18,6 +18,8 @@ public class FenetreAccueil extends Stage {
     public FenetreAccueil(StateController controller) {
         setTitle("FenetreHandler d'Accueil");
         setScene(loadSceneFromFXML(controller));
+        /*setMaximized(true);
+        setResizable(true);*/
     }
 
     private Scene loadSceneFromFXML(StateController controller){
