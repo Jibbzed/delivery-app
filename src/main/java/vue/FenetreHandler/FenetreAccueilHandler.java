@@ -113,7 +113,6 @@ public class FenetreAccueilHandler {
             alert.setHeaderText("Le fichier XML n'est pas valide");
             alert.setContentText("Veuillez charger un fichier XML valide");
             alert.showAndWait();
-            //throw new RuntimeException(e);
             plan = null;
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -121,7 +120,6 @@ public class FenetreAccueilHandler {
             alert.setHeaderText("Aucun fichier XML n'a été chargé");
             alert.setContentText("Veuillez charger un fichier XML");
             alert.showAndWait();
-            //throw new RuntimeException(e);
             plan = null;
         }
         return plan;
