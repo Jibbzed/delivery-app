@@ -9,6 +9,16 @@ public class Troncon {
     protected Intersection origine;
     protected Intersection destination;
 
+    /**
+     * Consrtructeur de la classe.
+     *
+     * @param nom         nom de la rue à laquelle appartient le tronçon
+     * @param longueur    longueur du tronçon
+     * @param origine     <code>Intersection</code> d'origine du tronçon
+     * @param destination <code>Intersection</code> d'arrivée du tronçon
+     *
+     * @see Intersection
+     */
     public Troncon(String nom, double longueur, Intersection origine, Intersection destination) {
         this.nom = nom;
         this.longueur = longueur;

@@ -2,24 +2,30 @@ package modele;
 
 public interface TSP {
     /**
-     * Search for a shortest cost hamiltonian circuit in <code>g</code> within <code>timeLimit</code> milliseconds
-     * (returns the best found tour whenever the time limit is reached)
-     * Warning: The computed tour always start from vertex 0
-     * @param limitTime
-     * @param g
+     * Recherche du plus court circuit dans le graphe.
+     * Recherche du plus court circuit hamiltonien dans le <code>Graphe</code> <code>g</code>, en ne dépassant pas
+     * <code>timeLimit</code> millisecondes de calcul
+     * Retourne la meilleure solution trouvée lorsque la limite de temps est atteinte
+     * Attention : le parcours hamiltonien démarre et termine toujours au sommet 0
+     *
+     * @param timeLimit temps de calcul maximal autorisé
+     * @param g         <code>Graphe</code> sur lequel on applique le TSP
+     *
+     * @see Graphe
      */
     public void searchSolution(int timeLimit, Graphe g);
 
     /**
-     * @param i
-     * @return the ith visited vertex in the solution computed by <code>searchSolution</code>
-     * (-1 if <code>searcheSolution</code> has not been called yet, or if i < 0 or i >= g.getNbSommets())
+     * @param i indice du sommet que l'on cherche dans la solution
+     *
+     * @return le i-ème sommet visité dans la solution calculée par <code>searchSolution</code>
+     * (-1 si <code>searcheSolution</code> n'a pas encore été exécuté, ou si i < 0 ou i >= nombre de sommets de <code>g</code>
      */
     public Integer getSolution(int i);
 
     /**
-     * @return the total cost of the solution computed by <code>searchSolution</code>
-     * (-1 if <code>searcheSolution</code> has not been called yet).
+     * @return le coût total de la solution calculée par <code>searchSolution</code>
+     * (-1 si <code>searcheSolution</code> n'a pas encore été exécuté)
      */
     public double getSolutionCost();
 

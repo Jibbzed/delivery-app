@@ -10,10 +10,22 @@ public class Tournee {
     // TODO: change coursier to Coursier instead of optional.
     private Optional<Coursier> coursier;
 
+    /**
+     * Constructeur par défaut de la classe.
+     */
     public Tournee() {
         this.livraisons = new ArrayList<>();
     }
 
+    /**
+     * Constructeur de la classe à partir d'une liste de livraisons et d'un coursier.
+     *
+     * @param livraisons liste des <code>Livraison</code> composant la tournée
+     * @param coursier   <code>Coursier</code> attitré à la tournée
+     *
+     * @see Livraison
+     * @see Coursier
+     */
     public Tournee(List<Livraison> livraisons, Coursier coursier) {
         this.livraisons = new ArrayList<>(livraisons);
         this.coursier = Optional.of(coursier);

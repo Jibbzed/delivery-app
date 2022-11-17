@@ -13,6 +13,8 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import vue.Fenetre.FenetrePrincipale;
 
+import java.util.List;
+
 public class FenetreSaisieLivraisonHandler{
 
     private FenetrePrincipale fenetrePrincipale;
@@ -75,7 +77,9 @@ public class FenetreSaisieLivraisonHandler{
         });
 //        coursierSelector.getItems().add("Coursier 1");
 //        coursierSelector.getItems().add("Coursier 2");
-        serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
+        serviceCoursier.getListeCoursiers().stream()
+                .filter(c -> !c.getPlanifie())
+                .forEach(c -> coursierSelector.getItems().add(c));
         coursierSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             coursierSelectionne = (Coursier) newValue;
         });
