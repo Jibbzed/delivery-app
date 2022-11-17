@@ -53,6 +53,4 @@ public class FenetrePrincipale extends Stage{
         return this.fxmlLoader.getController();
     }
 
-
-
 }

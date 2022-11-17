@@ -10,10 +10,24 @@ public class Dijkstra {
     private Double distance;
     private List<Troncon> chemin;
 
+    /**
+     * Constructeur par défaut de la classe.
+     */
     public Dijkstra() {
         chemin = new ArrayList<>();
     }
 
+    /**
+     * Constructeur paramétré de la classe.
+     *
+     * @param origine     <code>Intersection</code> d'origine du chemin
+     * @param destination <code>Intersection</code> d'arrivée du chemin
+     * @param distance    longueur du plus court chemin de l'origine à la destination
+     * @param chemin      liste de <code>Troncon</code> correspondant au plus court chemin de l'origine à la destination
+     *
+     * @see Intersection
+     * @see Troncon
+     */
     public Dijkstra(String origine, String destination, Double distance, List<Troncon> chemin) {
         this.origine = origine;
         this.destination = destination;

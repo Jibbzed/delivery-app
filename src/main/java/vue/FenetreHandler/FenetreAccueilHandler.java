@@ -56,6 +56,7 @@ public class FenetreAccueilHandler {
             Plan plan = getPlan(xmlPath);
             if (plan != null) {
                 this.stateController.afficherMap("Grande carte de Lyon", plan);
+                this.stateController.setXmlPathPlan(xmlPath);
             }
         });
 
@@ -64,6 +65,7 @@ public class FenetreAccueilHandler {
             Plan plan = getPlan(xmlPath);
             if (plan != null) {
                 this.stateController.afficherMap("Moyenne carte de Lyon", plan);
+                this.stateController.setXmlPathPlan(xmlPath);
             }
         });
 
@@ -72,6 +74,7 @@ public class FenetreAccueilHandler {
             Plan plan = getPlan(xmlPath);
             if (plan != null) {
                 this.stateController.afficherMap("Petite carte de Lyon", plan);
+                this.stateController.setXmlPathPlan(xmlPath);
             }
         });
 
@@ -81,6 +84,7 @@ public class FenetreAccueilHandler {
             Plan plan = getPlan(xmlPath);
             if (plan != null) {
                 this.stateController.afficherMap(title, plan);
+                this.stateController.setXmlPathPlan(xmlPath);
             }
         });
 
