@@ -3,16 +3,20 @@ package controleur;
 import controleur.command.ListOfCommands;
 import controleur.state.*;
 
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
+import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
+import service.ServiceCoursier;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
-import vue.Fenetre.FenetreAccueil;
-import vue.Fenetre.FenetrePrincipale;
-import vue.Fenetre.FenetreSaisieLivraison;
+import vue.Fenetre.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class StateController {
     private State currentState;
@@ -26,6 +30,8 @@ public class StateController {
     public final State selectionnerLivraisonState = new SelectionLivraisonState();
     public final State chargementLivraisonState = new ChargementLivraisonState();
     public final State selectionTourneeState = new SelectionTourneeState();
+
+    public final State gestionCoursierState = new GestionCoursierState();
     private Intersection intersectionSelectionne;
 
     public void setCurrentState(State state) {
@@ -114,4 +120,34 @@ public class StateController {
 
     }
     public void cliquerAjouterLivraisonATournee(){  }
+
+    public ArrayList<Coursier> recupererListeCoursiers(){
+        return ServiceCoursier.getInstance().getListeCoursiers();
+    }
+
+    public void allerGestionnaireCoursier() throws IOException {
+        popupStage = new FenetreGestionnaireCoursier(this);
+        popupStage.showAndWait();
+    }
+
+    public void ajouterCoursier(String nom, String prenom) {
+        Coursier coursier = new Coursier(nom, prenom);
+        ServiceCoursier.getInstance().ajouterCoursier(coursier);
+    }
+
+    public void supprimerCoursier(Coursier coursier) {
+        ServiceCoursier.getInstance().retirerCoursier(coursier);
+    }
+
+    public int nbLivraisonAffecteCoursier(Coursier coursier) {
+        int count = 0;
+        Set<Livraison> listeLivraison = ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons();
+        for(Livraison livraison : listeLivraison){
+            if(livraison.getCoursierLivraison().get().equals(coursier)){
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
