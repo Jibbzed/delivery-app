@@ -7,6 +7,7 @@ module vue {
     requires com.sothawo.mapjfx;
 
     requires javafaker;
+    requires java.xml;
     exports vue;
 
     opens vue to javafx.fxml, javafx.graphics;
