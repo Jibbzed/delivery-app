@@ -39,6 +39,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.groupingBy;
+
 
 public class FenetrePrincipaleHandler {
 
@@ -193,6 +195,7 @@ public class FenetrePrincipaleHandler {
     //private CheckBox checkIntersectionsMarkers;
     /** the first CoordinateLine */
     private CoordinateLine trackMagenta;
+    private Map<Coursier, CoordinateLine> trackMap = new HashMap<>();
     /** Check button for first track */
     //@FXML
     //private CheckBox checkTrackMagenta;
@@ -211,6 +214,9 @@ public class FenetrePrincipaleHandler {
     private ListView<Livraison> listeLivraisons;
 
     @FXML
+    private ListView<Livraison> listeLivraisonsSurTournee;
+
+    @FXML
     private VBox vBoxLivraison;
 
     @FXML
@@ -221,7 +227,7 @@ public class FenetrePrincipaleHandler {
     @FXML
     private ComboBox comboCoursier;
 
-    private Coursier coursierSelectionne;
+    private Optional<Coursier> coursierSelectionne = Optional.empty();
 
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
@@ -336,6 +342,9 @@ public class FenetrePrincipaleHandler {
         serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
         comboCoursier.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+            disableToutChemin();
+            coursierSelectionne.ifPresent(c-> enableCheminByCoursier(c));
+            refreshLivraison();
         });
 
 
@@ -521,7 +530,19 @@ public class FenetrePrincipaleHandler {
                 }
             }
         });
-
+        this.listeLivraisonsSurTournee.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty){
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if(empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                }
+                else {
+                    setText(livraison.afficherIhm(getPlan()));
+                }
+            }
+        });
         logger.debug("initialization finished");
 
 //        long animationStart = System.nanoTime();
@@ -706,39 +727,129 @@ public class FenetrePrincipaleHandler {
     }
 
     private void calculTournee() {
-        // On récupère la liste de livraisons existantes
-        List<Livraison> listeLivraion = new ArrayList<Livraison>(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
+        // On récupère la liste de livraisons existantes et on les groupe par coursier
+        Map<Optional<Coursier>, List<Livraison>> listeLivraisonByCoursier = ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
+                .stream()
+                .filter(livraison -> livraison.getCoursierLivraison().isPresent())
+                .collect(groupingBy(Livraison::getCoursierLivraison));
         // On transforme en liste d'intersection
-            Map<String, Livraison> livraisons = new HashMap<>();
-            for( Livraison l : listeLivraion ) {
-                livraisons.put(l.getDestinationLivraison().getId(), l);
-        }
+
+//            for( Livraison l : listeLivraion ) {
+//                livraisons.put(l.getDestinationLivraison().getId(), l);
+//        }
+        //  on calcule tournee et la groupe par coursier.
+        Map<Coursier, Tournee> tourneeParCoursier = new HashMap<>();
+        listeLivraisonByCoursier.keySet().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                //TODO: remove this filter after filtering the courtier in the creating livraison vue handler.
+                .filter(coursier -> !coursier.getPlanifie())
+                .forEach(
+                coursier -> {
+                    Map<String, Livraison> livraisons = new HashMap<>();
+                    listeLivraisonByCoursier.get(Optional.of(coursier)).forEach(
+                            livraison -> {
+                                livraisons.put(livraison.getDestinationLivraison().getId(), livraison);
+                            }
+                    );
+                    //TODO: Try catch here for the tounee with NullPointerException.
+                    Tournee tournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons).calculerTournee();
+                    tourneeParCoursier.put(coursier, tournee);
+                    tournee.getLivraisons().forEach(
+                            l -> ServiceLivraisonMockImpl.getInstance().ajouterLivraison(l)
+                    );
+                    coursier.setPlanifie(true);
+                    ServiceCoursier.getInstance().modifierCoursier(coursier);
+
+                }
+        );
+
+        listeLivraisons.getItems().forEach(
+                livraison -> {
+                    ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraison);
+                }
+        );
+        refreshLivraison();
+
+        // afficher toutes les tournee
 
         // On a un objet calculTournee et on calcule la tournee
-        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
+//        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
 
-        Tournee tournee = calculTournee.calculerTournee();
+//        Tournee tournee = calculTournee.calculerTournee();
 
-        // On récupère les intersections
-        List<Intersection> listeIntersections= new ArrayList<Intersection>();
-        // Origine et destination des livraisons
-        for (int i = 0 ; i < tournee.getLivraisons().size() ; i++) {
-            // Tronçons de chaque livraison
-            for(int j = 0 ; j < tournee.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
-                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
-                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
-            }
-        }
+        // On récupère les intersections en groupant par coursier
+        Map<Coursier, List<Intersection>> listIntersectionsOrderedByCourtier = new HashMap<>();
+        tourneeParCoursier.forEach(
+                (c , t) -> {
+                    List<Intersection> listeIntersectionForTournee = new ArrayList<>();
+                    t.getLivraisons().stream().flatMap(livraison -> livraison.getParcoursLivraison().stream())
+                            .forEach(parcours -> {
+                                listeIntersectionForTournee.add(parcours.getOrigine());
+                                listeIntersectionForTournee.add(parcours.getDestination());
+                            });
+                    listIntersectionsOrderedByCourtier.put(c, listeIntersectionForTournee);
+                }
+        );
+
+//        List<Intersection> listeIntersections= new ArrayList<Intersection>();
+//        // Origine et destination des livraisons
+//        for (int i = 0 ; i < tournee.getLivraisons().size() ; i++) {
+//            // Tronçons de chaque livraison
+//            for(int j = 0 ; j < tournee.getLivraisons().get(i).getParcoursLivraison().size() ; j++) {
+//                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getOrigine());
+//                listeIntersections.add(tournee.getLivraisons().get(i).getParcoursLivraison().get(j).getDestination());
+//            }
+//        }
         // On transforme en coordonnée
-        List<Coordinate> chemin = new ArrayList<Coordinate>();
-        for (int i = 0 ; i<listeIntersections.size() ; i++) {
-            chemin.add(new Coordinate(listeIntersections.get(i).getLatitude(), listeIntersections.get(i).getLongitude()));
-        }
+        Map<Coursier, List<Coordinate>> cheminParCoursier = new HashMap<>();
+        listIntersectionsOrderedByCourtier.forEach(
+                (c, listIntersection )->
+                    cheminParCoursier.put(
+                            c,
+                            listIntersection.stream().map(i -> new Coordinate(i.getLatitude(), i.getLongitude())).collect(Collectors.toList())
+                    )
+        );
+
         mapView.removeCoordinateLine(trackMagenta);
-        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
+
+        cheminParCoursier.forEach(
+                (c , listCoord) -> {
+                    CoordinateLine coordinateLine =
+                            new CoordinateLine(listCoord).setColor(
+                                Color.color(
+                                        Math.abs(Math.random()) , Math.abs(Math.random()), Math.abs(Math.random())
+                                )).setWidth(7).setVisible(true);
+                    trackMap.put(c, coordinateLine);
+                    mapView.addCoordinateLine(coordinateLine);
+                    this.coursierSelectionne.ifPresent(
+                            coursierSelectionner -> {
+                                disableToutChemin();
+                                enableCheminByCoursier(c);
+                            }
+                    );
+                }
+
+        );
+
+//        trackMagenta = new CoordinateLine(chemin).setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
-        mapView.addCoordinateLine(trackMagenta);
+//        mapView.addCoordinateLine(trackMagenta);
+    }
+
+    private void enableCheminByCoursier(Coursier c) {
+        if(this.trackMap.containsKey(c)) {
+            this.trackMap.get(c).setVisible(true);
+        }
+    }
+
+    private void disableToutChemin() {
+        this.trackMap.forEach(
+                (coursier, chemin) -> {
+                    chemin.setVisible(false);
+                }
+        );
     }
 
     /**
@@ -767,10 +878,35 @@ public class FenetrePrincipaleHandler {
 
     public void refreshLivraison() {
         ObservableList<Livraison> listLivraisonObeservable = FXCollections.observableArrayList();
+        ObservableList<Livraison> listLivraisonSurTourneeObeservable = FXCollections.observableArrayList();
+
         listeLivraisons.getItems().removeAll(listeLivraisons.getItems());
-        listLivraisonObeservable.addAll(ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons());
+        listeLivraisonsSurTournee.getItems().removeAll(listeLivraisonsSurTournee.getItems());
+
+        listLivraisonObeservable.addAll(
+                ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
+                        .stream().filter(l-> l.getParcoursLivraison().isEmpty()).collect(Collectors.toList())
+        );
+        listLivraisonSurTourneeObeservable.addAll(
+                ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
+                        .stream()
+                            .filter(l-> !l.getParcoursLivraison().isEmpty())
+                            .filter(l -> {
+                                if(coursierSelectionne.isPresent()) {
+                                    return l.getCoursierLivraison().equals(coursierSelectionne);
+                                }
+                                // when there is no selected courtier, list all deliveries that are in a tournee
+                                return true;
+                            })
+                            .collect(Collectors.toList())
+        );
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
+        listeLivraisonsSurTournee.getItems().addAll(listLivraisonSurTourneeObeservable);
+
         labelEvent.setText("Liste livraison modifiée");
+
+
+
     }
 
     public void supprimerLivraison() {
@@ -826,6 +962,6 @@ public class FenetrePrincipaleHandler {
     }
 
     public void selectionnerCoursier(Coursier coursier) {
-        this.coursierSelectionne = coursier;
+        this.coursierSelectionne = Optional.of(coursier);
     }
 }
