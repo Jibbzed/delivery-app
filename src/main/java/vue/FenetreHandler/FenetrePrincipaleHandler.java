@@ -356,6 +356,19 @@ public class FenetrePrincipaleHandler {
             }
         });
 
+        this.listeLivraisonsSurTournee.setCellFactory(param -> new ListCell<Livraison>() {
+            @Override
+            protected void updateItem(Livraison livraison, boolean empty) {
+                super.updateItem(livraison, empty);
+                //TODO: change the display format (address)
+                if (empty || livraison == null || livraison.getDestinationLivraison() == null) {
+                    setText(null);
+                } else {
+                    setText(livraison.toString(getPlan()));
+                }
+            }
+        });
+
         logger.debug("initialization finished");
     }
 
