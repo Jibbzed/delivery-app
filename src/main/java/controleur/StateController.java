@@ -147,33 +147,11 @@ public class StateController {
     public void sauvegarderLivraison(Livraison livraison){ currentState.sauvegarderLivraison(livraison, xmlPathPlan);
         System.out.println(xmlPathPlan); }
 
-    public ArrayList<Coursier> recupererListeCoursiers(){
-        return ServiceCoursier.getInstance().getListeCoursiers();
-    }
-
     public void allerGestionnaireCoursier() throws IOException {
+        currentState = this.gestionCoursierState;
         popupStage = new FenetreGestionnaireCoursier(this);
         popupStage.showAndWait();
-    }
-
-    public void ajouterCoursier(String nom, String prenom) {
-        Coursier coursier = new Coursier(nom, prenom);
-        ServiceCoursier.getInstance().ajouterCoursier(coursier);
-    }
-
-    public void supprimerCoursier(Coursier coursier) {
-        ServiceCoursier.getInstance().retirerCoursier(coursier);
-    }
-
-    public int nbLivraisonAffecteCoursier(Coursier coursier) {
-        int count = 0;
-        Set<Livraison> listeLivraison = ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons();
-        for(Livraison livraison : listeLivraison){
-            if(livraison.getCoursierLivraison().get().equals(coursier)){
-                count++;
-            }
-        }
-        return count;
+        currentState = this.initialState;
     }
 
 }
