@@ -28,6 +28,7 @@ import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.ServiceCoursier;
+import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -115,6 +116,16 @@ public class FenetrePrincipaleHandler {
 
     @FXML
     private Button buttonAjouterLivraison;
+
+    @FXML
+    private Button buttonChargerLivraison;
+
+    @FXML
+    private ComboBox comboLivraisonsSauvegardees;
+
+    @FXML
+    private Button buttonAjouterLivSauv;
+
 
     /** for editing the animation duration */
     /*@FXML
@@ -214,6 +225,7 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+    private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
 
     @FXML
     private ComboBox comboCoursier;
@@ -332,8 +344,8 @@ public class FenetrePrincipaleHandler {
         logger.trace("location buttons done");
 
         // wire the zoom button and connect the slider to the map's zoom
-        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
-        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
+//        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
+//        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         // add a listener to the animationDuration field and make sure we only accept int values
         /*animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -761,6 +773,12 @@ public class FenetrePrincipaleHandler {
         labelEvent.setText("Liste livraison modifiée");
     }
 
+    public void refreshLivraisonSauvegardee(){
+        serviceLivraison.afficherLivraisonsSauvegardees().forEach(l -> {
+            comboLivraisonsSauvegardees.getItems().removeAll(l);
+            comboLivraisonsSauvegardees.getItems().add(l);
+        });
+    }
     public void supprimerLivraison() {
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
         stateController.supprimerLivraison(livraisonASupprimer);
@@ -809,11 +827,33 @@ public class FenetrePrincipaleHandler {
         this.buttonModifierLivraison.setDisable(false);
     }
 
-    public String getXmlPathPlan() {
-        return xmlPathPlan;
-    }
-
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = coursier;
+    }
+
+    public void cliqueBoutonChargerLivraison(){
+        stateController.cliqueBoutonChargerLivraison();
+        if(buttonAjouterLivSauv.isVisible()){
+            comboLivraisonsSauvegardees.setVisible(false);
+            buttonAjouterLivSauv.setVisible(false);
+            buttonChargerLivraison.setText("Charger une livraison");
+            return;
+        }
+        comboLivraisonsSauvegardees.setVisible(true);
+        buttonAjouterLivSauv.setVisible(true);
+        refreshLivraisonSauvegardee();
+        buttonChargerLivraison.setText("Annuler");
+    }
+    public void validerChargementLivraison(){
+        if(comboLivraisonsSauvegardees.getValue() == null){
+            comboLivraisonsSauvegardees.setPromptText("Veuillez sélectionné une livraison");
+            return;
+        }
+        Livraison l = (Livraison) comboLivraisonsSauvegardees.getValue();
+        stateController.ajouterLivraison(l);
+        refreshLivraison();
+        comboLivraisonsSauvegardees.setVisible(false);
+        buttonAjouterLivSauv.setVisible(false);
+        buttonChargerLivraison.setText("Charger une livraison");
     }
 }

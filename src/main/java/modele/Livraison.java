@@ -49,12 +49,7 @@ public class Livraison {
 
     @Override
     public String toString() {
-        return "Livraison{" +
-                "destinationLivraison=" + destinationLivraison +
-                ", coursierLivraison=" + coursierLivraison +
-                ", parcoursLivraison=" + parcoursLivraison +
-                ", fenetreHoraireLivr=" + fenetreHoraireLivr +
-                '}';
+        return "Livraison de "+ coursierLivraison.get() + " dans la fenêtre de " + fenetreHoraireLivr.get() + "h";
     }
 
     public Optional<Coursier> getCoursierLivraison() {
@@ -115,6 +110,7 @@ public class Livraison {
     }
 
     public String afficherIhm(Plan plan) {
-        return "livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
+        return "Livraison à : " + plan.listerTronconsParIntersection(destinationLivraison) + " par le coursier : "+ this.getCoursierLivraison().get().getNom() + " " +this.getCoursierLivraison().get().getPrenom();
     }
+
 }

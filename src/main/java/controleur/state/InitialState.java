@@ -19,6 +19,11 @@ public class InitialState implements State {
     }
 
     @Override
+    public void cliqueBoutonChargerLivraison(StateController stateController) {
+        stateController.setCurrentState(stateController.ajoutLivraisonState);
+    }
+
+    @Override
     public void cliqueLivraison(StateController stateController) {
         State.super.cliqueLivraison(stateController);
         stateController.enableLivraisonDisableableComponents();
