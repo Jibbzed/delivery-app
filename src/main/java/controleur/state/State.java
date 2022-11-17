@@ -5,6 +5,7 @@ import controleur.command.ListOfCommands;
 import javafx.fxml.FXMLLoader;
 import modele.Coursier;
 import modele.Livraison;
+import service.ServiceCoursier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public interface State {
     default ArrayList<Coursier> recupererListeCoursiers(StateController stateController){
         return null;
     }
+
+    default void ajouterCoursier(String nom, String prenom) {}
+
+    default void supprimerCoursier(Coursier coursier) {}
 
     default void chargerLivraison(StateController stateController){}
 
