@@ -1,5 +1,6 @@
 package modele;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Intersection {
@@ -10,6 +11,14 @@ public class Intersection {
     private boolean isEntrepot;
 
 
+    /**
+     * Constructeur de la classe.
+     * Crée une intersection à partir d'informations récoltées dans le fichier XML du plan
+     *
+     * @param id        identifiant unique du point
+     * @param latitude  coordonnée de latitude du point
+     * @param longitude coordonnée de longitude du point
+     */
     public Intersection(String id, double latitude, double longitude){
         this.id=id;
         this.longitude=longitude;
@@ -71,4 +80,10 @@ public class Intersection {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public double calculerDistance(double latitude, double longitude) {
+    	return Math.sqrt(Math.pow(this.latitude - latitude, 2) + Math.pow(this.longitude - longitude, 2));
+    }
+
+
 }

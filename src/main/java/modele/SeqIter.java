@@ -8,12 +8,14 @@ public class SeqIter implements Iterator<Integer> {
     private int nbCandidates;
 
     /**
-     * Create an iterator to traverse the set of vertices in <code>unvisited</code>
-     * which are successors of <code>currentVertex</code> in <code>g</code>
-     * Vertices are traversed in the same order as in <code>unvisited</code>
-     * @param unvisited
-     * @param currentVertex
-     * @param g
+     * Constructeur de la classe.
+     * Crée un itérateur pour parcourir les sommets de <code>unvisited</code>
+     * qui sont les successeurs de <code>currentVertex</code> dans le <code>Graphe</code> <code>g</code>
+     * Les sommets sont parcourus dans l'ordre dans lequel ils apparaissent dans <code>unvisited</code>
+     *
+     * @param unvisited     liste des indices des sommets successeurs de <code>currentVertex</code>
+     * @param currentVertex indice du sommet actuellement exploré
+     * @param g             <code>Graphe</code> auquel on applique le TSP
      */
     public SeqIter(Collection<Integer> unvisited, int currentVertex, Graphe g){
         this.candidates = new Integer[unvisited.size()];

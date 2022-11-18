@@ -8,21 +8,41 @@ import java.util.Optional;
 
 public class Livraison {
 
+
     protected Optional<Intersection> origineLivraison = Optional.empty();
     protected Intersection destinationLivraison;
     protected Optional<Coursier> coursierLivraison = Optional.empty();
-    protected List<Troncon> parcoursLivraison; // parcours à faire pour la livraison
+    protected List<Troncon> parcoursLivraison = new ArrayList<>(); // parcours à faire pour la livraison
     protected Optional<Integer> fenetreHoraireLivr = Optional.empty();
     protected Optional<LocalTime> heurePassage = Optional.empty();
 
     public Livraison() {
     }
 
+    /**
+     * Constructeur de la classe à partir d'une destination.
+     *
+     * @param destinationLivraison <code>Intersection</code> d'arrivée de la livraison
+     */
     public Livraison(Intersection destinationLivraison) {
         this.destinationLivraison = destinationLivraison;
         parcoursLivraison = new ArrayList<>();
     }
 
+    /**
+     * Constructeur de la classe lors de la création d'une <code>Tournee</code>
+     *
+     * @param origineLivraison     <code>Intersection</code> de départ de la livraison
+     * @param destinationLivraison <code>Intersection</code> d'arrivée de la livraison
+     * @param coursier             <code>Coursier</code> associé à la livraison
+     * @param parcoursLivraison    liste de <code>Troncon</code> correspondant aau plus court chemin entre l'origine et la destination
+     * @param heureArrivee         heure d'arrivée estimée de la livraison dans le cadre de la tournée
+     *
+     * @see Tournee
+     * @see Intersection
+     * @see Coursier
+     * @see Troncon
+     */
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursier, List<Troncon> parcoursLivraison, LocalTime heureArrivee) {
         this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
@@ -31,6 +51,17 @@ public class Livraison {
         this.parcoursLivraison = parcoursLivraison;
         heurePassage = Optional.of(heureArrivee);
     }
+
+    /**
+     * Constructeur de la classe en tant que "demande de livraison"
+     *
+     * @param destinationLivraison <code>Intersection</code> correspondant à l'adresse de livraison
+     * @param coursierLivraison    <code>Coursier</code> associé à la livraison
+     * @param fenetreHoraireLivr   plage horaire dans laquelle la livraison doit être effectuée
+     *
+     * @see Intersection
+     * @see Coursier
+     */
     public Livraison(Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
         this.origineLivraison = Optional.empty();
         this.destinationLivraison = destinationLivraison;
@@ -38,6 +69,7 @@ public class Livraison {
         this.fenetreHoraireLivr = Optional.of(fenetreHoraireLivr);
         this.parcoursLivraison = new ArrayList<>();
     }
+
     public Livraison(Intersection origineLivraison, Intersection destinationLivraison, Coursier coursierLivraison, int fenetreHoraireLivr ) {
         this.origineLivraison = Optional.of(origineLivraison);
         this.destinationLivraison = destinationLivraison;
@@ -48,12 +80,7 @@ public class Livraison {
 
     @Override
     public String toString() {
-        return "Livraison{" +
-                "destinationLivraison=" + destinationLivraison +
-                ", coursierLivraison=" + coursierLivraison +
-                ", parcoursLivraison=" + parcoursLivraison +
-                ", fenetreHoraireLivr=" + fenetreHoraireLivr +
-                '}';
+        return "Livraison de "+ coursierLivraison.get() + " dans la fenêtre de " + fenetreHoraireLivr.get() + "h";
     }
 
     public Optional<Coursier> getCoursierLivraison() {
@@ -113,7 +140,19 @@ public class Livraison {
         return Objects.hash(origineLivraison, destinationLivraison, parcoursLivraison);
     }
 
-    public String afficherIhm() {
-        return "livraison sur coord: (" + destinationLivraison.getLatitude() + "," + destinationLivraison.getLongitude() + ")";
+    public String afficherIhm(Plan plan) {
+        return "Livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
     }
+
+    public String toString(Plan plan) {
+        String s = "Livraison à : " + plan.listerTronconsParIntersection(destinationLivraison);
+        if(coursierLivraison.isPresent()) {
+            s += " par " + coursierLivraison.get().toString();
+        }
+        if(fenetreHoraireLivr.isPresent()) {
+            s += " à " + fenetreHoraireLivr.get() + "h";
+        }
+        return s;
+    }
+
 }

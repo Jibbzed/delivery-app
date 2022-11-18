@@ -9,7 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ServiceLivraisonMockImpl implements ServiceLivraison {
-    private  Set<Livraison> livraisons;
+    private Set<Livraison> livraisons;
+    private Set<Livraison> livraisonsSauvegardees;
     private static ServiceLivraisonMockImpl instance;
 
     private ServiceLivraisonMockImpl() {
@@ -22,12 +23,12 @@ public class ServiceLivraisonMockImpl implements ServiceLivraison {
     }
 
     @Override
-    public void suprimmerLivraison(Livraison livraison) {
+    public void supprimerLivraison(Livraison livraison) {
         this.livraisons.remove(livraison);
     }
 
     @Override
-    public Set<Livraison> afficherToutLivraisons() {
+    public Set<Livraison> afficherToutesLivraisons() {
         return new HashSet<>(livraisons);
     }
 
@@ -41,5 +42,15 @@ public class ServiceLivraisonMockImpl implements ServiceLivraison {
             instance = new ServiceLivraisonMockImpl();
         }
         return instance;
+    }
+
+    @Override
+    public void creerListeLivraisonsSauvegardees(Set<Livraison> livraisonsSauvegardees) {
+        this.livraisonsSauvegardees = livraisonsSauvegardees;
+    }
+
+    @Override
+    public Set<Livraison> afficherLivraisonsSauvegardees() {
+        return this.livraisonsSauvegardees;
     }
 }

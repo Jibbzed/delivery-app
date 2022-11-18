@@ -9,15 +9,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.AjoutLivraisonController">
+<?import javafx.scene.control.ListView?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.FenetreHandler.FenetreSaisieLivraisonHandler">
    <children>
-      <VBox layoutX="306.0" layoutY="154.0" prefHeight="67.0" prefWidth="158.0">
+      <VBox alignment="CENTER" spacing="10.0" layoutX="290.0" layoutY="124.0" prefHeight="200.0" prefWidth="158.0">
          <children>
             <Label prefHeight="18.0" prefWidth="183.0" text="Sélectionnez un coursier" />
-            <ComboBox fx:id="coursierSelector" prefWidth="150.0" />
+            <ListView fx:id="coursierSelector" />
          </children>
       </VBox>
       <Button fx:id="validationButton" layoutX="494.0" layoutY="344.0" mnemonicParsing="false" onAction="#saisirLivraison" text="Valider" />
+      <Button fx:id="sauvegarderLivraison" layoutX="200.0" layoutY="344.0" mnemonicParsing="false" onAction="#sauvegarderLivraison" text="Sauvegarder la demande de Livraison" />
       <Label fx:id="warningMessage" layoutX="21.0" layoutY="347.0" text="Vous devez sélectionner une plage horaire et choisir un coursier dans la liste" textFill="RED" visible="false">
          <font>
             <Font name="System Bold Italic" size="13.0" />

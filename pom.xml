@@ -98,7 +98,7 @@
                     <programs>
                         <program>
                             <id>App</id>
-                            <mainClass>vue.AppLauncher</mainClass>
+                            <mainClass>DeliveryApp.AppLauncher</mainClass>
                         </program>
                     </programs>
                 </configuration>
