@@ -256,11 +256,20 @@ public class FenetrePrincipaleHandler {
             }
         });
 
+        Coursier toutLesCoursiers = new Coursier("Tout", "Coursier");
+        comboCoursier.getItems().add(toutLesCoursiers);
         serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
         comboCoursier.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
             disableToutChemin();
-            coursierSelectionne.ifPresent(c -> enableCheminByCoursier(c));
+            coursierSelectionne.ifPresent(c -> {
+                if(!c.equals(toutLesCoursiers)) {
+                    enableCheminByCoursier(c);
+                }
+                else {
+                    enableToutChemin();
+                }
+            });
             refreshLivraison();
         });
 
@@ -596,8 +605,13 @@ public class FenetrePrincipaleHandler {
 
                     this.coursierSelectionne.ifPresent(
                             coursierSelectionner -> {
-                                disableToutChemin();
-                                enableCheminByCoursier(coursierSelectionner);
+                                if(coursierSelectionner.equals( new Coursier("Tout", "Coursier"))) {
+                                    enableToutChemin();
+                                } else {
+                                    disableToutChemin();
+                                    enableCheminByCoursier(coursierSelectionner);
+                                }
+
                             }
 
                     );
@@ -615,6 +629,14 @@ public class FenetrePrincipaleHandler {
         this.trackMap.forEach(
                 (coursier, chemin) -> {
                     chemin.forEach(coordinateLine -> coordinateLine.setVisible(false));
+                }
+        );
+    }
+
+    private void enableToutChemin() {
+        this.trackMap.forEach(
+                (coursier, chemin) -> {
+                    chemin.forEach(coordinateLine -> coordinateLine.setVisible(true));
                 }
         );
     }
