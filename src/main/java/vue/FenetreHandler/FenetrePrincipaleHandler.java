@@ -7,6 +7,10 @@ import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import controleur.StateController;
+import javafx.animation.Transition;
+import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
@@ -151,6 +156,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private CheckBox checkboxIntersections;
 
+    @FXML
+    private Button buttonRechargement;
+    
     private final String intersectionIcone = "/icons8-pin-24.png";
     private final String entrepotIcone = "/icons8-warehouse-24.png";
     ;
@@ -190,7 +198,6 @@ public class FenetrePrincipaleHandler {
     private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
 
     private ServiceTournee serviceTournee = ServiceTournee.getInstance();
-
 
     private Optional<Coursier> coursierSelectionne = Optional.empty();
 
@@ -266,6 +273,15 @@ public class FenetrePrincipaleHandler {
 
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
+
+        buttonRechargement.setOnAction(event -> {
+            this.markersIntersections.clear();
+            this.coordinateList.clear();
+            this.
+            listeLivraisons.getItems().clear();
+            listeLivraisonsSurTournee.getItems().clear();
+            stateController.rechargerApp();
+        });
 
         buttonCoursier.setOnAction(event -> {
             try {

@@ -34,7 +34,7 @@
                </toggleGroup>
             </RadioButton>
             <RadioButton fx:id="start9" mnemonicParsing="false" text="9h-10h" toggleGroup="$plageHoraireSelector" />
-            <RadioButton fx:id="start10" mnemonicParsing="false" text="10h-11h" toggleGroup="$plageHoraireSelector" />
+            <RadioButton fx:id="start10" mnemonicParsing="false" text="10h-12h" toggleGroup="$plageHoraireSelector" />
             <RadioButton fx:id="start11" mnemonicParsing="false" text="11h-12h" toggleGroup="$plageHoraireSelector" />
          </children>
       </VBox>

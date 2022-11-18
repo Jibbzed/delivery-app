@@ -42,8 +42,8 @@ public class FenetreChoixDossierHandler {
         });
 
         buttonValider.setOnAction(event -> {
-                    String xmlPath = textXML.getText();
-                    this.produireFDR(xmlPath);
+            String xmlPath = textXML.getText();
+            this.produireFDR(xmlPath);
         });
     }
 
