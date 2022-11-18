@@ -10,6 +10,7 @@ import controleur.StateController;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -193,6 +194,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private ComboBox comboCoursier;
 
+    @FXML
+    private CheckBox checkboxIntersections;
+
     private Optional<Coursier> coursierSelectionne = Optional.empty();
 
     private Parent parent;
@@ -294,6 +298,15 @@ public class FenetrePrincipaleHandler {
             });
             refreshLivraison();
         });
+
+        checkboxIntersections.selectedProperty().addListener(
+                (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                    for(Marker m: markersIntersections){
+                        if(!m.getPosition().equals(coordCenterWarehouse)){
+                            m.setVisible(checkboxIntersections.isSelected());
+                        }
+                    }
+                });
 
         logger.trace("location buttons done");
 
