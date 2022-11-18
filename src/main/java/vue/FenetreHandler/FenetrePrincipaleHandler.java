@@ -28,6 +28,7 @@ import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.ServiceCoursier;
+import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -129,6 +130,26 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Button buttonAjouterLivraison;
 
+    @FXML
+    private Button buttonChargerLivraison;
+
+
+    /** for editing the animation duration */
+    /*@FXML
+    private TextField animationDuration;
+     */
+
+    /** the BIng Maps API Key. */
+    //@FXML
+    //private TextField bingMapsApiKey;
+
+    /** Label to display the current center */
+    @FXML
+    private Label labelCenter;
+
+    /** Label to display the current extent */
+    @FXML
+    private Label labelExtent;
 
     /**
      * label to display the last event.
@@ -167,6 +188,7 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+    private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
 
     @FXML
     private ComboBox comboCoursier;
@@ -276,8 +298,8 @@ public class FenetrePrincipaleHandler {
         logger.trace("location buttons done");
 
         // wire the zoom button and connect the slider to the map's zoom
-        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
-        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
+//        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
+//        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         logger.trace("options and labels done");
 
@@ -721,5 +743,9 @@ public class FenetrePrincipaleHandler {
 
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = Optional.of(coursier);
+    }
+
+    public void cliqueBoutonChargerLivraison() throws IOException {
+        stateController.cliqueBoutonChargerLivraison();
     }
 }

@@ -80,12 +80,20 @@ public class StateController {
         fenetrePrincipale.show();//showAndWait();
         mainStage.close();
         mainStage=fenetrePrincipale;
-
     }
-
+    public void chargerLivraisonsSauvegardees(String xmlLivraisonFile){
+        Parser parser = new Parser();
+        ServiceLivraison serviceLivraisonMock = ServiceLivraisonMockImpl.getInstance();
+        serviceLivraisonMock.creerListeLivraisonsSauvegardees( parser.chargerLivraisonsSauvegardees(xmlPathPlan, xmlLivraisonFile) );
+    }
 
     public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
+
+    public void chargerLivraison() throws IOException {
+        popupStage = new FenetreChargementLivraison(this, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 
@@ -154,4 +162,8 @@ public class StateController {
         currentState = this.initialState;
     }
 
+    public void cliqueBoutonChargerLivraison() throws IOException {
+        currentState.cliqueBoutonChargerLivraison(this);
+        chargerLivraison();
+    }
 }

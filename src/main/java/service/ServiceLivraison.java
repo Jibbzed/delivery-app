@@ -10,4 +10,7 @@ public interface ServiceLivraison {
     public void supprimerLivraison(Livraison livraison);
     public Set<Livraison> afficherToutesLivraisons();
     public Set<Livraison> afficherLivraisonParIntersection(Intersection intersection);
+    public void creerListeLivraisonsSauvegardees(Set<Livraison> livraisonsSauvegardees);
+    public Set<Livraison> afficherLivraisonsSauvegardees();
+
 }
