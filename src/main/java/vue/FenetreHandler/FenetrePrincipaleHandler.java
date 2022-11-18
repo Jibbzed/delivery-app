@@ -8,6 +8,7 @@ import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import controleur.StateController;
 import javafx.animation.Transition;
+import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
@@ -200,6 +202,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private CheckBox checkboxIntersections;
 
+    @FXML
+    private Button buttonRechargement;
+
     private Optional<Coursier> coursierSelectionne = Optional.empty();
 
     private Parent parent;
@@ -276,6 +281,12 @@ public class FenetrePrincipaleHandler {
 
         // wire up the location buttons
         buttonWarhouse.setOnAction(event -> mapView.setCenter(coordCenterWarehouse));
+
+        buttonRechargement.setOnAction(event -> {
+            this.markersIntersections.clear();
+            this.coordinateList.clear();
+            stateController.rechargerApp();
+        });
 
         buttonCoursier.setOnAction(event -> {
             try {

@@ -43,4 +43,6 @@ public interface State {
     default void undo(ListOfCommands listOfCommands){}
     default void sauvegarderLivraison(Livraison livraisonASauvegarder, String xmlPath) {}
     default void cliqueBoutonChargerLivraison(StateController stateController){}
+
+    default void resetModels(){}
 }

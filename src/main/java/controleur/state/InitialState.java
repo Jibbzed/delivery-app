@@ -2,6 +2,8 @@ package controleur.state;
 
 import controleur.StateController;
 import controleur.command.ListOfCommands;
+import service.ServiceCoursier;
+import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.IOException;
 
@@ -43,5 +45,11 @@ public class InitialState implements State {
     @Override
     public void undo(ListOfCommands listOfCommands) {
         listOfCommands.undo();
+    }
+
+    @Override
+    public void resetModels(){
+        ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons().clear();
+        new StateController();
     }
 }

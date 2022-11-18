@@ -68,6 +68,7 @@ public class StateController {
         mainStage = new FenetreAccueil(this);
         mainStage.show();
     }
+
    /* public void generateControllerPageAccueil(FenetreAccueilHandler controllerPageAccueil) {
         this.fenetreAccueilController = controllerPageAccueil;
     }*/
@@ -165,5 +166,10 @@ public class StateController {
     public void cliqueBoutonChargerLivraison() throws IOException {
         currentState.cliqueBoutonChargerLivraison(this);
         chargerLivraison();
+    }
+
+    public void rechargerApp(){
+        mainStage.close();
+        currentState.resetModels();
     }
 }
