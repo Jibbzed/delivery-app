@@ -32,7 +32,7 @@
         <Pane fx:id="leftControls" BorderPane.alignment="CENTER">
             <VBox spacing="10.0" BorderPane.alignment="CENTER">
                 <children>
-                    <Button fx:id="buttonWarhouse" maxWidth="Infinity" text="Entrepot" />
+                    <Button fx:id="buttonWarhouse" maxWidth="Infinity" text="Centrer sur l'entrepot" />
                     <Button fx:id="buttonCoursier" maxWidth="Infinity" text="Coursier" />
                     <Button fx:id="buttonChargerLivraison" maxWidth="Infinity" onAction="#cliqueBoutonChargerLivraison" text="Charger une livraison" />
                 </children>
