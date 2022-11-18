@@ -78,8 +78,6 @@ public class Plan {
     private void validTroncon(Troncon troncon) {
         if( (this.intersections.get(troncon.getOrigine()) != null )
                 || (this.intersections.get(troncon.getDestination()) != null ) ){
-            // TODO: Est-ce qu'on a besoin de ce check, si on ajoute des troncons que depuis fichier xml
-            // on a deja fais le check sur le ParserPlan avant de creer un nouveau troncon.
             throw new IllegalArgumentException("echec d'ajout du troncon: troncon avec un origine ou destination invalide.");
         }
     }
