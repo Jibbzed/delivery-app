@@ -80,12 +80,7 @@ public class Livraison {
 
     @Override
     public String toString() {
-        return "Livraison{" +
-                "destinationLivraison=" + destinationLivraison +
-                ", coursierLivraison=" + coursierLivraison +
-                ", parcoursLivraison=" + parcoursLivraison +
-                ", fenetreHoraireLivr=" + fenetreHoraireLivr +
-                '}';
+        return "Livraison de "+ coursierLivraison.get() + " dans la fenêtre de " + fenetreHoraireLivr.get() + "h";
     }
 
     public Optional<Coursier> getCoursierLivraison() {
@@ -159,4 +154,5 @@ public class Livraison {
         }
         return s;
     }
+
 }

@@ -24,6 +24,7 @@ import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.ServiceCoursier;
+import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -125,6 +126,26 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Button buttonAjouterLivraison;
 
+    @FXML
+    private Button buttonChargerLivraison;
+
+
+    /** for editing the animation duration */
+    /*@FXML
+    private TextField animationDuration;
+     */
+
+    /** the BIng Maps API Key. */
+    //@FXML
+    //private TextField bingMapsApiKey;
+
+    /** Label to display the current center */
+    @FXML
+    private Label labelCenter;
+
+    /** Label to display the current extent */
+    @FXML
+    private Label labelExtent;
 
     /**
      * label to display the last event.
@@ -163,6 +184,7 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+    private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
 
     @FXML
     private ComboBox comboCoursier;
@@ -252,19 +274,28 @@ public class FenetrePrincipaleHandler {
             }
         });
 
+        Coursier toutLesCoursiers = new Coursier("Tout", "Coursier");
+        comboCoursier.getItems().add(toutLesCoursiers);
         serviceCoursier.getListeCoursiers().forEach(c -> comboCoursier.getItems().add(c));
         comboCoursier.setOnAction(e -> {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
             disableToutChemin();
-            coursierSelectionne.ifPresent(c -> enableCheminByCoursier(c));
+            coursierSelectionne.ifPresent(c -> {
+                if(!c.equals(toutLesCoursiers)) {
+                    enableCheminByCoursier(c);
+                }
+                else {
+                    enableToutChemin();
+                }
+            });
             refreshLivraison();
         });
 
         logger.trace("location buttons done");
 
         // wire the zoom button and connect the slider to the map's zoom
-        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
-        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
+//        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
+//        sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         logger.trace("options and labels done");
 
@@ -588,8 +619,13 @@ public class FenetrePrincipaleHandler {
 
                     this.coursierSelectionne.ifPresent(
                             coursierSelectionner -> {
-                                disableToutChemin();
-                                enableCheminByCoursier(coursierSelectionner);
+                                if(coursierSelectionner.equals( new Coursier("Tout", "Coursier"))) {
+                                    enableToutChemin();
+                                } else {
+                                    disableToutChemin();
+                                    enableCheminByCoursier(coursierSelectionner);
+                                }
+
                             }
 
                     );
@@ -607,6 +643,14 @@ public class FenetrePrincipaleHandler {
         this.trackMap.forEach(
                 (coursier, chemin) -> {
                     chemin.forEach(coordinateLine -> coordinateLine.setVisible(false));
+                }
+        );
+    }
+
+    private void enableToutChemin() {
+        this.trackMap.forEach(
+                (coursier, chemin) -> {
+                    chemin.forEach(coordinateLine -> coordinateLine.setVisible(true));
                 }
         );
     }
@@ -691,5 +735,9 @@ public class FenetrePrincipaleHandler {
 
     public void selectionnerCoursier(Coursier coursier) {
         this.coursierSelectionne = Optional.of(coursier);
+    }
+
+    public void cliqueBoutonChargerLivraison() throws IOException {
+        stateController.cliqueBoutonChargerLivraison();
     }
 }

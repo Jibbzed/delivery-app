@@ -75,16 +75,24 @@ public class StateController {
         fenetrePrincipale.show();//showAndWait();
         mainStage.close();
         mainStage=fenetrePrincipale;
-
     }
-
+    public void chargerLivraisonsSauvegardees(String xmlLivraisonFile){
+        Parser parser = new Parser();
+        ServiceLivraison serviceLivraisonMock = ServiceLivraisonMockImpl.getInstance();
+        serviceLivraisonMock.creerListeLivraisonsSauvegardees( parser.chargerLivraisonsSauvegardees(xmlPathPlan, xmlLivraisonFile) );
+    }
 
     public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 
-    public void ajouterLivraison(Livraison l){ currentState.validerAjouterLivraison(l,this, listOfCommands); }
+    public void chargerLivraison() throws IOException {
+        popupStage = new FenetreChargementLivraison(this, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
+
+    public void ajouterLivraison(Livraison l){ currentState.valider(l,this, listOfCommands); }
 
     // TODO: make an interface for all our custom made stages.
     public void disableMapView(){
@@ -116,6 +124,7 @@ public class StateController {
     public void modifierLivraison(Livraison livraisonAModifier){
          popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
+        currentState.valider(livraisonAModifier,this, listOfCommands);
         // TODO change the attribute to an optional one.
     }
 
@@ -149,4 +158,8 @@ public class StateController {
         currentState = this.initialState;
     }
 
+    public void cliqueBoutonChargerLivraison() throws IOException {
+        currentState.cliqueBoutonChargerLivraison(this);
+        chargerLivraison();
+    }
 }
