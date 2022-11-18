@@ -56,6 +56,7 @@
                     <Button fx:id="buttonAjouterLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Ajouter une livraison" />
                     <Button fx:id="buttonSupprimerLivraisonTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer une livraison" />
                     <Button fx:id="buttonSupprimerTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer la tournée" />
+                    <Button fx:id="buttonProduireFDR" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Produire les feuilles de route" />
                 </VBox>
             </VBox>
          <CheckBox fx:id="checkboxIntersections" layoutX="14.0" layoutY="741.0" mnemonicParsing="false" text="Afficher les Intersections" />

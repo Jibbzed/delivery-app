@@ -92,6 +92,10 @@ public class StateController {
         popupStage.showAndWait();
     }
 
+    public void afficherChoixCheminFDR() throws IOException {
+        popupStage = new FenetreChoixDossier(this, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
     public void chargerLivraison() throws IOException {
         popupStage = new FenetreChargementLivraison(this, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
