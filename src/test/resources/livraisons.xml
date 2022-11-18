@@ -126,4 +126,40 @@
     <intersection>26317207</intersection>
     <feneHoraire>9</feneHoraire>
   </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>BOUSSIO</nom>
+      <prenom>Clemensso</prenom>
+    </coursier>
+    <intersection>249801845</intersection>
+    <feneHoraire>8</feneHoraire>
+  </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>LOUKHNATO</nom>
+      <prenom>Khalilo</prenom>
+    </coursier>
+    <intersection>15925440</intersection>
+    <feneHoraire>11</feneHoraire>
+  </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>LEPIDO</nom>
+      <prenom>Jibesso</prenom>
+    </coursier>
+    <intersection>26317235</intersection>
+    <feneHoraire>8</feneHoraire>
+  </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/mediumMap.xml</fichierPlan>
+    <coursier>
+      <nom>BOUSSIO</nom>
+      <prenom>Clemensso</prenom>
+    </coursier>
+    <intersection>2069548810</intersection>
+    <feneHoraire>8</feneHoraire>
+  </livraison>
 </livraisons>
