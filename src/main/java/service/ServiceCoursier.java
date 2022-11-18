@@ -6,7 +6,6 @@ import modele.Coursier;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: Make it an interface and than implement it because we could have also an other implementation based on xml.
 public class ServiceCoursier {
     private static ServiceCoursier instance;
     private ArrayList<Coursier>  listeCoursiers = new ArrayList<>();

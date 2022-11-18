@@ -56,32 +56,6 @@ public class FenetrePrincipaleHandler {
      * logger for the class.
      */
     private static final Logger logger = LoggerFactory.getLogger(FenetrePrincipaleHandler.class);
-    private final String intersectionIcone = "/icons8-pin-24.png";
-    private final String entrepotIcone = "/icons8-warehouse-24.png";
-    ;
-    private static String entropotId;
-    private static Coordinate coordCenterWarehouse;
-    private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
-    private StateController stateController;
-    private Coordinate coordMin;
-    private Coordinate coordMax;
-
-
-    private List<Coordinate> coordinateList;
-    private Extent extentLyon;
-    /**
-     * default zoom value.
-     */
-    private static final int ZOOM_DEFAULT = 15;
-
-    /**
-     * the markers.
-     */
-    private Marker markerMinCoord;
-    private Marker markerMaxCoord;
-
-    private final Set<Marker> markersIntersections = new HashSet<>();
-
 
     /**
      * Le plan
@@ -113,7 +87,7 @@ public class FenetrePrincipaleHandler {
      * Accordion for all the different options
      */
     @FXML
-    private Pane leftControls;
+    private ScrollPane leftControls;
 
 
     /**
@@ -143,22 +117,15 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Button buttonChargerLivraison;
 
-
-
-    /** for editing the animation duration */
-    /*@FXML
-    private TextField animationDuration;
+    /**
+     * Label to display the current center
      */
-
-    /** the BIng Maps API Key. */
-    //@FXML
-    //private TextField bingMapsApiKey;
-
-    /** Label to display the current center */
     @FXML
     private Label labelCenter;
 
-    /** Label to display the current extent */
+    /**
+     * Label to display the current extent
+     */
     @FXML
     private Label labelExtent;
 
@@ -170,24 +137,6 @@ public class FenetrePrincipaleHandler {
      */
     @FXML
     private Label labelEvent;
-
-    /**
-     * the first CoordinateLine
-     */
-    private CoordinateLine trackMagenta;
-    private Map<Coursier, List<CoordinateLine>> trackMap = new HashMap<>();
-
-    /**
-     * the second CoordinateLine
-     */
-    private CoordinateLine trackCyan;
-    /**
-     * Check button for first track
-     */
-    private CoordinateLine polygonLine;
-    /**
-     * Check Button for polygon drawing mode.
-     */
 
     @FXML
     private ListView<Livraison> listeLivraisons;
@@ -201,11 +150,6 @@ public class FenetrePrincipaleHandler {
     @FXML
     private VBox vBoxTournee;
 
-    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
-    private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
-
-    private ServiceTournee serviceTournee = ServiceTournee.getInstance();
-
     @FXML
     private ComboBox comboCoursier;
 
@@ -214,6 +158,46 @@ public class FenetrePrincipaleHandler {
 
     @FXML
     private Button buttonRechargement;
+    
+    private final String intersectionIcone = "/icons8-pin-24.png";
+    private final String entrepotIcone = "/icons8-warehouse-24.png";
+    ;
+    private static String entropotId;
+    private static Coordinate coordCenterWarehouse;
+    private static final Coordinate coordWarhouseLyon = new Coordinate(45.74979, 4.87572);
+    private StateController stateController;
+    private Coordinate coordMin;
+    private Coordinate coordMax;
+
+
+    private List<Coordinate> coordinateList;
+    private Extent extentLyon;
+    /**
+     * default zoom value.
+     */
+    private static final int ZOOM_DEFAULT = 15;
+
+    /**
+     * the markers.
+     */
+    private Marker markerMinCoord;
+    private Marker markerMaxCoord;
+
+    private final Set<Marker> markersIntersections = new HashSet<>();
+
+
+
+
+    /**
+     * the first CoordinateLine
+     */
+    private CoordinateLine trackMagenta;
+    private Map<Coursier, List<CoordinateLine>> trackMap = new HashMap<>();
+
+    private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+    private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
+
+    private ServiceTournee serviceTournee = ServiceTournee.getInstance();
 
     private Optional<Coursier> coursierSelectionne = Optional.empty();
 
@@ -240,7 +224,6 @@ public class FenetrePrincipaleHandler {
                             return new Coordinate(intersection.getLatitude(), intersection.getLongitude());
                         })
                         .collect(Collectors.toList());
-        // TODO: pour les constantes, ca degage d'ici, example "/icons8-pin-24.png", "/icons8-warehouse-24.png"
         coordinateList.stream()
                 .map(c -> {
                     String image = this.intersectionIcone;
@@ -315,10 +298,9 @@ public class FenetrePrincipaleHandler {
             selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
             disableToutChemin();
             coursierSelectionne.ifPresent(c -> {
-                if(!c.equals(toutLesCoursiers)) {
+                if (!c.equals(toutLesCoursiers)) {
                     enableCheminByCoursier(c);
-                }
-                else {
+                } else {
                     enableToutChemin();
                 }
             });
@@ -327,8 +309,8 @@ public class FenetrePrincipaleHandler {
 
         checkboxIntersections.selectedProperty().addListener(
                 (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
-                    for(Marker m: markersIntersections){
-                        if(!m.getPosition().equals(coordCenterWarehouse)){
+                    for (Marker m : markersIntersections) {
+                        if (!m.getPosition().equals(coordCenterWarehouse)) {
                             m.setVisible(checkboxIntersections.isSelected());
                         }
                     }
@@ -355,7 +337,13 @@ public class FenetrePrincipaleHandler {
 
         trackMagenta = new CoordinateLine().setColor(Color.MAGENTA).setWidth(7).setVisible(true);
 
-        buttonCalculTournee.setOnAction(event -> this.calculTournee());
+        buttonCalculTournee.setOnAction(event -> {
+                    this.calculTournee();
+                    if(!ServiceTournee.getInstance().getTournees().isEmpty()){
+                        buttonProduireFDR.setDisable(false);
+                    }
+                }
+        );
 
         buttonProduireFDR.setOnAction(event -> {
             try {
@@ -379,11 +367,11 @@ public class FenetrePrincipaleHandler {
                 labelEvent.setText(newValue.toString(plan));
                 String intersectionIdSelectionne = newValue.getDestinationLivraison().getId();
                 Map<String, Dijkstra> resultatDijkstra =
-                        plan.plusCourtChemin(entropotId, Collections.singletonList( intersectionIdSelectionne ));
+                        plan.plusCourtChemin(entropotId, Collections.singletonList(intersectionIdSelectionne));
                 // TODO: Duplicated code
                 List<Coordinate> cheminLivraison = resultatDijkstra.get(intersectionIdSelectionne).getChemin().stream()
                         .map(Troncon::getOrigine)
-                        .map(intersection-> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
+                        .map(intersection -> new Coordinate(intersection.getLatitude(), intersection.getLongitude()))
                         .collect(Collectors.toList());
                 // Ajouter derniere intersection au chemin
                 cheminLivraison.add(new Coordinate(newValue.getDestinationLivraison().getLatitude(), newValue.getDestinationLivraison().getLongitude()));
@@ -392,10 +380,10 @@ public class FenetrePrincipaleHandler {
 //            Extent tracksExtent = Extent.forCoordinates(trackMagenta.getCoordinateStream().collect(Collectors.toList()));
 //            mapView.setExtent(tracksExtent);
                 mapView.addCoordinateLine(trackMagenta);
-                for(Marker m : markersIntersections) {
-                    if(m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
+                for (Marker m : markersIntersections) {
+                    if (m.getPosition().getLatitude() == newValue.getDestinationLivraison().getLatitude() && m.getPosition().getLongitude() == newValue.getDestinationLivraison().getLongitude()) {
                         m.setVisible(true);
-                    } else if(!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
+                    } else if (!m.getPosition().getLatitude().equals(coordCenterWarehouse.getLatitude()) || !m.getPosition().getLongitude().equals(coordCenterWarehouse.getLongitude())) {
                         m.setVisible(false);
                     }
                 }
@@ -482,7 +470,7 @@ public class FenetrePrincipaleHandler {
             //set the marker from markerIntersections of the intersection visible
             if (intersection != null) {
                 // Cas où la checkbox intersections est cochée : on ne change pas les pins
-                if(!checkboxIntersections.isSelected()) {
+                if (!checkboxIntersections.isSelected()) {
                     for (Marker marker : markersIntersections) {
                         if (marker.getPosition().getLatitude() == intersection.getLatitude() && marker.getPosition().getLongitude() == intersection.getLongitude()) {
                             marker.setVisible(true);
@@ -553,7 +541,7 @@ public class FenetrePrincipaleHandler {
             //obtenir l'intersection depuis son id
             Intersection intersection = plan.getIntersections().get(intersectionIdSelectionne);
 
-            if(!intersection.isEntrepot()){
+            if (!intersection.isEntrepot()) {
                 this.stateController.doubleCliquePlan(intersection);
             }
         });
@@ -579,6 +567,9 @@ public class FenetrePrincipaleHandler {
     private void handleKeyPressed(KeyEvent ke) {
         if (ke.getCode() == KeyCode.Z) {
             stateController.undo();
+            refreshLivraison();
+        }else if(ke.getCode() == KeyCode.Y){
+            stateController.redo();
             refreshLivraison();
         }
     }
@@ -623,7 +614,6 @@ public class FenetrePrincipaleHandler {
         listeLivraisonByCoursier.keySet().stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                //TODO: remove this filter after filtering the courtier in the creating livraison vue handler.
                 .filter(coursier -> !coursier.getPlanifie())
                 .forEach(
                         coursier -> {
@@ -633,7 +623,6 @@ public class FenetrePrincipaleHandler {
                                         livraisons.put(livraison.getDestinationLivraison().getId(), livraison);
                                     }
                             );
-                            //TODO: Try catch here for the tounee with NullPointerException.
                             Tournee tournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons).calculerTournee();
                             tourneeParCoursier.put(coursier, tournee);
                             tournee.getLivraisons().forEach(
@@ -653,7 +642,7 @@ public class FenetrePrincipaleHandler {
         // On récupère les intersections en groupant par coursier
         Map<Coursier, List<Troncon>> listTronconsOrderedByCourtier = new HashMap<>();
         tourneeParCoursier.forEach(
-                (c , t) -> {
+                (c, t) -> {
                     listTronconsOrderedByCourtier.put(
                             c,
                             t.getLivraisons()
@@ -667,7 +656,7 @@ public class FenetrePrincipaleHandler {
         mapView.removeCoordinateLine(trackMagenta);
         tourneeParCoursier.forEach(
                 (c, tournee) -> {
-                    final double r =Math.abs(Math.random());
+                    final double r = Math.abs(Math.random());
                     final double g = Math.abs(Math.random());
                     final double b = Math.abs(Math.random());
                     List<CoordinateLine> coordinateLinesForTournee = new ArrayList<>();
@@ -681,8 +670,8 @@ public class FenetrePrincipaleHandler {
                                         }
                                 );
 
-                                float opacity = ((float) tournee.getLivraisons().indexOf(livraison) + 1) / ((float)tournee.getLivraisons().size());
-                                CoordinateLine coordinateLineForLivraison =  new CoordinateLine(coordonnesSurLivraison)
+                                float opacity = ((float) tournee.getLivraisons().indexOf(livraison) + 1) / ((float) tournee.getLivraisons().size());
+                                CoordinateLine coordinateLineForLivraison = new CoordinateLine(coordonnesSurLivraison)
                                         .setColor(Color.color(r, g, b, opacity))
                                         .setWidth(7)
                                         .setVisible(true);
@@ -694,7 +683,7 @@ public class FenetrePrincipaleHandler {
 
                     this.coursierSelectionne.ifPresent(
                             coursierSelectionner -> {
-                                if(coursierSelectionner.equals( new Coursier("Tout", "Coursier"))) {
+                                if (coursierSelectionner.equals(new Coursier("Tout", "Coursier"))) {
                                     enableToutChemin();
                                 } else {
                                     disableToutChemin();
@@ -709,8 +698,8 @@ public class FenetrePrincipaleHandler {
     }
 
     private void enableCheminByCoursier(Coursier c) {
-        if(this.trackMap.containsKey(c)) {
-            this.trackMap.get(c).forEach(cor-> cor.setVisible(true));
+        if (this.trackMap.containsKey(c)) {
+            this.trackMap.get(c).forEach(cor -> cor.setVisible(true));
         }
     }
 

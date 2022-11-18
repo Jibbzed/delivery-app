@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-//TODO: Get node Parent
 public class FenetrePrincipale extends Stage{
     private String fxmlFile = "/vue/Principale.fxml";
     FXMLLoader fxmlLoader;
