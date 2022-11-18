@@ -5,6 +5,7 @@ import controleur.StateController;
 import javafx.scene.control.Alert;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
+import javafx.stage.Screen;
 import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
 import vue.FenetreHandler.FenetrePrincipaleHandler;

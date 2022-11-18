@@ -150,7 +150,6 @@ public class FenetreSaisieLivraisonHandler{
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
         fenetrePrincipale.enleverFlou();
-
     }
 
     public void sauvegarderLivraison(){

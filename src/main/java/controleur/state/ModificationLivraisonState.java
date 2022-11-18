@@ -1,6 +1,8 @@
 package controleur.state;
 
 import controleur.StateController;
+import controleur.command.CommandeAjouterLivraison;
+import controleur.command.ListOfCommands;
 import javafx.fxml.FXMLLoader;
 import modele.Livraison;
 
@@ -9,15 +11,17 @@ import java.io.IOException;
 public class ModificationLivraisonState implements State{
     private Livraison livraisonAModifier;
     @Override
-    public void valider(StateController stateController) {
+    public void valider(Livraison livraisonAAjouter, StateController stateController, ListOfCommands listOfCommands) {
         State.super.valider(stateController);
         stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponents();
     }
 
     @Override
     public void annuler(StateController stateController) {
         State.super.annuler(stateController);
         stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponents();
     }
 
     @Override
@@ -33,4 +37,5 @@ public class ModificationLivraisonState implements State{
     public void setLivraisonAModifier(Livraison livraisonAModifier) {
         this.livraisonAModifier = livraisonAModifier;
     }
+
 }
