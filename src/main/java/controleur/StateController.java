@@ -110,7 +110,10 @@ public class StateController {
     public void enableLivraisonDisableableComponents() {
        ((FenetrePrincipale)this.mainStage).getFenetreHandler().enableLivraisonDisableableComponents();
     }
-    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
+    public void supprimerLivraison(Livraison livraisonASupprimer){
+        currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);
+        disableLivraisonDisableableComponents();
+    }
 
     public void cliqueModifierLivraison(Livraison livraisonAModifier){
         currentState.modifierLivraison(this, livraisonAModifier);
