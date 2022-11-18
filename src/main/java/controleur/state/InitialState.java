@@ -15,7 +15,6 @@ public class InitialState implements State {
     public void doubleCliquePlan(StateController stateController) {
         stateController.setCurrentState(stateController.ajoutLivraisonState);
         try {
-            stateController.disableMapView();
             stateController.afficherAjoutLivraison();
         } catch (IOException e) {
             throw new RuntimeException(e);

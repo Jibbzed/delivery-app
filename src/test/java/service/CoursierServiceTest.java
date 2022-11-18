@@ -11,8 +11,6 @@ public class CoursierServiceTest {
 
     private ServiceCoursier serviceCoursier;
 
-
-    //TODO: Remove this class test ?
     @Test
     public void testConstructuerCoursierService() {
         // given
