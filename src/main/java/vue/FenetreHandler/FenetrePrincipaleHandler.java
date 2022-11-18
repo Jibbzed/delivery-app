@@ -439,6 +439,7 @@ public class FenetrePrincipaleHandler {
         // add an event handler for singleclicks, set the click marker to the new position when it's visible
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
+            checkboxIntersections.setSelected(false);
             final Coordinate newPosition = event.getCoordinate().normalize();
             Intersection intersection = plan.getIntersectionProche(newPosition.getLatitude(), newPosition.getLongitude());
             //set the marker from markerIntersections of the intersection visible
