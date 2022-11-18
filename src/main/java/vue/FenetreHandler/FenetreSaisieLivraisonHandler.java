@@ -103,7 +103,7 @@ public class FenetreSaisieLivraisonHandler{
         destinationIdLabel.setVisible(true);
         coursierSelector.getSelectionModel().select(livraisonAModifier.getCoursierLivraison().get());
         selectionnerCoursier(livraisonAModifier.getCoursierLivraison().get());
-        //TODO : faire le cas où Coursier est empty
+
        if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
             selectionnerPlageHoraire(8);
