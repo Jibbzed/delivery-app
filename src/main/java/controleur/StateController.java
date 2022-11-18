@@ -154,4 +154,9 @@ public class StateController {
         currentState.cliqueBoutonChargerLivraison(this);
         chargerLivraison();
     }
+
+    public void rechargerApp(){
+        mainStage.close();
+        currentState.resetModels();
+    }
 }
