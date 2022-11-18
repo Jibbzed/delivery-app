@@ -9,6 +9,7 @@ import modele.Livraison;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.FenetreAccueil;
+import vue.Fenetre.FenetreChoixDossier;
 import vue.Fenetre.FenetrePrincipale;
 import vue.Fenetre.FenetreSaisieLivraison;
 
@@ -66,6 +67,11 @@ public class StateController {
 
     public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
+
+    public void afficherChoixCheminFDR() throws IOException {
+        popupStage = new FenetreChoixDossier(this, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 

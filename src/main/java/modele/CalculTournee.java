@@ -132,7 +132,7 @@ public class CalculTournee {
             for( Troncon t : trajet ) {
                 dist += t.getLongueur();
             }
-            double duree = dist/15; // on considère que le livreur se déplace à 15km/h
+            double duree = dist/15000; // on considère que le livreur se déplace à 15km/h
             int dureeHeure = (int)duree;
             int dureeMinutes = (int)((duree-dureeHeure)*60);
             LocalTime heureArrivee = heureDepart.plusHours(dureeHeure);
@@ -157,7 +157,7 @@ public class CalculTournee {
         for( Troncon t : trajet ) {
             dist += t.getLongueur();
         }
-        double duree = dist/15; // on considère que le livreur se déplace à 15km/h
+        double duree = dist/15000; // on considère que le livreur se déplace à 15km/h
         int dureeHeure = (int)duree;
         int dureeMinutes = (int)((duree-dureeHeure)*60);
         LocalTime heureArrivee = heureDepart.plusHours(dureeHeure);
