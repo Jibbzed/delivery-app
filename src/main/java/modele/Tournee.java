@@ -8,7 +8,7 @@ import java.util.Optional;
 public class Tournee {
     private List<Livraison> livraisons;
     // TODO: change coursier to Coursier instead of optional.
-    private Optional<Coursier> coursier;
+    private Coursier coursier;
 
     /**
      * Constructeur par défaut de la classe.
@@ -28,11 +28,11 @@ public class Tournee {
      */
     public Tournee(List<Livraison> livraisons, Coursier coursier) {
         this.livraisons = new ArrayList<>(livraisons);
-        this.coursier = Optional.of(coursier);
+        this.coursier = coursier;
     }
 
     public void attribuerTournee(Coursier c){
-        this.coursier = Optional.of(c);
+        this.coursier = c;
         c.setPlanifie(true);
     }
 
@@ -67,5 +67,13 @@ public class Tournee {
             s += l.toString(plan) + " ";
         }
         return s;
+    }
+
+    public Coursier getCoursier() {
+        return coursier;
+    }
+
+    public void setCoursier(Coursier coursier) {
+        this.coursier = coursier;
     }
 }

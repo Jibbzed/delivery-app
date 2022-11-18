@@ -11,7 +11,9 @@ import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -28,6 +30,7 @@ import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.ServiceCoursier;
+import service.ServiceTournee;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.BufferedReader;
@@ -226,7 +229,9 @@ public class FenetrePrincipaleHandler {
     private VBox vBoxTournee;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
+    private ServiceTournee serviceTournee = ServiceTournee.getInstance();
 
+    private Map<Coursier, Tournee> tourneeParCoursier = new HashMap<>();
     @FXML
     private ComboBox comboCoursier;
 
@@ -351,7 +356,6 @@ public class FenetrePrincipaleHandler {
             coursierSelectionne.ifPresent(c-> enableCheminByCoursier(c));
             refreshLivraison();
         });
-
 
 //        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
         logger.trace("location buttons done");
@@ -502,6 +506,19 @@ public class FenetrePrincipaleHandler {
 
         buttonModifierLivraison.setOnAction(event -> {
             modifierLivraison();
+        });
+
+        buttonAjouterLivraison.setOnAction(event -> {
+            stateController.getCurrentState().cliqueAjouterLivraisonATournee(stateController);
+
+            List<Livraison> livs = tourneeParCoursier.get((Coursier) comboCoursier.getValue()).getLivraisons();
+            System.out.println(livs);
+            for (Livraison l : livs) {
+                Marker marker = markersIntersections.stream()
+                        .filter(m->m.getPosition().equals( new Coordinate(l.getDestinationLivraison().getLatitude(), l.getDestinationLivraison().getLongitude()) ))
+                        .findAny().get();
+                marker.setVisible(true);
+            }
         });
 
         listeLivraisons.setOnMouseClicked(event -> {
@@ -740,14 +757,29 @@ public class FenetrePrincipaleHandler {
         mapView.addEventHandler(MarkerEvent.MARKER_DOUBLECLICKED, event -> {
             event.consume();
             Coordinate coordSelectionne = event.getMarker().getPosition();
-            String intersectionIdSelectionne =
+            Intersection intersectionSelectionne =
                     plan.getIntersections().values().stream()
                             .filter(i -> i.getLatitude() == coordSelectionne.getLatitude()
                                     && i.getLongitude() == coordSelectionne.getLongitude())
-                            .map(Intersection::getId)
-                            .findAny().orElse("");
+                            .findAny().orElse(null);
+            String intersectionIdSelectionne = intersectionSelectionne.getId();
+            if(stateController.getCurrentState()== stateController.ajoutLivraisonTourneeState1
+                    || stateController.getCurrentState()==stateController.ajoutLivraisonTourneeState2) {
+                Livraison livraisonSelectionnee = listeLivraisonsSurTournee.getItems().stream()
+                        .filter(l -> l.getDestinationLivraison().getId().equals(intersectionIdSelectionne))
+                        .findAny().get();
+                if (livraisonSelectionnee != null) {
+                    stateController.doubleCliqueLivraison(livraisonSelectionnee, this.plan);
+                }
+            }else if (stateController.getCurrentState()==stateController.ajoutLivraisonTourneeState3){
+                Livraison livraison = new Livraison(intersectionSelectionne);
+                livraison.setCoursierLivraison((Coursier) comboCoursier.getValue());
+                stateController.doubleCliqueLivraison(livraison, this.plan);
+                tourneeParCoursier = serviceTournee.getTournees();
+            }else{
+                this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
+            }
 
-            this.stateController.doubleCliquePlan(plan.getIntersections().get(intersectionIdSelectionne));
 
         });
 
@@ -837,42 +869,7 @@ public class FenetrePrincipaleHandler {
     }
 
     private void calculTournee() {
-        // On récupère la liste de livraisons existantes et on les groupe par coursier
-        Map<Optional<Coursier>, List<Livraison>> listeLivraisonByCoursier = ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons()
-                .stream()
-                .filter(livraison -> livraison.getCoursierLivraison().isPresent())
-                .collect(groupingBy(Livraison::getCoursierLivraison));
-        // On transforme en liste d'intersection
-
-//            for( Livraison l : listeLivraion ) {
-//                livraisons.put(l.getDestinationLivraison().getId(), l);
-//        }
-        //  on calcule tournee et la groupe par coursier.
-        Map<Coursier, Tournee> tourneeParCoursier = new HashMap<>();
-        listeLivraisonByCoursier.keySet().stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                //TODO: remove this filter after filtering the courtier in the creating livraison vue handler.
-                .filter(coursier -> !coursier.getPlanifie())
-                .forEach(
-                coursier -> {
-                    Map<String, Livraison> livraisons = new HashMap<>();
-                    listeLivraisonByCoursier.get(Optional.of(coursier)).forEach(
-                            livraison -> {
-                                livraisons.put(livraison.getDestinationLivraison().getId(), livraison);
-                            }
-                    );
-                    //TODO: Try catch here for the tounee with NullPointerException.
-                    Tournee tournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons).calculerTournee();
-                    tourneeParCoursier.put(coursier, tournee);
-                    tournee.getLivraisons().forEach(
-                            l -> ServiceLivraisonMockImpl.getInstance().ajouterLivraison(l)
-                    );
-                    coursier.setPlanifie(true);
-                    ServiceCoursier.getInstance().modifierCoursier(coursier);
-
-                }
-        );
+        stateController.calculerTournees(this.plan, this.entropotId);
 
         listeLivraisons.getItems().forEach(
                 livraison -> {
@@ -880,15 +877,9 @@ public class FenetrePrincipaleHandler {
                 }
         );
         refreshLivraison();
+        tourneeParCoursier = serviceTournee.getTournees();
 
-        // afficher toutes les tournee
-
-        // On a un objet calculTournee et on calcule la tournee
-//        CalculTournee calculTournee = new CalculTournee(this.plan, plan.getIntersections().get(entropotId), livraisons);
-//
-//        Tournee tournee = calculTournee.calculerTournee();
-//        listeTournees.getItems().add(tournee);
-
+        // Afficher les tournees
         // On récupère les intersections en groupant par coursier
         Map<Coursier, List<Intersection>> listIntersectionsOrderedByCourtier = new HashMap<>();
         tourneeParCoursier.forEach(
@@ -1012,7 +1003,7 @@ public class FenetrePrincipaleHandler {
                             .collect(Collectors.toList())
         );
         listeLivraisons.getItems().addAll(listLivraisonObeservable);
-        listeLivraisonsSurTournee.getItems().addAll(listLivraisonSurTourneeObeservable);
+        listeLivraisonsSurTournee.getItems().addAll(tourneeParCoursier.get(comboCoursier.getValue()).getLivraisons());
 
         labelEvent.setText("Liste livraison modifiée");
 

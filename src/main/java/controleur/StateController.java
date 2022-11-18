@@ -17,9 +17,9 @@ import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
-import java.util.Set;
+import static java.util.stream.Collectors.groupingBy;
 
 public class StateController {
     private State currentState;
@@ -32,9 +32,11 @@ public class StateController {
     public final State modificationLivraisonState = new ModificationLivraisonState();
     public final State selectionnerLivraisonState = new SelectionLivraisonState();
     public final State chargementLivraisonState = new ChargementLivraisonState();
-    public final State selectionTourneeState = new SelectionTourneeState();
 
     public final State gestionCoursierState = new GestionCoursierState();
+    public final State ajoutLivraisonTourneeState1 = new AjoutLivraisonTourneeState1();
+    public final State ajoutLivraisonTourneeState2 = new AjoutLivraisonTourneeState2();
+    public final State ajoutLivraisonTourneeState3 = new AjoutLivraisonTourneeState3();
     private Intersection intersectionSelectionne;
     private static String xmlPathPlan;
 
@@ -128,6 +130,9 @@ public class StateController {
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this);
     }
+    public void doubleCliqueLivraison(Livraison livraison, Plan plan){
+        currentState.doubleCliqueLivraison(this,listOfCommands,livraison, plan);
+    }
     public void undo(){ currentState.undo(listOfCommands); }
 
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
@@ -174,6 +179,10 @@ public class StateController {
             }
         }
         return count;
+    }
+
+    public void calculerTournees(Plan plan, String idEntrepot){
+        currentState.calculerTournees(plan, idEntrepot);
     }
 
 }
