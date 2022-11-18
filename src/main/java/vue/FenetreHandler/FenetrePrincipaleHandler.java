@@ -445,6 +445,30 @@ public class FenetrePrincipaleHandler {
             }
         });
 
+        mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
+            event.consume();
+            final Coordinate newPosition = event.getCoordinate().normalize();
+            Intersection intersection = plan.getIntersectionProche(newPosition.getLatitude(), newPosition.getLongitude());
+            //set the marker from markerIntersections of the intersection visible
+            if (intersection != null) {
+                // Cas où la checkbox intersections est cochée : on ne change pas les pins
+                if(!checkboxIntersections.isSelected()) {
+                    for (Marker marker : markersIntersections) {
+                        if (marker.getPosition().getLatitude() == intersection.getLatitude() && marker.getPosition().getLongitude() == intersection.getLongitude()) {
+                            marker.setVisible(true);
+                        } else {
+                            //set marker invisible except for the warehouse
+                            if (!marker.getPosition().equals(coordCenterWarehouse)) {
+                                marker.setVisible(false);
+                            }
+                        }
+                    }
+                }
+                labelEvent.setText(plan.listerTronconsParIntersection(intersection));
+                stateController.doubleCliquePlan(intersection);
+            }
+        });
+
         // add an event handler for MapViewEvent#MAP_EXTENT and set the extent in the map
         mapView.addEventHandler(MapViewEvent.MAP_EXTENT, event -> {
             event.consume();
