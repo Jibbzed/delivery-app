@@ -11,7 +11,6 @@ public class InitialState implements State {
     public void doubleCliquePlan(StateController stateController) {
         stateController.setCurrentState(stateController.ajoutLivraisonState);
         try {
-            stateController.disableMapView();
             stateController.afficherAjoutLivraison();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -40,8 +39,4 @@ public class InitialState implements State {
         stateController.setCurrentState(stateController.selectionTourneeState);
     }
 
-    @Override
-    public void undo(ListOfCommands listOfCommands) {
-        listOfCommands.undo();
-    }
 }

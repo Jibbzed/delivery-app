@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public class Tournee {
     private List<Livraison> livraisons;
-    // TODO: change coursier to Coursier instead of optional.
     private Optional<Coursier> coursier;
 
     /**

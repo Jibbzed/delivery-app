@@ -63,13 +63,7 @@ public class StateController {
         mainStage = new FenetreAccueil(this);
         mainStage.show();
     }
-   /* public void generateControllerPageAccueil(FenetreAccueilHandler controllerPageAccueil) {
-        this.fenetreAccueilController = controllerPageAccueil;
-    }*/
-    /*public void generateAjoutLivraisonController(FenetreSaisieLivraisonHandler ajoutLivraisonController){
-        this.fenetreSaisieLivraisonController = ajoutLivraisonController;
-    }*/
-    //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
+
     public void afficherMap(String title, Plan plan){
         FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(this, title, plan);
         fenetrePrincipale.show();//showAndWait();
@@ -98,15 +92,6 @@ public class StateController {
 
     public void ajouterLivraison(Livraison l){ currentState.valider(l,this, listOfCommands); }
 
-    // TODO: make an interface for all our custom made stages.
-    public void disableMapView(){
-        //((FenetrePrincipale)this.mainStage).getController().disableView();
-    }
-
-    public void enableMapView() {
-        //((FenetrePrincipale)this.mainStage).getController().enableView();
-    }
-
     public void disableLivraisonDisableableComponents() {
         ((FenetrePrincipale)this.mainStage).getFenetreHandler().disableLivraisonDisableableComponents();
     }
@@ -132,14 +117,14 @@ public class StateController {
          popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
         currentState.valider(livraisonAModifier,this, listOfCommands);
-        // TODO change the attribute to an optional one.
     }
 
     public void doubleCliquePlan(Intersection intersectionSelectionne){
         this.setIntersectionSelectionne(intersectionSelectionne);
         currentState.doubleCliquePlan(this);
     }
-    public void undo(){ currentState.undo(listOfCommands); }
+    public void undo(){ listOfCommands.undo(); }
+    public void redo(){listOfCommands.redo();}
 
     public void cliquerChargerLivraison(){ currentState.cliqueChargerLivraison(this);}
 
