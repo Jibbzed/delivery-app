@@ -7,13 +7,9 @@ import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import controleur.StateController;
-import javafx.animation.Transition;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -295,9 +291,6 @@ public class FenetrePrincipaleHandler {
             modifierLivraison();
         });
 
-        listeLivraisons.setOnMouseClicked(event -> {
-            this.stateController.getCurrentState().cliqueLivraison(this.stateController);
-        });
 
         listeLivraisons.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
