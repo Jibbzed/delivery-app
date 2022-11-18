@@ -40,6 +40,10 @@ public class Tournee {
         return new ArrayList<>(livraisons); // Nouvelle liste pour qu'on ne puisse pas changer la liste par un get
     }
 
+    public Optional<Coursier> getCoursier() {
+        return coursier;
+    }
+
     public void ajouterLivraison(Livraison l){
         this.livraisons.add(l);
     }

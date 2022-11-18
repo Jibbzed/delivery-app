@@ -1,0 +1,30 @@
+Planning quotidien de Maylina LEPOLLO
+
+1) Heure de passage : Optional[18:14]
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 153.72511 mètres.
+
+2) Heure de passage : Optional[10:00]
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 83.108986 mètres.
+Prenez le tronçon qui passe par 'Rue Jeanne d'Arc' sur 151.94449 mètres.
+
+3) Heure de passage : Optional[11:00]
+Prenez le tronçon qui passe par 'Rue du Docteur Paul Diday' sur 76.26666 mètres.
+Prenez le tronçon qui passe par 'Passage Feuillat' sur 153.3693 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 83.108986 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 111.942184 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 238.35002 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 21.551727 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 68.41653 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 36.126144 mètres.
+Prenez le tronçon qui passe par 'Rue Girié' sur 187.75513 mètres.
+
+4) Heure de passage : Optional[23:08]
+Prenez le tronçon qui passe par 'Rue Girié' sur 187.75513 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 36.126144 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 68.41653 mètres.
+Prenez le tronçon qui passe par 'Route de Genas' sur 21.551727 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 238.35002 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 111.942184 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 83.108986 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 153.72511 mètres.
+

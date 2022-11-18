@@ -1,0 +1,36 @@
+Planning quotidien de Khalilo LOUKHNATO
+
+1) Heure de passage : Optional[08:00]
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 153.72511 mètres.
+Prenez le tronçon qui passe par 'Passage Feuillat' sur 153.3693 mètres.
+
+2) Heure de passage : Optional[10:00]
+Prenez le tronçon qui passe par 'Rue du Docteur Paul Diday' sur 103.34052 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 32.53504 mètres.
+Prenez le tronçon qui passe par 'Rue Bara' sur 101.70724 mètres.
+Prenez le tronçon qui passe par 'Rue des Prévoyants de l'Avenir' sur 114.692825 mètres.
+
+3) Heure de passage : Optional[11:00]
+Prenez le tronçon qui passe par 'Rue des Prévoyants de l'Avenir' sur 114.692825 mètres.
+Prenez le tronçon qui passe par 'Rue Bara' sur 114.30229 mètres.
+Prenez le tronçon qui passe par 'Rue Bara' sur 49.161777 mètres.
+Prenez le tronçon qui passe par 'Rue Bara' sur 11.288361 mètres.
+Prenez le tronçon qui passe par 'Avenue Lacassagne' sur 47.480927 mètres.
+Prenez le tronçon qui passe par 'Avenue Lacassagne' sur 88.17194 mètres.
+Prenez le tronçon qui passe par 'Avenue Lacassagne' sur 113.25773 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 32.53504 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 82.277626 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 77.777405 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 15.331951 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 46.197845 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 85.53022 mètres.
+Prenez le tronçon qui passe par 'Rue du Docteur Rebatel' sur 20.22657 mètres.
+Prenez le tronçon qui passe par 'Rue de l'Harmonie' sur 129.78181 mètres.
+
+4) Heure de passage : Optional[14:09]
+Prenez le tronçon qui passe par 'Rue de l'Harmonie' sur 99.70037 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 58.375137 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 92.586105 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 90.44906 mètres.
+Prenez le tronçon qui passe par 'Rue Feuillat' sur 64.89446 mètres.
+
