@@ -151,6 +151,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Label labelExtent;
 
+    @FXML
+    private Label labelHaut;
+
     /**
      * label to display the last event.
      */
