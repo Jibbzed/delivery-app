@@ -172,12 +172,12 @@ public class Plan {
             }
             noeudsNoirs.add(noeudCourant);
             noeudsGris.remove(noeudCourant);
-          /*  Boolean exitDest = true;
+            Boolean exitDest = true;
             for( String id : idDestinations ) {
                 if( !noeudsNoirs.contains(id) ) { exitDest = false; }
             }
             Boolean exitOrigin = noeudsNoirs.contains(idOrigine);
-            if( exitOrigin && exitDest ) { break; }*/
+            if( exitOrigin && exitDest ) { break; }
         }
 
         Map<String, Dijkstra> res = new HashMap<>();
@@ -192,8 +192,7 @@ public class Plan {
     protected List<Troncon> getChemin(String idOrigine, String id, Map<String, Troncon> parents) {
         List<Troncon> chemin = new ArrayList<>();
         String idActuel = id;
-        Troncon tronconActuel = parents.get(idActuel);
-
+        Troncon tronconActuel = parents.get(id);
         do {
             chemin.add(tronconActuel);
             idActuel = tronconActuel.getOrigine().getId();
