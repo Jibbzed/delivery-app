@@ -227,7 +227,6 @@ public class FenetrePrincipaleHandler {
                     String image = this.intersectionIcone;
                     boolean isVisible = false;
                     if (c.equals(coordCenterWarehouse)) {
-
                         image = this.entrepotIcone;
                         isVisible = true;
                     }
