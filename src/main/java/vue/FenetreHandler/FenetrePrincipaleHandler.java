@@ -15,7 +15,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -25,16 +24,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import modele.*;
 import modele.exception.MauvaisFormatXmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.ServiceCoursier;
+import service.ServiceTournee;
 import service.ServiceLivraison;
+
 import service.impl.ServiceLivraisonMockImpl;
+import vue.Fenetre.FenetreChoixDossier;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -134,7 +138,11 @@ public class FenetrePrincipaleHandler {
     private Button buttonAjouterLivraison;
 
     @FXML
+    private Button buttonProduireFDR;
+
+    @FXML
     private Button buttonChargerLivraison;
+
 
 
     /** for editing the animation duration */
@@ -196,6 +204,8 @@ public class FenetrePrincipaleHandler {
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
     private ServiceLivraison serviceLivraison = ServiceLivraisonMockImpl.getInstance();
 
+    private ServiceTournee serviceTournee = ServiceTournee.getInstance();
+
     @FXML
     private ComboBox comboCoursier;
 
@@ -236,7 +246,6 @@ public class FenetrePrincipaleHandler {
                     String image = this.intersectionIcone;
                     boolean isVisible = false;
                     if (c.equals(coordCenterWarehouse)) {
-
                         image = this.entrepotIcone;
                         isVisible = true;
                     }
@@ -285,6 +294,9 @@ public class FenetrePrincipaleHandler {
         buttonRechargement.setOnAction(event -> {
             this.markersIntersections.clear();
             this.coordinateList.clear();
+            this.
+            listeLivraisons.getItems().clear();
+            listeLivraisonsSurTournee.getItems().clear();
             stateController.rechargerApp();
         });
 
@@ -345,16 +357,20 @@ public class FenetrePrincipaleHandler {
 
         buttonCalculTournee.setOnAction(event -> this.calculTournee());
 
+        buttonProduireFDR.setOnAction(event -> {
+            try {
+                stateController.afficherChoixCheminFDR();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         buttonSupprimerLivraison.setOnAction(event -> {
             supprimerLivraison();
         });
 
         buttonModifierLivraison.setOnAction(event -> {
             modifierLivraison();
-        });
-
-        listeLivraisons.setOnMouseClicked(event -> {
-            this.stateController.getCurrentState().cliqueLivraison(this.stateController);
         });
 
         listeLivraisons.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -637,16 +653,16 @@ public class FenetrePrincipaleHandler {
         // On récupère les intersections en groupant par coursier
         Map<Coursier, List<Troncon>> listTronconsOrderedByCourtier = new HashMap<>();
         tourneeParCoursier.forEach(
-                (c , t) ->
+                (c , t) -> {
                     listTronconsOrderedByCourtier.put(
                             c,
                             t.getLivraisons()
                                     .stream()
                                     .flatMap(livraison -> livraison.getParcoursLivraison().stream())
-                                    .collect(Collectors.toList()))
+                                    .collect(Collectors.toList()));
+                    serviceTournee.ajouterTournee(t);
+                }
         );
-
-
 
         mapView.removeCoordinateLine(trackMagenta);
         tourneeParCoursier.forEach(
@@ -764,6 +780,16 @@ public class FenetrePrincipaleHandler {
         listeLivraisonsSurTournee.getItems().addAll(listLivraisonSurTourneeObeservable);
         labelEvent.setText("Liste livraison modifiée");
     }
+
+    /*
+    public void produireFDR() {
+        FeuilleDeRoute feuilleDeRoute = new FeuilleDeRoute();
+        for (Tournee tournee : serviceTournee.getTournees()) {
+            feuilleDeRoute.CreerFeuille(tournee);
+        }
+
+    }
+    */
 
     public void supprimerLivraison() {
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();

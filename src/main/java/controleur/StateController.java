@@ -5,10 +5,8 @@ import controleur.state.*;
 
 
 import javafx.stage.Stage;
-import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
-import service.ServiceCoursier;
 import modele.Parser;
 import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
@@ -17,9 +15,6 @@ import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.Set;
 
 public class StateController {
     private State currentState;
@@ -93,12 +88,16 @@ public class StateController {
         popupStage.showAndWait();
     }
 
+    public void afficherChoixCheminFDR() throws IOException {
+        popupStage = new FenetreChoixDossier(this, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
     public void chargerLivraison() throws IOException {
         popupStage = new FenetreChargementLivraison(this, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 
-    public void ajouterLivraison(Livraison l){ currentState.validerAjouterLivraison(l,this, listOfCommands); }
+    public void ajouterLivraison(Livraison l){ currentState.valider(l,this, listOfCommands); }
 
     // TODO: make an interface for all our custom made stages.
     public void disableMapView(){
@@ -116,7 +115,10 @@ public class StateController {
     public void enableLivraisonDisableableComponents() {
        ((FenetrePrincipale)this.mainStage).getFenetreHandler().enableLivraisonDisableableComponents();
     }
-    public void supprimerLivraison(Livraison livraisonASupprimer){ currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);}
+    public void supprimerLivraison(Livraison livraisonASupprimer){
+        currentState.cliqueSupprimerLivraison(this, livraisonASupprimer, listOfCommands);
+        disableLivraisonDisableableComponents();
+    }
 
     public void cliqueModifierLivraison(Livraison livraisonAModifier){
         currentState.modifierLivraison(this, livraisonAModifier);
@@ -124,12 +126,13 @@ public class StateController {
     }
 
     public void abandonAjoutLivraison(){
-        currentState.abandonnerLivraison(this);
+        currentState.annuler(this);
     }
 
     public void modifierLivraison(Livraison livraisonAModifier){
          popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
+        currentState.valider(livraisonAModifier,this, listOfCommands);
         // TODO change the attribute to an optional one.
     }
 

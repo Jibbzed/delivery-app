@@ -2,7 +2,9 @@ package controleur.state;
 
 import controleur.StateController;
 import controleur.command.ListOfCommands;
+import modele.Tournee;
 import service.ServiceCoursier;
+import service.ServiceTournee;
 import service.impl.ServiceLivraisonMockImpl;
 
 import java.io.IOException;
@@ -49,7 +51,12 @@ public class InitialState implements State {
 
     @Override
     public void resetModels(){
-        ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons().clear();
+        for(Tournee t : ServiceTournee.getInstance().getTournees()){
+            t.getLivraisons().forEach(livraison -> ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraison));
+        }
+            ServiceTournee.getInstance().getTournees().clear();
+            ServiceLivraisonMockImpl.getInstance().afficherToutesLivraisons().forEach(livraison -> ServiceLivraisonMockImpl.getInstance().supprimerLivraison(livraison));
+            ServiceCoursier.getInstance().setNonPlanifieTous();
         new StateController();
     }
 }
