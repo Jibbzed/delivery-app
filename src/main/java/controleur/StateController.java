@@ -3,17 +3,23 @@ package controleur;
 import controleur.command.ListOfCommands;
 import controleur.state.*;
 
+
 import javafx.stage.Stage;
+import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
+import service.ServiceCoursier;
+import modele.Parser;
+import modele.Plan;
+import modele.exception.MauvaisFormatXmlException;
 import service.ServiceLivraison;
 import service.impl.ServiceLivraisonMockImpl;
-import vue.Fenetre.FenetreAccueil;
-import vue.Fenetre.FenetreChoixDossier;
-import vue.Fenetre.FenetrePrincipale;
-import vue.Fenetre.FenetreSaisieLivraison;
+import vue.Fenetre.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import java.util.Set;
 
 public class StateController {
     private State currentState;
@@ -27,7 +33,18 @@ public class StateController {
     public final State selectionnerLivraisonState = new SelectionLivraisonState();
     public final State chargementLivraisonState = new ChargementLivraisonState();
     public final State selectionTourneeState = new SelectionTourneeState();
+
+    public final State gestionCoursierState = new GestionCoursierState();
     private Intersection intersectionSelectionne;
+    private static String xmlPathPlan;
+
+    public static String getXmlPathPlan() {
+        return xmlPathPlan;
+    }
+
+    public static void setXmlPathPlan(String xmlPathPlan) {
+        StateController.xmlPathPlan = xmlPathPlan;
+    }
 
     public void setCurrentState(State state) {
         currentState = state;
@@ -58,12 +75,17 @@ public class StateController {
         this.fenetreSaisieLivraisonController = ajoutLivraisonController;
     }*/
     //TODO: save the arguments in the FenetrePrincipaleHandler instatnce.
-    public void afficherMap(String title, String xmlMapPath){
+    public void afficherMap(String title, Plan plan){
+        FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(this, title, plan);
+        fenetrePrincipale.show();//showAndWait();
         mainStage.close();
-        mainStage = new FenetrePrincipale(this, title, xmlMapPath);
-        mainStage.showAndWait();
+        mainStage=fenetrePrincipale;
     }
-
+    public void chargerLivraisonsSauvegardees(String xmlLivraisonFile){
+        Parser parser = new Parser();
+        ServiceLivraison serviceLivraisonMock = ServiceLivraisonMockImpl.getInstance();
+        serviceLivraisonMock.creerListeLivraisonsSauvegardees( parser.chargerLivraisonsSauvegardees(xmlPathPlan, xmlLivraisonFile) );
+    }
 
     public void afficherAjoutLivraison() throws IOException {
         popupStage = new FenetreSaisieLivraison(this, this.intersectionSelectionne, (FenetrePrincipale) mainStage);
@@ -72,6 +94,10 @@ public class StateController {
 
     public void afficherChoixCheminFDR() throws IOException {
         popupStage = new FenetreChoixDossier(this, (FenetrePrincipale) mainStage);
+        popupStage.showAndWait();
+    }
+    public void chargerLivraison() throws IOException {
+        popupStage = new FenetreChargementLivraison(this, (FenetrePrincipale) mainStage);
         popupStage.showAndWait();
     }
 
@@ -100,6 +126,10 @@ public class StateController {
         this.modifierLivraison(livraisonAModifier);
     }
 
+    public void abandonAjoutLivraison(){
+        currentState.abandonnerLivraison(this);
+    }
+
     public void modifierLivraison(Livraison livraisonAModifier){
          popupStage = new FenetreSaisieLivraison(this, livraisonAModifier, (FenetrePrincipale) mainStage);
          popupStage.showAndWait();
@@ -119,5 +149,25 @@ public class StateController {
         serviceLivraison.ajouterLivraison(livraisonACharger);
 
     }
+
     public void cliquerAjouterLivraisonATournee(){  }
+
+    public Plan chargerPlan(String xmlPath) throws MauvaisFormatXmlException, IOException{
+        Parser parser = new Parser();
+        return parser.lirePlan(xmlPath);
+    }
+    public void sauvegarderLivraison(Livraison livraison){ currentState.sauvegarderLivraison(livraison, xmlPathPlan);
+        System.out.println(xmlPathPlan); }
+
+    public void allerGestionnaireCoursier() throws IOException {
+        currentState = this.gestionCoursierState;
+        popupStage = new FenetreGestionnaireCoursier(this);
+        popupStage.showAndWait();
+        currentState = this.initialState;
+    }
+
+    public void cliqueBoutonChargerLivraison() throws IOException {
+        currentState.cliqueBoutonChargerLivraison(this);
+        chargerLivraison();
+    }
 }

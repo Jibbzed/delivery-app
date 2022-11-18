@@ -13,6 +13,8 @@ import service.ServiceCoursier;
 import service.ServiceLivraison;
 import vue.Fenetre.FenetrePrincipale;
 
+import java.util.List;
+
 public class FenetreSaisieLivraisonHandler{
 
     private FenetrePrincipale fenetrePrincipale;
@@ -20,7 +22,7 @@ public class FenetreSaisieLivraisonHandler{
 
     private Coursier coursierSelectionne;
     @FXML
-    private ComboBox coursierSelector;
+    private ListView coursierSelector;
 
     @FXML
     private Label warningMessage;
@@ -42,6 +44,9 @@ public class FenetreSaisieLivraisonHandler{
     @FXML
     private Label destinationIdLabel;
 
+    @FXML
+    private Button sauvegarderLivraison;
+
     private StateController stateController;
 
     private ServiceCoursier serviceCoursier = ServiceCoursier.getInstance();
@@ -51,8 +56,10 @@ public class FenetreSaisieLivraisonHandler{
     public void AjoutLivraisonController() {
     }
 
-    public void initialize(StateController stateController) {
+    public void initialize(StateController stateController, FenetrePrincipale fenetrePrincipale) {
         this.stateController = stateController;
+        this.fenetrePrincipale = fenetrePrincipale;
+        fenetrePrincipale.rendreFlou();
         start8.setOnAction(e -> {
             selectionnerPlageHoraire(8);
         });
@@ -70,11 +77,12 @@ public class FenetreSaisieLivraisonHandler{
         });
 //        coursierSelector.getItems().add("Coursier 1");
 //        coursierSelector.getItems().add("Coursier 2");
-        serviceCoursier.getListeCoursiers().forEach(c -> coursierSelector.getItems().add(c));
-        coursierSelector.setOnAction(e -> {
-            selectionnerCoursier((Coursier) ((ComboBox) e.getSource()).getValue());
+        serviceCoursier.getListeCoursiers().stream()
+                .filter(c -> !c.getPlanifie())
+                .forEach(c -> coursierSelector.getItems().add(c));
+        coursierSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            coursierSelectionne = (Coursier) newValue;
         });
-
     }
 
     /**
@@ -82,29 +90,32 @@ public class FenetreSaisieLivraisonHandler{
      *
      * @param intersection
      */
-    public void initData(Intersection intersection, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initData(Intersection intersection, Plan plan) {
         destination = intersection;
         destinationIdLabel.setText(plan.listerTronconsParIntersection(intersection));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
         System.out.println(destination);
     }
 
-    public void initDataLivraison(Livraison livraisonAModifier, FenetrePrincipale fenetrePrincipale, Plan plan) {
+    public void initDataLivraison(Livraison livraisonAModifier, Plan plan) {
         destination = livraisonAModifier.getDestinationLivraison();
         destinationIdLabel.setText(livraisonAModifier.afficherIhm(plan));
         destinationIdLabel.setVisible(true);
-        this.fenetrePrincipale = fenetrePrincipale;
-        coursierSelector.setValue(livraisonAModifier.getCoursierLivraison().get().toString());
-        coursierSelectionne=livraisonAModifier.getCoursierLivraison().get();
-        if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
+        coursierSelector.getSelectionModel().select(livraisonAModifier.getCoursierLivraison().get());
+        selectionnerCoursier(livraisonAModifier.getCoursierLivraison().get());
+        //TODO : faire le cas où Coursier est empty
+       if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[8]")) {
             start8.setSelected(true);
+            selectionnerPlageHoraire(8);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[9]")) {
             start9.setSelected(true);
+            selectionnerPlageHoraire(9);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[10]")) {
             start10.setSelected(true);
+            selectionnerPlageHoraire(10);
         } else if (livraisonAModifier.getFenetreHoraireLivr().toString().equals("Optional[11]")) {
             start11.setSelected(true);
+            selectionnerPlageHoraire(11);
         }
     }
 
@@ -118,8 +129,13 @@ public class FenetreSaisieLivraisonHandler{
     }
 
     public void saisirLivraison() {
-        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getValue() == null) {
-            warningMessage.setVisible(true);
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getSelectionModel().getSelectedItem() == null) {
+            //warningMessage.setVisible(true);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur de saisie");
+            alert.setContentText("Veuillez sélectionner un coursier et une plage horaire");
+            alert.showAndWait();
             return;
         }
 //        this.stateController.getCurrentState().valider(this.stateController);
@@ -133,5 +149,21 @@ public class FenetreSaisieLivraisonHandler{
         this.fenetrePrincipale.getFenetreHandler().refreshLivraison();
         Stage stage = (Stage) validationButton.getScene().getWindow();
         stage.close();
+        fenetrePrincipale.enleverFlou();
+
+    }
+
+    public void sauvegarderLivraison(){
+        if (plageHoraireSelector.getSelectedToggle() == null || coursierSelector.getSelectionModel().getSelectedItem() == null) {
+            warningMessage.setVisible(true);
+            return;
         }
+        Livraison livraison = new Livraison(this.destination);
+        livraison.setCoursierLivraison(this.coursierSelectionne);
+        livraison.setFenetreHoraireLivr(this.plageHoraire);
+        stateController.sauvegarderLivraison(livraison);
+        sauvegarderLivraison.setText("Livraison sauvegardée");
+        sauvegarderLivraison.setMouseTransparent(true);
+    }
+
 }
