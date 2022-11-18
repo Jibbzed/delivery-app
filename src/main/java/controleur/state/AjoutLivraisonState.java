@@ -24,7 +24,7 @@ public class AjoutLivraisonState implements State {
         stateController.setCurrentState(stateController.initialState);
     }
     @Override
-    public void validerAjouterLivraison(Livraison livraisonAAjouter, StateController stateController, ListOfCommands listOfCommands) {
+    public void valider(Livraison livraisonAAjouter, StateController stateController, ListOfCommands listOfCommands) {
         listOfCommands.add(new CommandeAjouterLivraison(livraisonAAjouter));
         stateController.enableMapView();
         stateController.setCurrentState(stateController.initialState);
