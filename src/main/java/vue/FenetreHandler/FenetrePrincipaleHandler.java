@@ -10,6 +10,7 @@ import controleur.StateController;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -196,6 +197,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private ComboBox comboCoursier;
 
+    @FXML
+    private CheckBox checkboxIntersections;
+
     private Optional<Coursier> coursierSelectionne = Optional.empty();
 
     private Parent parent;
@@ -297,6 +301,15 @@ public class FenetrePrincipaleHandler {
             });
             refreshLivraison();
         });
+
+        checkboxIntersections.selectedProperty().addListener(
+                (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                    for(Marker m: markersIntersections){
+                        if(!m.getPosition().equals(coordCenterWarehouse)){
+                            m.setVisible(checkboxIntersections.isSelected());
+                        }
+                    }
+                });
 
         logger.trace("location buttons done");
 
@@ -432,6 +445,30 @@ public class FenetrePrincipaleHandler {
                     }
                 }
                 labelEvent.setText(plan.listerTronconsParIntersection(intersection));
+            }
+        });
+
+        mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
+            event.consume();
+            final Coordinate newPosition = event.getCoordinate().normalize();
+            Intersection intersection = plan.getIntersectionProche(newPosition.getLatitude(), newPosition.getLongitude());
+            //set the marker from markerIntersections of the intersection visible
+            if (intersection != null) {
+                // Cas où la checkbox intersections est cochée : on ne change pas les pins
+                if(!checkboxIntersections.isSelected()) {
+                    for (Marker marker : markersIntersections) {
+                        if (marker.getPosition().getLatitude() == intersection.getLatitude() && marker.getPosition().getLongitude() == intersection.getLongitude()) {
+                            marker.setVisible(true);
+                        } else {
+                            //set marker invisible except for the warehouse
+                            if (!marker.getPosition().equals(coordCenterWarehouse)) {
+                                marker.setVisible(false);
+                            }
+                        }
+                    }
+                }
+                labelEvent.setText(plan.listerTronconsParIntersection(intersection));
+                stateController.doubleCliquePlan(intersection);
             }
         });
 

@@ -60,6 +60,7 @@
                     <Button fx:id="buttonCalculTournee" maxWidth="Infinity" text="Calculer une tournée" />
                 </children>
             </VBox>
+         <CheckBox fx:id="checkboxIntersections" layoutX="14.0" layoutY="741.0" mnemonicParsing="false" text="Afficher les Intersections" />
         </Pane>
     </left>
 </BorderPane>
