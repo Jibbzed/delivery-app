@@ -76,4 +76,10 @@ public class ServiceCoursier {
         Coursier c7 = new Coursier("BELLEMINIO", "Alessandro");
         ajouterCoursier(c7);
     }
+    
+    public void setNonPlanifieTous(){
+        for(Coursier coursier : listeCoursiers) {
+            coursier.setPlanifie(false);
+        }
+    }
 }

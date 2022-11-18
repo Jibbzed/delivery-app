@@ -42,4 +42,6 @@ public interface State {
     default void clique(StateController stateController){};
     default void sauvegarderLivraison(Livraison livraisonASauvegarder, String xmlPath) {}
     default void cliqueBoutonChargerLivraison(StateController stateController){}
+
+    default void resetModels(){}
 }

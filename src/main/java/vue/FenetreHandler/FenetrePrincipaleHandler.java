@@ -112,6 +112,9 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Button buttonChargerLivraison;
 
+    @FXML
+    private Button buttonRechargement;
+
     /**
      * Label to display the current center
      */
@@ -273,6 +276,14 @@ public class FenetrePrincipaleHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        buttonRechargement.setOnAction(event -> {
+            this.markersIntersections.clear();
+            this.coordinateList.clear();
+            listeLivraisons.getItems().clear();
+            listeLivraisonsSurTournee.getItems().clear();
+            stateController.rechargerApp();
         });
 
         Coursier toutLesCoursiers = new Coursier("Tout", "Coursier");
@@ -784,11 +795,14 @@ public class FenetrePrincipaleHandler {
     public void disableLivraisonDisableableComponents() {
         this.buttonSupprimerLivraison.setDisable(true);
         this.buttonModifierLivraison.setDisable(true);
+        this.buttonRechargement.setDisable(false);
     }
 
     public void enableLivraisonDisableableComponents() {
         this.buttonSupprimerLivraison.setDisable(false);
         this.buttonModifierLivraison.setDisable(false);
+        this.buttonRechargement.setDisable(true);
+
     }
 
     public void selectionnerCoursier(Coursier coursier) {
