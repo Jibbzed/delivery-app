@@ -12,12 +12,14 @@ public class ModificationLivraisonState implements State{
     public void valider(StateController stateController) {
         State.super.valider(stateController);
         stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponents();
     }
 
     @Override
     public void annuler(StateController stateController) {
         State.super.annuler(stateController);
         stateController.setCurrentState(stateController.initialState);
+        stateController.disableLivraisonDisableableComponents();
     }
 
     @Override
@@ -33,4 +35,5 @@ public class ModificationLivraisonState implements State{
     public void setLivraisonAModifier(Livraison livraisonAModifier) {
         this.livraisonAModifier = livraisonAModifier;
     }
+
 }

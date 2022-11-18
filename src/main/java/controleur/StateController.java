@@ -5,10 +5,8 @@ import controleur.state.*;
 
 
 import javafx.stage.Stage;
-import modele.Coursier;
 import modele.Intersection;
 import modele.Livraison;
-import service.ServiceCoursier;
 import modele.Parser;
 import modele.Plan;
 import modele.exception.MauvaisFormatXmlException;
@@ -17,9 +15,6 @@ import service.impl.ServiceLivraisonMockImpl;
 import vue.Fenetre.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.Set;
 
 public class StateController {
     private State currentState;
@@ -115,7 +110,7 @@ public class StateController {
     }
 
     public void abandonAjoutLivraison(){
-        currentState.abandonnerLivraison(this);
+        currentState.annuler(this);
     }
 
     public void modifierLivraison(Livraison livraisonAModifier){

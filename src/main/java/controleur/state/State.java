@@ -38,7 +38,6 @@ public interface State {
 
     default void validerChargerLivraison(Livraison livraisonACharger, StateController stateController) {}
     default void validerAjouterLivraison(Livraison livraisonAAjouter,StateController stateController, ListOfCommands listOfCommands){}
-    default void abandonnerLivraison(StateController stateController){}
     default void clique(StateController stateController){};
     default void undo(ListOfCommands listOfCommands){}
     default void sauvegarderLivraison(Livraison livraisonASauvegarder, String xmlPath) {}

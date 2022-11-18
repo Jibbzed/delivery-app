@@ -291,7 +291,6 @@ public class FenetrePrincipaleHandler {
             modifierLivraison();
         });
 
-
         listeLivraisons.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 this.stateController.getCurrentState().cliqueLivraison(this.stateController);

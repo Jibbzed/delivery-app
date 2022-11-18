@@ -4,8 +4,11 @@ import controleur.StateController;
 import controleur.command.CommandeAjouterLivraison;
 import controleur.command.ListOfCommands;
 import javafx.fxml.FXMLLoader;
+import modele.Coursier;
 import modele.Livraison;
 import modele.Parser;
+
+import java.util.ArrayList;
 
 public class AjoutLivraisonState implements State {
     @Override
@@ -18,7 +21,6 @@ public class AjoutLivraisonState implements State {
         }
 
     }
-
     @Override
     public void validerAjouterLivraison(Livraison livraisonAAjouter, StateController stateController, ListOfCommands listOfCommands) {
         listOfCommands.add(new CommandeAjouterLivraison(livraisonAAjouter));
@@ -27,7 +29,7 @@ public class AjoutLivraisonState implements State {
     }
 
     @Override
-    public void abandonnerLivraison(StateController stateController) {
+    public void annuler(StateController stateController) {
         stateController.setCurrentState(stateController.initialState);
     }
 }
