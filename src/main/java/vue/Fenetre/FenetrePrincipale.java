@@ -2,11 +2,8 @@ package vue.Fenetre;
 
 import com.sothawo.mapjfx.Projection;
 import controleur.StateController;
-import javafx.scene.control.Alert;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
 import modele.Plan;
-import modele.exception.MauvaisFormatXmlException;
 import vue.FenetreHandler.FenetrePrincipaleHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 //TODO: Get node Parent
 public class FenetrePrincipale extends Stage{
-    private String fxmlFile = "/vue/Principale2.fxml";
+    private String fxmlFile = "/vue/Principale.fxml";
     FXMLLoader fxmlLoader;
 
     private Parent rootNode;
