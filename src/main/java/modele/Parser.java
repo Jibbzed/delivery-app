@@ -143,8 +143,8 @@ public class Parser {
         xmlOutputter.output(doc, new FileWriter(xmlFile));
     }
 
-    public Set<Livraison> chargerLivraisonsSauvegardees(String xmlMapFile) {
-        String xmlLivraisonFile = "src/test/resources/livraisons.xml";
+    public Set<Livraison> chargerLivraisonsSauvegardees(String xmlMapFile, String xmlLivraisonFile) {
+        //String xmlLivraisonFile = "src/test/resources/livraisons.xml";
         SAXBuilder sax = new SAXBuilder();
         sax.setProperty(ACCESS_EXTERNAL_DTD, "");
         sax.setProperty(ACCESS_EXTERNAL_SCHEMA, "");

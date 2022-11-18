@@ -133,12 +133,6 @@ public class FenetrePrincipaleHandler {
     @FXML
     private Button buttonChargerLivraison;
 
-    @FXML
-    private ComboBox comboLivraisonsSauvegardees;
-
-    @FXML
-    private Button buttonAjouterLivSauv;
-
 
     /** for editing the animation duration */
     /*@FXML
@@ -682,12 +676,6 @@ public class FenetrePrincipaleHandler {
         labelEvent.setText("Liste livraison modifiée");
     }
 
-    public void refreshLivraisonSauvegardee(){
-        serviceLivraison.afficherLivraisonsSauvegardees().forEach(l -> {
-            comboLivraisonsSauvegardees.getItems().removeAll(l);
-            comboLivraisonsSauvegardees.getItems().add(l);
-        });
-    }
     public void supprimerLivraison() {
         Livraison livraisonASupprimer = this.listeLivraisons.getSelectionModel().getSelectedItem();
         stateController.supprimerLivraison(livraisonASupprimer);
@@ -719,29 +707,7 @@ public class FenetrePrincipaleHandler {
         this.coursierSelectionne = Optional.of(coursier);
     }
 
-    public void cliqueBoutonChargerLivraison(){
+    public void cliqueBoutonChargerLivraison() throws IOException {
         stateController.cliqueBoutonChargerLivraison();
-        if(buttonAjouterLivSauv.isVisible()){
-            comboLivraisonsSauvegardees.setVisible(false);
-            buttonAjouterLivSauv.setVisible(false);
-            buttonChargerLivraison.setText("Charger une livraison");
-            return;
-        }
-        comboLivraisonsSauvegardees.setVisible(true);
-        buttonAjouterLivSauv.setVisible(true);
-        refreshLivraisonSauvegardee();
-        buttonChargerLivraison.setText("Annuler");
-    }
-    public void validerChargementLivraison(){
-        if(comboLivraisonsSauvegardees.getValue() == null){
-            comboLivraisonsSauvegardees.setPromptText("Veuillez sélectionné une livraison");
-            return;
-        }
-        Livraison l = (Livraison) comboLivraisonsSauvegardees.getValue();
-        stateController.ajouterLivraison(l);
-        refreshLivraison();
-        comboLivraisonsSauvegardees.setVisible(false);
-        buttonAjouterLivSauv.setVisible(false);
-        buttonChargerLivraison.setText("Charger une livraison");
     }
 }

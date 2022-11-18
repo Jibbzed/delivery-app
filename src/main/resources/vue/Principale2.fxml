@@ -9,9 +9,6 @@
     <top>
         <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="buttonChargerLivraison" onAction="#cliqueBoutonChargerLivraison" text="Charger une livraison" />
-                <ComboBox fx:id="comboLivraisonsSauvegardees" prefHeight="26.0" prefWidth="309.0" visible="false"/>
-                <Button fx:id="buttonAjouterLivSauv" onAction="#validerChargementLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="61.0" text="Ajouter" visible="false"/>
             </children>
             <padding>
                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
@@ -37,6 +34,7 @@
                 <children>
                     <Button fx:id="buttonWarhouse" maxWidth="Infinity" text="Entrepot" />
                     <Button fx:id="buttonCoursier" maxWidth="Infinity" text="Coursier" />
+                    <Button fx:id="buttonChargerLivraison" maxWidth="Infinity" onAction="#cliqueBoutonChargerLivraison" text="Charger une livraison" />
                 </children>
                 <VBox fx:id="vBoxLivraison" spacing="10.0" BorderPane.alignment="CENTER">
                     <Label text="Livraisons" />
@@ -44,6 +42,9 @@
                     <Button fx:id="buttonModifierLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Modifier la livraison" />
                     <Button fx:id="buttonSupprimerLivraison" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer la livraison" />
                 </VBox>
+                <children>
+                    <Button fx:id="buttonCalculTournee" maxWidth="Infinity" text="Calculer une tournée" />
+                </children>
                 <VBox fx:id="vBoxTournee" spacing="10.0">
                     <Label text="Tournées" />
                     <ComboBox fx:id="comboCoursier" prefHeight="26.0" prefWidth="198.0" promptText="Coursier" />
@@ -52,9 +53,6 @@
                     <Button fx:id="buttonSupprimerLivraisonTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer une livraison" />
                     <Button fx:id="buttonSupprimerTournee" mnemonicParsing="false" prefHeight="26.0" prefWidth="198.0" text="Supprimer la tournée" />
                 </VBox>
-                <children>
-                    <Button fx:id="buttonCalculTournee" maxWidth="Infinity" text="Calculer une tournée" />
-                </children>
             </VBox>
         </Pane>
     </left>

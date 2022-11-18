@@ -117,4 +117,13 @@
     <intersection>190817691</intersection>
     <feneHoraire>11</feneHoraire>
   </livraison>
+  <livraison>
+    <fichierPlan>src/test/resources/smallMap.xml</fichierPlan>
+    <coursier>
+      <nom>ANCELO</nom>
+      <prenom>Gwenaella</prenom>
+    </coursier>
+    <intersection>26317207</intersection>
+    <feneHoraire>9</feneHoraire>
+  </livraison>
 </livraisons>
